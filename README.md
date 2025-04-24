@@ -48,7 +48,6 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 ## Demo
 ### Deployed to Vercel
 You can view a fully working demo at [this link](https://pc-builder-app-tau.vercel.app/).
-Vercel deployment will guide you through creating a Supabase account and project.
 
 
 ### Feedback and issues

@@ -15,11 +15,10 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Dropdown selection for each component
 - Live price calculation and compatibility checks
 - Dynamic preview of the build
-- 
+  
 ### 3. Admin Environment (MVP)
 - Admin can manage or edit components in the Supabase database
 - Logs for builds and user activity
-
 
 ### 4. Save and Share Builds (nice to have)
 - Users can save builds in their profile

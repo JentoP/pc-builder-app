@@ -2,39 +2,42 @@
 The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize and compare their ideal PC setups.
 
 ## Features in development
-### Authentication and User Management (MVP)
+### 1. Authentication and User Management (MVP)
 - Login and registration via Supabase Auth
 - Profile page with saved builds
 
-### Component Library (MVP)
+### 2. Component Library (MVP)
 - Components retrieved via an external API (nice to have), or imported manually into the database
 - Support for categories like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling
 - Filters for brand, price, compatibility, etc.
 
-### PC Builder Interface (MVP)
+### 3. PC Builder Interface (MVP)
 - Dropdown selection for each component
 - Live price calculation and compatibility checks
 - Dynamic preview of the build
+- 
+### 3. Admin Environment (MVP)
+- Admin can manage or edit components in the Supabase database
+- Logs for builds and user activity
 
-### Save and Share Builds (nice to have)
+
+### 4. Save and Share Builds (nice to have)
 - Users can save builds in their profile
 - Share via a unique link
 - Option to copy and modify builds
 
-### Compatibility Check (nice to have)
+### 5. Compatibility Check (nice to have)
 - Logic integrated (or via API) to check if components are compatible
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
 
-### Wishlist and Comparison (nice to have)**
+### 6. Wishlist and Comparison (nice to have)
 - Option to compare components
 - Wishlist for future purchases
 
-### Admin Environment (MVP)
-- Admin can manage or edit components in the Supabase database
-- Logs for builds and user activity
+
 
 ### API Integration
-External API is used to fetch real-time component data (price, specs, availability)
+- External API is used to fetch real-time component data (price, specs, availability)
 
 ## Tech Stack
 - [Next.js](https://nextjs.org)

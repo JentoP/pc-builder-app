@@ -40,7 +40,7 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 
 ## Tech Stack
 - [Next.js](https://nextjs.org)
-- supabase-ssr. A package to configure Supabase Auth to use cookies
+- Database using [Supabase](https://supabase.com/). Includes package to configure Supabase Auth to use cookies
 - Styling with [Tailwind CSS](https://tailwindcss.com)
 - Components with [shadcn/ui](https://ui.shadcn.com/)
 - Deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)

@@ -1,5 +1,5 @@
-import NextLogo from "./next-logo";
-import SupabaseLogo from "./supabase-logo";
+import NextLogo from "@/components/nextjs/next-logo";
+import SupabaseLogo from "@/components/nextjs/supabase-logo";
 
 export default function Header() {
   return (

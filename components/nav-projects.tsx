@@ -73,7 +73,7 @@ export function NavProjects({
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <Link href="/builder/new">
+                                    <Link href="/builder/projects/new">
                                         <FolderPlus className="text-muted-foreground"/>
                                         <span>New Project</span>
                                     </Link>

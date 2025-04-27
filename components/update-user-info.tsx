@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import {createClient} from "@/utils/supabase/client";
+import {createClient} from "@/app/api/supabase/client";
 import {Button} from "@/components/ui/button";
 
 export default function UpdateUserProfile() {

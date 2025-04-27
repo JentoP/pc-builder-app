@@ -19,8 +19,7 @@ import {
     SidebarFooter,
     SidebarRail,
 } from "@/components/ui/sidebar"
-import Link from "next/link";
-import Logo from "@/components/logo";
+
 
 const data = {
     user: {
@@ -87,7 +86,7 @@ const data = {
             icon: Settings2,
             items: [
                 {
-                    title: "General",
+                    title: "Account",
                     url: "/settings",
                 },
                 // {

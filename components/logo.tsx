@@ -7,7 +7,7 @@ export default function Logo() {
         <Image
             src="/images/logo/pcbuildername.png"
             alt="Logo"
-            width="250" height="150"
+            width="250" height="180"
             className="p-2"
         />
         </Link>

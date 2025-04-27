@@ -1,5 +1,4 @@
-"use client";
-import {createClient} from "@/utils/supabase/server";
+import {createClient} from "@/app/api/supabase/server";
 import {redirect} from "next/navigation";
 import UpdateUserProfile from "@/components/update-user-info";
 

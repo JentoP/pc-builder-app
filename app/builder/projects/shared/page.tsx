@@ -1,7 +1,5 @@
-import {createClient} from "@/utils/supabase/server";
+import {createClient} from "@/app/api/supabase/server";
 import {redirect} from "next/navigation";
-import EditBuild from "@/app/builder/edit/page";
-import NewBuild from "@/app/builder/new/page";
 
 export default async function Dashboard() {
     const supabase = await createClient();

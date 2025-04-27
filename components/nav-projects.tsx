@@ -5,7 +5,7 @@ import {
     Forward,
     MoreHorizontal,
     Trash2,
-    type LucideIcon, FolderPlus, LayoutDashboard,
+    type LucideIcon, FolderPlus, LayoutDashboard, House,
 } from "lucide-react"
 
 import {
@@ -24,6 +24,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar"
+import Link from "next/link";
 
 export function NavProjects({
                                 projects,
@@ -37,13 +38,17 @@ export function NavProjects({
     const {isMobile} = useSidebar()
 
     return (
-        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+        <SidebarGroup className="">
             <SidebarGroupLabel></SidebarGroupLabel>
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton>
+                        <House className="text-muted-foreground"/>
+                        <a href="/"> <span>Home</span></a>
+                    </SidebarMenuButton>
+                    <SidebarMenuButton>
                         <LayoutDashboard className="text-muted-foreground"/>
-                        <span>Dashboard</span>
+                        <a href="/dashboard"> <span>Dashboard</span></a>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
 
@@ -63,33 +68,39 @@ export function NavProjects({
                                 </SidebarMenuAction>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
-                                className="w-48 rounded-lg"
+                                className="w-50 rounded-lg"
                                 side={isMobile ? "bottom" : "right"}
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <FolderPlus className="text-muted-foreground"/>
-                                    <span>New Project</span>
+                                    <Link href="/builder/new">
+                                        <FolderPlus className="text-muted-foreground"/>
+                                        <span>New Project</span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Folder className="text-muted-foreground"/>
-                                    <span>View Projects</span>
+                                    <Link href="/builder/projects">
+                                        <Folder className="text-muted-foreground"/>
+                                        <span>View Projects</span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Forward className="text-muted-foreground"/>
-                                    <span>Share Projects</span>
+                                    <Link href="/builder/projects/shared">
+                                        <Forward className="text-muted-foreground"/>
+                                        <span>Shared Projects</span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator/>
                                 <DropdownMenuItem>
-                                    <Trash2 className="text-muted-foreground"/>
-                                    <span>Delete Projects</span>
+                                    <Link href="/builder/projects/deleted">
+                                        <Trash2 className="text-muted-foreground"/>
+                                        <span>Deleted Projects</span>
+                                    </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </SidebarMenuItem>
                 ))}
-
-
             </SidebarMenu>
         </SidebarGroup>
     )

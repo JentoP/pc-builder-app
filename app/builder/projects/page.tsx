@@ -1,7 +1,7 @@
 import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
 
-export default async function ProtectedPage() {
+export default async function Dashboard() {
     const supabase = await createClient();
 
     const {
@@ -14,7 +14,11 @@ export default async function ProtectedPage() {
 
     return (
         <div className="flex flex-col gap-6">
-  Hello {user.email}!
+            <h1 className="text-2xl font-medium">Projects</h1>
+            <h2>These are your builds, you can delete, edit or share them with others.</h2>
+            <div className="justify-center flex gap-4">
+            {/*List of projects*/}
+            </div>
         </div>
     );
 }

@@ -24,8 +24,8 @@ import Logo from "@/components/logo";
 
 const data = {
     user: {
-        name: "shadcn",
-        email: "m@example.com",
+        name: "Jento",
+        email: "mail@jentopieters.be",
         avatar: "/avatars/shadcn.jpg",
     },
     navMain: [
@@ -76,8 +76,8 @@ const data = {
                     url: "/tutorial",
                 },
                 {
-                    title: "Changelog",
-                    url: "/logs",
+                    title: "Source Code",
+                    url: "https://github.com/JentoP/pc-builder-app",
                 },
             ],
         },
@@ -90,10 +90,10 @@ const data = {
                     title: "General",
                     url: "/settings",
                 },
-                {
-                    title: "Billing",
-                    url: "/billing",
-                },
+                // {
+                //     title: "Billing",
+                //     url: "/billing",
+                // },
             ],
         },
     ],

@@ -1,11 +1,9 @@
 import {ThemeSwitcher} from "@/components/nextjs/theme-switcher";
 import {Geist} from "next/font/google";
 import {ThemeProvider} from "next-themes";
-import Link from "next/link";
 import "./globals.css";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import Logo from "@/components/logo";
-import Navigation from "@/components/navigation";
 import {AppSidebar} from "@/components/app-sidebar";
 import {
     SidebarInset,

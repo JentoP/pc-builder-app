@@ -3,9 +3,24 @@ import {Geist} from "next/font/google";
 import {ThemeProvider} from "next-themes";
 import Link from "next/link";
 import "./globals.css";
-import {SpeedInsights} from "@vercel/speed-insights/next"
+import {SpeedInsights} from "@vercel/speed-insights/next";
 import Logo from "@/components/logo";
 import Navigation from "@/components/navigation";
+import {AppSidebar} from "@/components/app-sidebar";
+import {
+    SidebarInset,
+    SidebarProvider,
+    SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {Separator} from "@/components/ui/separator";
 import * as React from "react";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -37,37 +52,45 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
         >
-            <main className="min-h-screen flex flex-col items-center">
-                <div className="flex-1 w-full flex flex-col gap-20 items-center">
-                    <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                        <div className="w-full max-w-5xl flex items-center justify-between p-3 px-5 text-sm">
-                            <div className="flex items-center">
-                                <Link href={"/"}>
-                                    <Logo/>
-                                </Link>
-                            </div>
-                            <div className="flex items-center justify-center flex-grow">
-                            </div>
-                            <div className="flex items-center">
-                                <ThemeSwitcher/>
-                                <Navigation/>
-                            </div>
+            <SidebarProvider>
+                <AppSidebar/>
+                <SidebarInset>
+                    <main className="min-h-screen flex flex-col">
+                        {/* Top Navbar */}
+                        <header
+                            className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+                                <SidebarTrigger className="ml-3"/>
+                                <Separator orientation="vertical" className="mr-2 h-4"/>
+                                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+                                    <div className="w-full max-w-5xl flex items-center justify-between p-3 px-5 text-sm">
+                                        <div className="flex items-center justify-center flex-grow"/>
+                                        <div className="flex items-center gap-4">
+                                            <ThemeSwitcher/>
+                                        </div>
+                                    </div>
+                                </nav>
+                        </header>
+
+
+                        {/* header */}
+
+
+                        {/* Main Content */}
+                        <div className="flex-1 flex flex-col gap-20 max-w-5xl mx-auto p-5">
+                            {children}
+                            <SpeedInsights/>
                         </div>
-                    </nav>
 
-                    <div className="flex flex-col gap-20 max-w-5xl p-5">
-                        {children}
-                        <SpeedInsights/>
-                    </div>
-
-                    <footer
-                        className="w-full flex flex-col items-center justify-center border-t mx-auto text-center text-xs gap-4 py-5">
-                        <p>PC Builder</p>
-                        <p>© 2025</p>
-                        <p>Powered by Supabase & NextJS</p>
-                    </footer>
-                </div>
-            </main>
+                        {/* Footer */}
+                        <footer
+                            className="w-full flex flex-col items-center justify-center border-t mx-auto text-center text-xs gap-4 py-5">
+                            <p>PC Builder</p>
+                            <p>© {new Date().getFullYear()}</p>
+                            <p>Powered by Supabase & NextJS</p>
+                        </footer>
+                    </main>
+                </SidebarInset>
+            </SidebarProvider>
         </ThemeProvider>
         </body>
         </html>

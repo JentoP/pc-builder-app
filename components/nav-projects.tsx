@@ -43,11 +43,11 @@ export function NavProjects({
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton>
-                        <House className="text-muted-foreground"/>
+                        <Link href="/"><House className="text-muted-foreground"/></Link>
                         <a href="/"> <span>Home</span></a>
                     </SidebarMenuButton>
                     <SidebarMenuButton>
-                        <LayoutDashboard className="text-muted-foreground"/>
+                        <Link href="/dashboard"> <LayoutDashboard className="text-muted-foreground"/></Link>
                         <a href="/dashboard"> <span>Dashboard</span></a>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -55,10 +55,10 @@ export function NavProjects({
                 {projects.map((item) => (
                     <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild>
-                            <a href={item.url}>
+                            <Link href={item.url}>
                                 <item.icon/>
                                 <span>{item.name}</span>
-                            </a>
+                            </Link>
                         </SidebarMenuButton>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

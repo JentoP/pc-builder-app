@@ -17,7 +17,7 @@ export default async function Dashboard() {
 
   return (
       <div className="flex flex-col gap-6">
-        Hello {user.email}!
+        {/*Hello {user.email}!*/}
         {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
       </div>
 

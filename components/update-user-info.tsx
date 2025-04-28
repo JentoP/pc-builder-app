@@ -18,17 +18,18 @@ export default function UpdateUserProfile() {
     useEffect(() => {
         const loadProfile = async () => {
             setLoading(true);
-            const {data: {user}} = await supabase.auth.getUser();
-            if (user) {
+            console.log("[loadProfile] Fetch profile");
+            const {data: {session}} = await supabase.auth.getSession();
+            console.log("User:", session);
+            if (session) {
                 const {data, error} = await supabase
                     .from('profiles')
-                    .select('*')
-                    .eq('id', user.id)
-                    .single();
-                console.log("User:", user);
-
+                    .select('first_name, last_name, bio, avatar_url')
+                    .eq('id', session.user.id)
+                    .maybeSingle();
+                console.log("Profile:", data);
                 if (error) {
-                    // console.error("Error loading profile:", error.message);
+                    console.error("Error loading profile");
                 } else if (data) {
                     setFirstName(data.first_name || "");
                     setLastName(data.last_name || "");

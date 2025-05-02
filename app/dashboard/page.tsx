@@ -1,6 +1,6 @@
-import {createClient} from "@/app/api/supabase/server";
+import {createClient} from "@/supabase/server";
 import {redirect} from "next/navigation";
-import {hasEnvVars} from "@/app/api/supabase/check-env-vars";
+import {hasEnvVars} from "@/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
 
@@ -16,9 +16,8 @@ export default async function Dashboard() {
   }
 
   return (
-      <div className="flex flex-col gap-6">
-        {/*Hello {user.email}!*/}
-        {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+      <div className="text-2xl">
+        Dashboard
       </div>
 
   );

@@ -1,4 +1,4 @@
-import {createClient} from "@/app/api/supabase/server";
+import {createClient} from "@/supabase/server";
 import {redirect} from "next/navigation";
 import UpdateUserProfile from "@/components/update-user-info";
 
@@ -19,6 +19,7 @@ export default async function Settings() {
             <div className="gap-4 left-0">
                 <h2 className="text-lg font-medium">Account Info</h2>
                 <UpdateUserProfile/>
+
             </div>
         </div>
     );

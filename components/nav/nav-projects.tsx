@@ -43,12 +43,12 @@ export function NavProjects({
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton>
-                        <Link href="/"><House className="text-muted-foreground"/></Link>
+                        <Link href="/"><House width="17" height="17"/></Link>
                         <a href="/"> <span>Home</span></a>
                     </SidebarMenuButton>
                     <SidebarMenuButton>
-                        <Link href="/dashboard"> <LayoutDashboard className="text-muted-foreground"/></Link>
-                        <a href="/dashboard"> <span>Dashboard</span></a>
+                        <Link href="/dashboard"><LayoutDashboard width="17" height="17"/></Link>
+                        <a href="/dashboard"><span>Dashboard</span></a>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
 

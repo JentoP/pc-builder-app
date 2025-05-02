@@ -6,10 +6,9 @@ export default async function Page() {
 
     return (
         <div className="flex flex-col gap-6">
-            <h1 className="text-2xl font-medium">Processors</h1>
-            <h2>These are all processors, you can delete, edit or share them with others.</h2>
+            <h1 className="text-2xl font-medium">Storage</h1>
+            <h2>These are all data storage, you can delete, edit or share them with others.</h2>
             <div className="justify-center flex gap-4">
-                {/*List of processors*/}
             </div>
         </div>
     );

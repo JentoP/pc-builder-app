@@ -20,6 +20,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import {Separator} from "@/components/ui/separator";
 import * as React from "react";
+import {hasEnvVars} from "@/app/api/supabase/check-env-vars";
+import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
+import HeaderAuth from "@/components/nextjs/header-auth";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -36,9 +39,7 @@ const geistSans = Geist({
     subsets: ["latin"],
 });
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+export default function RootLayout({children,}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
@@ -57,18 +58,16 @@ export default function RootLayout({
                         {/* Header */}
                         <header
                             className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-                                <SidebarTrigger className="ml-3"/>
-                                <Separator orientation="vertical" className="mr-2 h-4"/>
-                                <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12">
-                                    <div className="w-full flex items-center justify-between text-sm">
-                                        <Logo/>
-                                        <div className="flex items-center justify-center flex-grow"/>
+                            <SidebarTrigger className="ml-3"/>
+                            <Separator orientation="vertical" className="mr-2 h-4"/>
+                            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12">
+                                <div className="w-full flex items-center justify-between text-sm">
+                                    <Logo/>
+                                    <div className="flex items-center justify-center flex-grow"/>
+                                    {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
 
-                                        <div className="flex items-center gap-4">
-                                            <ThemeSwitcher/>
-                                        </div>
-                                    </div>
-                                </nav>
+                                </div>
+                            </nav>
                         </header>
 
 
@@ -79,11 +78,14 @@ export default function RootLayout({
                         </div>
 
                         {/* Footer */}
-                        <footer
-                            className="w-full flex flex-col items-center justify-center border-t mx-auto text-center text-xs gap-4 py-5">
-                            <p>PC Builder</p>
-                            <p>© {new Date().getFullYear()}</p>
-                            <p>Powered by Supabase & NextJS</p>
+                        <footer className="w-full flex flex-col border-t mx-auto text-xs gap-4 p-5">
+                            <div className="flex justify-between">
+                                <p>PC Builder © {new Date().getFullYear()}</p>
+                                <p>Powered by Supabase & NextJS</p>
+                                <div className="flex text-center gap-4">
+                                    <ThemeSwitcher/>
+                                </div>
+                            </div>
                         </footer>
                     </main>
                 </SidebarInset>

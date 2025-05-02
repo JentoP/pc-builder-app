@@ -19,7 +19,7 @@ export default function Navigation() {
                         <Menu className="w-5 h-5" />
                     </NavigationMenuTrigger>
                     <NavigationMenuContent className="flex flex-col space-y-2 p-4">
-                        <Link href="/" className=" text-sm">
+                        <Link href="/public" className=" text-sm">
                             Home
                         </Link>
                         <Link href="/about" className="text-sm">

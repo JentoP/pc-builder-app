@@ -6,16 +6,16 @@ import {
     BookOpen,
     PcCase,
 } from "lucide-react"
-import {NavMain} from "@/components/nav-main"
-import {NavProjects} from "@/components/nav-projects"
+import {NavMain} from "@/components/nav/nav-main"
+import {NavProjects} from "@/components/nav/nav-projects"
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarRail,
 } from "@/components/ui/sidebar"
-import {NavUser} from "@/components/nav-user"
-import {useProfile} from "@/app/api/hooks/fetch-user"
+import {NavUser} from "@/components/nav/nav-user"
+import {useProfile} from "@/hooks/fetch-user"
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     const { profile, loading } = useProfile()

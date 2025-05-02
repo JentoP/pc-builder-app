@@ -4,23 +4,15 @@ import {ThemeProvider} from "next-themes";
 import "./globals.css";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import Logo from "@/components/logo";
-import {AppSidebar} from "@/components/app-sidebar";
+import {AppSidebar} from "@/components/nav/app-sidebar";
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import {Separator} from "@/components/ui/separator";
 import * as React from "react";
-import {hasEnvVars} from "@/app/api/supabase/check-env-vars";
+import {hasEnvVars} from "@/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
 
@@ -70,7 +62,6 @@ export default function RootLayout({children,}: Readonly<{
                             </nav>
                         </header>
 
-
                         {/* Main Content */}
                         <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl mx-12 p-5">
                             {children}
@@ -79,7 +70,7 @@ export default function RootLayout({children,}: Readonly<{
 
                         {/* Footer */}
                         <footer className="w-full flex flex-col border-t mx-auto text-xs gap-4 p-5">
-                            <div className="flex justify-between">
+                            <div className="text-sm flex justify-between">
                                 <p>PC Builder © {new Date().getFullYear()}</p>
                                 <p>Powered by Supabase & NextJS</p>
                                 <div className="flex text-center gap-4">

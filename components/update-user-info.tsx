@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/app/api/supabase/client";
+import { createClient } from "@/supabase/client";
 import { Button } from "@/components/ui/button";
-import { useProfile } from "@/app/api/hooks/fetch-user";
+import { useProfile } from "@/hooks/fetch-user";
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 

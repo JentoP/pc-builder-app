@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 export function useProfile() {
     const supabase = createClient();

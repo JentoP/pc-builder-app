@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
 import * as React from "react";
-import {hasEnvVars} from "@/supabase/check-env-vars";
+import {hasEnvVars} from "@/utils/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
 

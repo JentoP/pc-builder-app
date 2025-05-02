@@ -1,6 +1,6 @@
-import {createClient} from "@/supabase/server";
+import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
-import {hasEnvVars} from "@/supabase/check-env-vars";
+import {hasEnvVars} from "@/utils/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
 

@@ -1,4 +1,4 @@
-import {createClient} from "@/supabase/server";
+import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
 // import {useProfile} from "@/app/api/hooks/fetch-user";
 

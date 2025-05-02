@@ -16,7 +16,7 @@ export default async function Settings() {
     return (
         <div className="flex flex-col gap-6">
             <h1 className="text-2xl font-bold">Settings</h1>
-            <div className="flex flex-col gap-4">
+            <div className="gap-4 left-0">
                 <h2 className="text-lg font-medium">Account Info</h2>
                 <UpdateUserProfile/>
             </div>

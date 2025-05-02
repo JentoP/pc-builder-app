@@ -5,60 +5,42 @@ import {
     LaptopMinimalCheck,
     BookOpen,
     PcCase,
-    Map,
-    PieChart,
-    Settings2,
 } from "lucide-react"
-
 import {NavMain} from "@/components/nav-main"
 import {NavProjects} from "@/components/nav-projects"
-import {NavUser} from "@/components/nav-user"
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarRail,
 } from "@/components/ui/sidebar"
+import {NavUser} from "@/components/nav-user"
+import {useProfile} from "@/app/api/hooks/fetch-user"
 
+export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
+    const { profile, loading } = useProfile()
 
-const data = {
-    user: {
-        name: "Jento",
-        email: "mail@jentopieters.be",
-        avatar: "/avatars/shadcn.jpg",
-    },
-    navMain: [
+    const user = {
+        name: `${profile.firstName} ${profile.lastName}`.trim() || "Loading...",
+        email: profile.email || "Loading...",
+        avatar: `${profile.avatarUrl}` || " @public/images/avatar.png",
+    }
+
+    const navMain = [
         {
             title: "Hardware Components",
             url: "#",
             icon: PcCase,
             isActive: true,
             items: [
-                {
-                    title: "Processors",
-                    url: "/processors",
-                }, {
-                    title: "Motherboards",
-                    url: "/motherboards",
-                }, {
-                    title: "Memory",
-                    url: "/memory",
-                }, {
-                    title: "Graphic Cards",
-                    url: "/graphic-cards",
-                }, {
-                    title: "Storage",
-                    url: "/storage",
-                }, {
-                    title: "Power Supplies",
-                    url: "/power-supplies",
-                }, {
-                    title: "Cases",
-                    url: "/cases",
-                }, {
-                    title: "Cooling",
-                    url: "/cooling",
-                },
+                { title: "Processors", url: "/parts/processors" },
+                { title: "Motherboards", url: "/parts/motherboards" },
+                { title: "Memory", url: "/parts/memory" },
+                { title: "Graphic Cards", url: "/parts/graphic-cards" },
+                { title: "Storage", url: "/parts/storage" },
+                { title: "Power Supplies", url: "/parts/power-supplies" },
+                { title: "Cases", url: "/parts/cases" },
+                { title: "Cooling", url: "/parts/cooling" },
             ],
         },
         {
@@ -66,56 +48,31 @@ const data = {
             url: "#",
             icon: BookOpen,
             items: [
-                {
-                    title: "About",
-                    url: "/about",
-                },
-                {
-                    title: "Tutorial",
-                    url: "/tutorial",
-                },
-                {
-                    title: "Source Code",
-                    url: "https://github.com/JentoP/pc-builder-app",
-                },
+                { title: "About", url: "/about" },
+                { title: "Tutorial", url: "/tutorial" },
+                { title: "Source Code", url: "https://github.com/JentoP/pc-builder-app" },
             ],
         },
-        {
-            title: "Settings",
-            url: "#",
-            icon: Settings2,
-            items: [
-                {
-                    title: "Account",
-                    url: "/settings",
-                },
-                // {
-                //     title: "Billing",
-                //     url: "/billing",
-                // },
-            ],
-        },
-    ],
-    projects: [
+    ]
+
+    const projects = [
         {
             name: "PC Builder",
             url: "/builder",
             icon: LaptopMinimalCheck,
         },
-    ],
-}
+    ]
 
-export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarContent>
-                <NavProjects projects={data.projects}/>
-                <NavMain items={data.navMain}/>
+                <NavProjects projects={projects} />
+                <NavMain items={navMain} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user}/>
+                <NavUser user={user} />
             </SidebarFooter>
-            <SidebarRail/>
+            <SidebarRail />
         </Sidebar>
     )
 }

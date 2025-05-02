@@ -4,12 +4,15 @@ import { SubmitButton } from "@/components/nextjs/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import * as React from "react";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
+    <>
+      <h1 className="text-lg font-medium">Please sign in or register to use the application:</h1>
     <form className="flex-1 flex flex-col min-w-64">
-      <h1 className="text-2xl font-medium">Sign in</h1>
+      <h2 className="text-2xl font-medium">Sign in</h2>
       <p className="text-sm text-foreground">
         Don't have an account?{" "}
         <Link className="text-foreground font-medium underline" href="/sign-up">
@@ -40,5 +43,6 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
         <FormMessage message={searchParams} />
       </div>
     </form>
+      </>
   );
 }

@@ -1,27 +1,36 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+type MotherboardModalProps = {
+    socket?: string;
+    onSelect: (mobo: any) => void;
+    onClose: () => void;
+};
 
-export default function MotherboardModal({ onSelect, onClose }: { onSelect: (mobo: any) => void; onClose: () => void }) {
-    const [mobos, setMobos] = useState([]);
+export default function MotherboardModal({ socket, onSelect, onClose }: MotherboardModalProps) {
     const supabase = createClient();
-    type MotherboardModalProps = {
-        socket?: string;
-        onSelect: (mobo: any) => void;
-        onClose: () => void;
-    };
-
+    const [motherboards, setMotherboards] = useState([]);
     useEffect(() => {
-        const fetchMobos = async () => {
-            const { data, error } = await supabase.from('motherboards').select('*');
-            if (error) console.error(error);
-            else { // @ts-ignore
-                setMobos(data);
+        const fetchMotherboards = async () => {
+            const supabase = createClient();
+            let query = supabase.from('motherboards').select('*');
+
+            if (socket) {
+                query = query.eq('socket', socket);
+            }
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error('Error fetching motherboards:', error.message);
+            } else {
+                // @ts-ignore
+                setMotherboards(data || []);
             }
         };
 
-        fetchMobos();
-    }, []);
+        fetchMotherboards();
+    }, [socket]);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -43,7 +52,7 @@ export default function MotherboardModal({ onSelect, onClose }: { onSelect: (mob
                     </tr>
                     </thead>
                     <tbody>
-                    {mobos.map((mobo: any) => (
+                    {motherboards.map((mobo: any) => (
                         <tr key={mobo.id}>
                             <td className="border p-2">{mobo.name}</td>
                             <td className="border p-2">{mobo.socket}</td>

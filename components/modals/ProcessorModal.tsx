@@ -20,9 +20,9 @@ export default function ProcessorModal({ onSelect, onClose }: { onSelect: (cpu: 
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded max-h-[80vh] overflow-y-auto w-[90%] max-w-4xl">
+            <div className="bg-white p-6 rounded max-h-[80vh] overflow-y-auto w-[90%] max-w-4xl relative">
                 <h2 className="text-xl font-bold mb-4">Select a Processor</h2>
-                <button className="absolute top-8 right-6 text-red-500" onClick={onClose}>✖</button>
+                <button className="absolute top-4 right-6 text-red-500" onClick={onClose}>✖</button>
 
                 <table className="w-full table-auto border-collapse border ">
                     <thead className="">

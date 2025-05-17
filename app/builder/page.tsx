@@ -72,7 +72,11 @@ export default function BuilderPage() {
                 <ProcessorModal onSelect={(cpu) => handleSelect('processor', cpu)} onClose={() => setModalOpen(null)} />
             )}
             {modalOpen === 'motherboard' && (
-                <MotherboardModal onSelect={(mobo) => handleSelect('motherboard', mobo)} onClose={() => setModalOpen(null)} />
+                <MotherboardModal
+                    socket={build.processor?.socket}
+                    onSelect={(mobo) => handleSelect('motherboard', mobo)}
+                    onClose={() => setModalOpen(null)}
+                />
             )}
             {modalOpen === 'memory' && (
                 <MemoryModal onSelect={(ram) => handleSelect('memory', ram)} onClose={() => setModalOpen(null)} />

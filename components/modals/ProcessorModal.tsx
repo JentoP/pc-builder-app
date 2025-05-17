@@ -10,10 +10,8 @@ type ProcessorModalProps = {
 export default function ProcessorModal({ socket, onSelect, onClose }: ProcessorModalProps) {
     const [processors, setProcessors] = useState([]);
     const supabase = createClient();
-
     useEffect(() => {
         const fetchProcessors = async () => {
-            const supabase = createClient();
             let query = supabase.from('processors').select('*');
 
             if (socket) {

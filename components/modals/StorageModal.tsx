@@ -1,19 +1,26 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
+import {useEffect, useState} from 'react';
+import {createClient} from '@/utils/supabase/client';
 
 type StorageModalProps = {
     onSelect: (storage: any) => void;
     onClose: () => void;
+    motherboard?: any;
 };
 
-export default function StorageModal({ onSelect, onClose }: StorageModalProps) {
+export default function StorageModal({onSelect, onClose, motherboard}: StorageModalProps) {
     const [storage, setStorage] = useState([]);
     const supabase = createClient();
 
     useEffect(() => {
         const fetchStorage = async () => {
-            const { data, error } = await supabase.from('storage').select('*');
+            let query = supabase.from('storages').select('*');
+            const mobo = motherboard;
+            if (mobo) {
+                query = query.or(`(interface.eq.nvme,interface.eq.sata)`); // if both are accepted
+            }
+
+            const {data, error} = await supabase.from('storage').select('*');
             if (error) console.error('Error fetching storage:', error.message);
             else { // @ts-ignore
                 setStorage(data || []);
@@ -33,20 +40,31 @@ export default function StorageModal({ onSelect, onClose }: StorageModalProps) {
                         <th className="border p-2">Name</th>
                         <th className="border p-2">Manufacturer</th>
                         <th className="border p-2">Price</th>
+                        <th className="border p-2">Capacity</th>
                         <th className="border p-2">Select</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {storage.map((storage: any) => (
-                        <tr key={storage.id}>
-                            <td className="border p-2">{storage.name}</td>
-                            <td className="border p-2">{storage.manufacturer}</td>
-                            <td className="border p-2">${storage.price.toFixed(2)}</td>
-                            <td className="border p-2">
-                                <button className="bg-green-500 text-white px-2 py-1 rounded" onClick={() => onSelect(storage)}>Select</button>
-                            </td>
-                        </tr>
-                    ))}
+                    {storage
+                        .filter((s: any) => {
+                            if (!motherboard) return true;
+                            if (s.interface === 'nvme' && motherboard.nvme_slots < 1) return false;
+                            if (s.interface === 'sata' && motherboard.sata_ports < 1) return false;
+                            return true;
+                        })
+                        .map((storage: any) => (
+                            <tr key={storage.id}>
+                                <td className="border p-2">{storage.name}</td>
+                                <td className="border p-2">{storage.interface}</td>
+                                <td className="border p-2">{storage.capacity} GB</td>
+                                <td className="border p-2">${storage.price.toFixed(2)}</td>
+                                <td className="border p-2">
+                                    <button className="bg-green-500 text-white px-2 py-1 rounded"
+                                            onClick={() => onSelect(storage)}>Select
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

@@ -1,22 +1,37 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+type ProcessorModalProps = {
+    socket?: string;
+    onSelect: (cpu: any) => void;
+    onClose: () => void;
+};
 
-export default function ProcessorModal({ onSelect, onClose }: { onSelect: (cpu: any) => void; onClose: () => void }) {
+export default function ProcessorModal({ socket, onSelect, onClose }: ProcessorModalProps) {
     const [processors, setProcessors] = useState([]);
     const supabase = createClient();
 
     useEffect(() => {
         const fetchProcessors = async () => {
-            const { data, error } = await supabase.from('processors').select('*');
-            if (error) console.error(error);
-            else { // @ts-ignore
-                setProcessors(data);
+            const supabase = createClient();
+            let query = supabase.from('processors').select('*');
+
+            if (socket) {
+                query = query.eq('socket', socket);
+            }
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error('Error fetching processors:', error.message);
+            } else {
+                // @ts-ignore
+                setProcessors(data || []);
             }
         };
 
         fetchProcessors();
-    }, []);
+    }, [socket]);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50">

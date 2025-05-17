@@ -2,21 +2,37 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 
-export default function MemoryModal({ onSelect, onClose }: { onSelect: (ram: any) => void; onClose: () => void }) {
+type MemoryModalProps = {
+    type?: string;
+    onSelect: (ram: any) => void;
+    onClose: () => void;
+};
+
+export default function MemoryModal({ type, onSelect, onClose }: MemoryModalProps) {
     const [memory, setMemory] = useState([]);
     const supabase = createClient();
 
     useEffect(() => {
         const fetchMemory = async () => {
-            const { data, error } = await supabase.from('memory').select('*');
-            if (error) console.error(error);
-            else { // @ts-ignore
-                setMemory(data);
+            const supabase = createClient();
+            let query = supabase.from('memory').select('*');
+
+            if (type) {
+                query = query.eq('type', type);
+            }
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error('Error fetching memory:', error.message);
+            } else {
+                setMemory(data || []);
             }
         };
 
         fetchMemory();
-    }, []);
+    }, [type]);
+
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

@@ -60,7 +60,7 @@ export default function StorageModal({ motherboard, onSelect, onClose }: Storage
                     </tr>
                     </thead>
                     <tbody>
-                    {filtered.map.length === 0 ? (
+                    {filtered.length === 0 ? (
                         <tr>
                             <td colSpan={8} className="p-4 text-center text-red-500">
                                 No results found. Check other components for compatibility.

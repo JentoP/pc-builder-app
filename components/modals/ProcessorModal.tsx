@@ -13,13 +13,11 @@ export default function ProcessorModal({ socket, onSelect, onClose }: ProcessorM
     useEffect(() => {
         const fetchProcessors = async () => {
             let query = supabase.from('processors').select('*');
-
             if (socket) {
                 query = query.eq('socket', socket);
             }
 
             const { data, error } = await query;
-
             if (error) {
                 console.error('Error fetching processors:', error.message);
             } else {
@@ -27,7 +25,6 @@ export default function ProcessorModal({ socket, onSelect, onClose }: ProcessorM
                 setProcessors(data || []);
             }
         };
-
         fetchProcessors();
     }, [socket]);
 

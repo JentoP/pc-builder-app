@@ -14,15 +14,12 @@ export default function MemoryModal({ type, onSelect, onClose }: MemoryModalProp
 
     useEffect(() => {
         const fetchMemory = async () => {
-            const supabase = createClient();
             let query = supabase.from('memory').select('*');
-
             if (type) {
                 query = query.eq('type', type);
             }
 
             const { data, error } = await query;
-
             if (error) {
                 console.error('Error fetching memory:', error.message);
             } else {
@@ -30,7 +27,6 @@ export default function MemoryModal({ type, onSelect, onClose }: MemoryModalProp
                 setMemory(data || []);
             }
         };
-
         fetchMemory();
     }, [type]);
 

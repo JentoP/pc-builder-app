@@ -14,7 +14,7 @@ export default function PsuModal({ onSelect, onClose }: PsuModalProps) {
     useEffect(() => {
         const fetchPsus = async () => {
             const { data, error } = await supabase.from('power_supplies').select('*');
-            if (error) console.error('Error fetching GPUs:', error.message);
+            if (error) console.error('Error fetching PSUs:', error.message);
             else { // @ts-ignore
                 setPsus(data || []);
             }
@@ -25,7 +25,7 @@ export default function PsuModal({ onSelect, onClose }: PsuModalProps) {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded max-h-[80vh] overflow-y-auto w-[90%] max-w-4xl relative">
-                <h2 className="text-xl font-bold mb-4">Select GPU</h2>
+                <h2 className="text-xl font-bold mb-4">Select a power supply</h2>
                 <button className="absolute top-4 right-6 text-red-500" onClick={onClose}>✖</button>
                 <table className="w-full table-auto border-collapse border border-gray-300">
                     <thead className="bg-gray-100">

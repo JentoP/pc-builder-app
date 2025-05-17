@@ -12,15 +12,12 @@ export default function MotherboardModal({ socket, onSelect, onClose }: Motherbo
     const [motherboards, setMotherboards] = useState([]);
     useEffect(() => {
         const fetchMotherboards = async () => {
-            const supabase = createClient();
             let query = supabase.from('motherboards').select('*');
-
             if (socket) {
                 query = query.eq('socket', socket);
             }
 
             const { data, error } = await query;
-
             if (error) {
                 console.error('Error fetching motherboards:', error.message);
             } else {
@@ -28,7 +25,6 @@ export default function MotherboardModal({ socket, onSelect, onClose }: Motherbo
                 setMotherboards(data || []);
             }
         };
-
         fetchMotherboards();
     }, [socket]);
 

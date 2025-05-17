@@ -13,9 +13,11 @@ export default function GpuModal({ onSelect, onClose }: GpuModalProps) {
 
     useEffect(() => {
         const fetchGpus = async () => {
-            const { data, error } = await supabase.from('gpus').select('*');
+            const { data, error } = await supabase.from('graphic_cards').select('*');
             if (error) console.error('Error fetching GPUs:', error.message);
-            else setGpus(data || []);
+            else { // @ts-ignore
+                setGpus(data || []);
+            }
         };
         fetchGpus();
     }, []);

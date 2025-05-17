@@ -1,6 +1,3 @@
-import {hasEnvVars} from "@/utils/supabase/check-env-vars";
-import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
-import HeaderAuth from "@/components/nextjs/header-auth";
 import * as React from "react";
 
 export default async function Home() {

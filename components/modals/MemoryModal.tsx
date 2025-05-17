@@ -26,6 +26,7 @@ export default function MemoryModal({ type, onSelect, onClose }: MemoryModalProp
             if (error) {
                 console.error('Error fetching memory:', error.message);
             } else {
+                // @ts-ignore
                 setMemory(data || []);
             }
         };

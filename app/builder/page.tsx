@@ -73,7 +73,7 @@ export default function BuilderPage() {
             )}
             {modalOpen === 'motherboard' && (
                 <MotherboardModal
-                    socket={build.processor?.socket}
+                    build={build}
                     onSelect={(mobo) => handleSelect('motherboard', mobo)}
                     onClose={() => setModalOpen(null)}
                 />

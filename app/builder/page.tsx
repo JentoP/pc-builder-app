@@ -39,6 +39,12 @@ export default function BuilderPage() {
                 <button className="mt-2 bg-blue-600 text-white px-4 py-2 rounded" onClick={() => setModalOpen('processor')}>
                     Choose Processor
                 </button>
+            {/*    remove selection*/}
+                {build.processor && (
+                    <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded" onClick={() => handleSelect('processor', null)}>
+                        Remove Processor
+                    </button>
+                )}
             </div>
 
             {/* Motherboard */}
@@ -52,6 +58,12 @@ export default function BuilderPage() {
                 <button className="mt-2 bg-blue-600 text-white px-4 py-2 rounded" onClick={() => setModalOpen('motherboard')}>
                     Choose Motherboard
                 </button>
+                {build.motherboard && (
+
+                    <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded" onClick={() => handleSelect('motherboard', null)}>
+                    Remove Motherboard
+                </button>
+                )}
             </div>
 
             {/* Memory */}
@@ -65,12 +77,22 @@ export default function BuilderPage() {
                 <button className="mt-2 bg-blue-600 text-white px-4 py-2 rounded" onClick={() => setModalOpen('memory')}>
                     Choose Memory
                 </button>
+                {build.memory && (
+                    <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded" onClick={() => handleSelect('memory', null)}>
+                    Remove Memory
+                </button>
+                )}
             </div>
 
             {/* Modals */}
             {modalOpen === 'processor' && (
-                <ProcessorModal onSelect={(cpu) => handleSelect('processor', cpu)} onClose={() => setModalOpen(null)} />
+                <ProcessorModal
+                    socket={build.motherboard?.socket}
+                    onSelect={(cpu) => handleSelect('processor', cpu)}
+                    onClose={() => setModalOpen(null)}
+                />
             )}
+
             {modalOpen === 'motherboard' && (
                 <MotherboardModal
                     socket={build.processor?.socket}
@@ -79,7 +101,15 @@ export default function BuilderPage() {
                 />
             )}
             {modalOpen === 'memory' && (
-                <MemoryModal onSelect={(ram) => handleSelect('memory', ram)} onClose={() => setModalOpen(null)} />
+                <MemoryModal
+                    type={
+                        build.motherboard?.chipset.startsWith('Z690') || build.motherboard?.chipset.startsWith('Z790')
+                            ? 'DDR5'
+                            : 'DDR4'
+                    }
+                    onSelect={(ram) => handleSelect('memory', ram)}
+                    onClose={() => setModalOpen(null)}
+                />
             )}
         </div>
     );

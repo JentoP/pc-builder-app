@@ -21,19 +21,19 @@ type StorageModalProps = {
 
 export default function StorageModal({ motherboard, onSelect, onClose }: StorageModalProps) {
     const supabase = createClient();
-    const [storages, setStorages] = useState<Storage[]>([]);
+    const [storages, setStorage] = useState<Storage[]>([]);
 
     useEffect(() => {
-        const fetchStorages = async () => {
-            const { data, error } = await supabase.from('storages').select('*');
+        const fetchStorage = async () => {
+            const { data, error } = await supabase.from('storage').select('*');
             if (error) {
-                console.error('Error fetching storages:', error.message);
+                console.error('Error fetching storage:', error.message);
             } else {
-                setStorages(data || []);
+                setStorage(data || []);
             }
         };
 
-        fetchStorages();
+        fetchStorage();
     }, []);
 
     const filtered = storages.filter((s) => {
@@ -60,22 +60,30 @@ export default function StorageModal({ motherboard, onSelect, onClose }: Storage
                     </tr>
                     </thead>
                     <tbody>
-                    {filtered.map((s) => (
-                        <tr key={s.id}>
-                            <td className="border p-2">{s.name}</td>
-                            <td className="border p-2">{s.interface}</td>
-                            <td className="border p-2">{s.capacity}</td>
-                            <td className="border p-2">${s.price.toFixed(2)}</td>
-                            <td className="border p-2">
-                                <button
-                                    className="bg-green-500 text-white px-2 py-1 rounded"
-                                    onClick={() => onSelect(s)}
-                                >
-                                    Select
-                                </button>
+                    {filtered.map.length === 0 ? (
+                        <tr>
+                            <td colSpan={8} className="p-4 text-center text-red-500">
+                                No results found. Check other components for compatibility.
                             </td>
                         </tr>
-                    ))}
+                    ) : (
+                        filtered.map((s) => (
+                            <tr key={s.id}>
+                                <td className="border p-2">{s.name}</td>
+                                <td className="border p-2">{s.interface}</td>
+                                <td className="border p-2">{s.capacity}</td>
+                                <td className="border p-2">${s.price.toFixed(2)}</td>
+                                <td className="border p-2">
+                                    <button
+                                        className="bg-green-500 text-white px-2 py-1 rounded"
+                                        onClick={() => onSelect(s)}
+                                    >
+                                        Select
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                     </tbody>
                 </table>
             </div>

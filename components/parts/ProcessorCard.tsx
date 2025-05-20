@@ -17,14 +17,21 @@ type Processor = {
 
 export default function ProcessorCard({cpu}: { cpu: Processor }) {
     const [image, setImage] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchImage = async () => {
             try {
                 const res = await fetch(`/api/parts-image?q=${encodeURIComponent(cpu.name)}`)
                 const data = await res.json()
-                setImage(data.image || null)
-            } catch {
+                if (data.error) {
+                    setError(data.error)
+                    setImage(null)
+                } else {
+                    setImage(data.image || null)
+                }
+            } catch (err) {
+                setError('Failed to fetch image')
                 setImage(null)
             }
         }
@@ -35,10 +42,22 @@ export default function ProcessorCard({cpu}: { cpu: Processor }) {
     return (
         <div className="border rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
             <div className="mb-3">
-                {image ? (
-                    <img src={image} alt={cpu.name} className="w-full h-40 object-contain rounded"/>
+                {error ? (
+                    <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
+                        <p className="text-sm">{error}</p>
+                    </div>
+                ) : image ? (
+                    <img 
+                        src={image} 
+                        alt={cpu.name} 
+                        className="w-full h-40 object-contain rounded"
+                        onError={() => {
+                            setError('Image failed to load')
+                            setImage(null)
+                        }}
+                    />
                 ) : (
-                    <div className="w-full h-40 flex items-center justify-center text-sm  rounded">
+                    <div className="w-full h-40 flex items-center justify-center text-sm rounded">
                         <Skeleton className="w-full h-full"/>
                     </div>
                 )}

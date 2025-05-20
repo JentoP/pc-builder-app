@@ -1,11 +1,52 @@
 import { NextResponse } from 'next/server'
+import { createClient } from '@/utils/supabase/server'
+
+const imageCache = new Map<string, string>()
+const typeKeywords: Record<string, string> = {
+    cpu: 'CPU box',
+    gpu: 'graphics card box',
+    motherboard: 'motherboard box',
+    ram: 'RAM stick',
+    ssd: 'SSD',
+    hdd: 'hard drive',
+    psu: 'power supply unit',
+    case: 'PC case',
+    cooler: 'CPU cooler',
+    monitor: 'monitor display',
+    keyboard: 'keyboard',
+    mouse: 'gaming mouse',
+    default: ''
+}
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
+    const type = searchParams.get('type')?.toLowerCase() || 'default'
 
     if (!query) {
         return NextResponse.json({ error: 'Missing query' }, { status: 400 })
+    }
+
+    const keyword = typeKeywords[type] || typeKeywords.default
+    const searchQuery = `${query} ${keyword}`.trim()
+
+    // In-memory cache check
+    if (imageCache.has(searchQuery)) {
+        return NextResponse.json({ image: imageCache.get(searchQuery) })
+    }
+
+    const supabase = await createClient()
+
+    // Supabase DB check first
+    const { data: dbMatch, error: dbError } = await supabase
+        .from(type + 's')
+        .select('image_url')
+        .ilike('name', `%${query}%`)
+        .maybeSingle()
+
+    if (dbMatch?.image_url) {
+        imageCache.set(searchQuery, dbMatch.image_url)
+        return NextResponse.json({ image: dbMatch.image_url })
     }
 
     const apiKey = process.env.SERPAPI_KEY
@@ -13,30 +54,36 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Missing SerpAPI key' }, { status: 500 })
     }
 
-    const url = `https://serpapi.com/search.json?q=${encodeURIComponent(query + ' CPU')}&tbm=isch&api_key=${apiKey}`
+    const url = `https://serpapi.com/search?engine=google_images_light&q=${encodeURIComponent(searchQuery)}&tbm=isch&api_key=${apiKey}`
 
     try {
         const res = await fetch(url)
         if (!res.ok) {
             throw new Error(`SerpAPI request failed: ${res.status}`)
         }
-        
-        const data = await res.json()
-        
-        // Try to find the best image available
-        const images = data.images_results || []
-        // @ts-ignore
-        const imageUrl = images.find(img => img.original?.includes('jpg') || img.original?.includes('png'))?.original
-            || images[0]?.thumbnail || null
 
-        if (!imageUrl) {
-            console.warn('No suitable image found for query:', query)
+        const data = await res.json()
+        const images = data.images_results || []
+        const imageUrl = images.find(img => img.original)?.original || images[0]?.thumbnail || null
+
+        if (imageUrl) {
+            imageCache.set(searchQuery, imageUrl)
+
+            // Optional: store it in the table if exact match found
+            if (dbMatch) {
+                await supabase
+                    .from(type + 's')
+                    .update({ image_url: imageUrl })
+                    .ilike('name', `%${query}%`)
+            }
+        } else {
+            console.warn(`No image found for: ${searchQuery}`)
         }
 
         return NextResponse.json({ image: imageUrl })
     } catch (error) {
         console.error('Error fetching image:', error)
-        return NextResponse.json({ 
+        return NextResponse.json({
             image: null,
             error: error instanceof Error ? error.message : 'Unknown error'
         }, { status: 500 })

@@ -7,13 +7,14 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Profile page with saved builds
 
 ### 2. Component Library (MVP)
-- Components retrieved via an external API (nice to have), or imported manually into the database
-- Support for categories like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling
+- Components retrieved via a manually imported database
+- Pages for components like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling,...
 - Filters for brand, price, compatibility, etc.
+- Image fetching through API as a fallback.
 
 ### 3. PC Builder Interface (MVP)
-- Dropdown selection for each component
-- Live price calculation and compatibility checks
+- Selection for each component
+- Live price calculation
 - Dynamic preview of the build
   
 ### 3. Admin Environment (MVP)
@@ -25,18 +26,16 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Share via a unique link
 - Option to copy and modify builds
 
-### 5. Compatibility Check (nice to have)
-- Logic integrated (or via API) to check if components are compatible
+### 5. Compatibility Check (MVP)
+- Logic integrated to check if components are compatible
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
 
 ### 6. Wishlist and Comparison (nice to have)
 - Option to compare components
 - Wishlist for future purchases
 
-
-
-### API Integration
-- External API is used to fetch real-time component data (price, specs, availability)
+### API Integration (nice to have)
+- External API used to fetch real-time component data (price, specs, availability)
 
 ## Tech Stack
 - [Next.js](https://nextjs.org)

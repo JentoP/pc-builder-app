@@ -1,0 +1,48 @@
+INSERT INTO cases (name, manufacturer, side_panel, mobo_form_factor, psu_form_factor, color, price) VALUES
+('O11 Dynamic', 'Lian Li', 'Tempered Glass', 'ATX', 'ATX', 'Black', 139.99),
+('Meshify C', 'Fractal Design', 'Mesh', 'ATX', 'ATX', 'White', 109.99),
+('H510', 'NZXT', 'Tempered Glass', 'ATX', 'ATX', 'Red', 74.99),
+('NR200P', 'Cooler Master', 'Tempered Glass', 'Mini-ITX', 'SFX', 'Black', 89.99),
+('Torrent Compact', 'Fractal Design', 'Mesh', 'ATX', 'ATX', 'Gray', 129.99);
+INSERT INTO processors (name, manufacturer, socket, cores, threads, base_clock, boost_clock, tdp, price) VALUES
+('Ryzen 9 5900X', 'AMD', 'AM4', 12, 24, 3.7, 4.8, 105, 399.99),
+('Core i7-12700K', 'Intel', 'LGA1700', 12, 20, 3.6, 5.0, 125, 379.99),
+('Ryzen 5 5600X', 'AMD', 'AM4', 6, 12, 3.7, 4.6, 65, 199.99),
+('Core i5-12400F', 'Intel', 'LGA1700', 6, 12, 2.5, 4.4, 65, 179.99),
+('Ryzen 7 5800X3D', 'AMD', 'AM4', 8, 16, 3.4, 4.5, 105, 329.99);
+INSERT INTO motherboards (name, manufacturer, chipset, socket, form_factor, memory_slots, max_memory, price) VALUES
+('B550 AORUS Master', 'Gigabyte', 'B550', 'AM4', 'ATX', 4, 128, 259.99),
+('Z690 TOMAHAWK', 'MSI', 'Z690', 'LGA1700', 'ATX', 4, 128, 249.99),
+('ROG Strix B550-I', 'ASUS', 'B550', 'AM4', 'Mini-ITX', 2, 64, 209.99),
+('Z790 AORUS Elite', 'Gigabyte', 'Z790', 'LGA1700', 'ATX', 4, 128, 289.99),
+('B450M DS3H', 'Gigabyte', 'B450', 'AM4', 'Micro-ATX', 2, 64, 89.99);
+INSERT INTO memory (name, manufacturer, type, speed, size, modules, price) VALUES
+('Vengeance RGB Pro', 'Corsair', 'DDR4', 3600, 8, 2, 94.99),
+('Trident Z Neo', 'G.Skill', 'DDR4', 3600, 16, 2, 159.99),
+('Ripjaws V', 'G.Skill', 'DDR4', 3200, 8, 2, 69.99),
+('Viper Steel', 'Patriot', 'DDR4', 4400, 8, 2, 124.99),
+('Kingston Fury Beast', 'Kingston', 'DDR5', 5200, 16, 2, 179.99);
+INSERT INTO storage (name, manufacturer, type, interface, capacity, price) VALUES
+('970 EVO Plus', 'Samsung', 'SSD', 'NVMe', 1000, 129.99),
+('WD Black SN850X', 'Western Digital', 'SSD', 'NVMe', 2000, 249.99),
+('Crucial MX500', 'Crucial', 'SSD', 'SATA', 1000, 84.99),
+('Barracuda', 'Seagate', 'HDD', 'SATA', 2000, 54.99),
+('980 PRO', 'Samsung', 'SSD', 'NVMe', 1000, 149.99);
+INSERT INTO coolers (name, manufacturer, type, socket_compatibility, radiator_size, noise_level, price) VALUES
+('H150i Elite Capellix', 'Corsair', 'AIO', ARRAY['AM4','LGA1700'], '360mm', 34.0, 189.99),
+('NH-D15', 'Noctua', 'Air', ARRAY['AM4','LGA1200'], NULL, 24.6, 99.99),
+('Kraken Z73', 'NZXT', 'AIO', ARRAY['AM4','LGA1700'], '360mm', 33.0, 249.99),
+('Hyper 212 Black', 'Cooler Master', 'Air', ARRAY['AM4','LGA1700'], NULL, 26.0, 39.99),
+('LC240 RGB', 'DeepCool', 'AIO', ARRAY['AM4','LGA1700'], '240mm', 32.5, 89.99);
+INSERT INTO power_supplies (name, manufacturer, wattage, form_factor, efficiency_rating, modularity, price) VALUES
+('RM850x', 'Corsair', 850, 'ATX', '80+ Gold', 'Full', 129.99),
+('SuperNOVA 750 G5', 'EVGA', 750, 'ATX', '80+ Gold', 'Full', 119.99),
+('SF600', 'Corsair', 600, 'SFX', '80+ Platinum', 'Full', 149.99),
+('Focus GX-550', 'Seasonic', 550, 'ATX', '80+ Gold', 'Full', 89.99),
+('Toughpower GF1 850W', 'Thermaltake', 850, 'ATX', '80+ Gold', 'Full', 109.99);
+INSERT INTO graphic_cards (name, manufacturer, chipset, memory_size, memory_type, length_mm, tdp, price) VALUES
+('RTX 4080 Gaming X Trio', 'MSI', 'RTX 4080', 16, 'GDDR6X', 337, 320, 1199.99),
+('RX 7900 XTX', 'AMD', 'RX 7900 XTX', 24, 'GDDR6', 287, 355, 999.99),
+('RTX 4070 Ti', 'ASUS', 'RTX 4070 Ti', 12, 'GDDR6X', 305, 285, 799.99),
+('RTX 3060 Ventus', 'MSI', 'RTX 3060', 12, 'GDDR6', 242, 170, 329.99),
+('RX 6700 XT', 'Sapphire', 'RX 6700 XT', 12, 'GDDR6', 267, 230, 479.99);

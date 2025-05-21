@@ -6,18 +6,19 @@ import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/fetch-user";
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toast } from "sonner";
 
 export default function UpdateUserProfile() {
     const supabase = createClient();
-    const { profile, loading: loadingProfile, error: fetchError } = useProfile();
+    const { profile, loading: loadingProfile, error: fetchError, refresh } = useProfile();
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [bio, setBio] = useState("");
     const [avatarUrl, setAvatarUrl] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         setFirstName(profile.firstName);
@@ -29,14 +30,10 @@ export default function UpdateUserProfile() {
     const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        setError(null);
-        setSuccess(false);
 
-        const { data, error: userError } = await supabase.auth.getUser();
-        const user = data?.user;
-
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
         if (!user || !user.id) {
-            setError("User not found");
+            toast.error("User not found");
             setLoading(false);
             return;
         }
@@ -50,67 +47,112 @@ export default function UpdateUserProfile() {
         }, { onConflict: "id" });
 
         if (updateError) {
-            setError(updateError.message);
+            toast.error(updateError.message);
         } else {
-            setSuccess(true);
+            refresh();
+            toast.success("Profile updated successfully!");
         }
 
         setLoading(false);
     };
 
     return (
-        <div className="max-w-md p-4">
-            {loadingProfile && <p>Loading profile...</p>}
+        <div className="max-w-4xl p-4">
+            {loadingProfile && (
+                <div className="flex flex-col md:flex-row gap-6">
+                    <div className="flex-1 space-y-4">
+                        <Skeleton className="h-40 w-40" />
+                        <Skeleton className="h-10 w-32" />
+                        <Skeleton className="h-10 w-48" />
+                    </div>
+                    <div className="flex-1 space-y-4">
+                        <Skeleton className="h-10 w-24" />
+                        <Skeleton className="h-10 w-24" />
+                        <Skeleton className="h-10 w-32" />
+                        <Skeleton className="h-10 w-48" />
+                    </div>
+                </div>
+            )}
             {fetchError && <p className="text-red-500">{fetchError}</p>}
             {!loadingProfile && (
-                <form onSubmit={handleUpdate} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium">First Name</label>
-                        <Input
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
+                <div className="flex flex-col md:flex-row gap-6">
+                    {/* Profile Info Card */}
+                    <div className="flex-1">
+                        <div className="rounded-lg border p-4">
+                            <div className="flex items-center gap-4">
+                                <Avatar className="h-40 w-40">
+                                    <AvatarImage src={profile.avatarUrl} alt="Profile" />
+                                    <AvatarFallback>
+                                        {profile.firstName?.[0]?.toUpperCase() || "U"}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <h3 className="font-medium">
+                                        {profile.firstName} {profile.lastName}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {profile.bio || "No bio set"}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium">Last Name</label>
-                        <Input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
+                    {/* Update Form */}
+                    <div className="flex-1">
+                        <form onSubmit={handleUpdate} className="space-y-3">
+                            <div>
+                                <label className="block text-sm font-medium">First Name</label>
+                                <Input
+                                    type="text"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    className="w-full p-2 border rounded"
+                                />
+                            </div>
 
-                    <div>
-                        <label className="block text-sm font-medium">Bio</label>
-                        <Textarea
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
+                            <div>
+                                <label className="block text-sm font-medium">Last Name</label>
+                                <Input
+                                    type="text"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    className="w-full p-2 border rounded"
+                                />
+                            </div>
 
-                    <div>
-                        <label className="block text-sm font-medium">Avatar URL</label>
-                        <Input
-                            type="text"
-                            value={avatarUrl}
-                            onChange={(e) => setAvatarUrl(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
+                            <div>
+                                <label className="block text-sm font-medium">Bio</label>
+                                <Textarea
+                                    value={bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                    className="w-full p-2 border rounded"
+                                />
+                            </div>
 
-                    <Button type="submit" disabled={loading}>
-                        {loading ? "Saving..." : "Save Changes"}
-                    </Button>
-                </form>
+                            <div>
+                                <label className="block text-sm font-medium">Avatar URL</label>
+                                <Input
+                                    type="text"
+                                    value={avatarUrl}
+                                    onChange={(e) => setAvatarUrl(e.target.value)}
+                                    className="w-full p-2 border rounded"
+                                />
+                            </div>
+
+                            <div className="flex justify-end gap-2">
+                                <Button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full sm:w-auto"
+                                >
+                                    {loading ? "Updating..." : "Update Profile"}
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             )}
-
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-            {success && <p className="text-green-600 mt-4">Profile updated successfully!</p>}
         </div>
     );
 }

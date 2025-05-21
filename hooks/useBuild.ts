@@ -45,7 +45,6 @@ function checkCompatibility(type: keyof Build, part: any, current: Build): Parti
             toast.error('Processor removed due to socket incompatibility.');
         }
     }
-
     return updates;
 }
 

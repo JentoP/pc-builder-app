@@ -9,6 +9,7 @@ export type Build = {
     storage?: any;
     psu?: any;
     case?: any;
+    cooling?: any;
 };
 
 const defaultBuild: Build = {
@@ -19,6 +20,7 @@ const defaultBuild: Build = {
     storage: null,
     psu: null,
     case: null,
+    cooling: null,
 };
 
 function getSocket(part: any): string | null {

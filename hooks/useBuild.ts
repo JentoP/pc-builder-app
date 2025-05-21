@@ -28,12 +28,13 @@ function getSocket(part: any): string | null {
 function checkCompatibility(type: keyof Build, part: any, current: Build): Partial<Build> {
     const updates: Partial<Build> = {};
 
+    // CPU & Motherboard socket
     if (type === 'processor') {
         const newSocket = getSocket(part);
         const mbSocket = getSocket(current.motherboard);
         if (mbSocket && newSocket !== mbSocket) {
             updates.motherboard = null;
-            toast.error('Motherboard removed due to socket incompatibility.');
+            toast.warning('Motherboard removed due to CPU socket incompatibility.');
         }
     }
 
@@ -42,9 +43,71 @@ function checkCompatibility(type: keyof Build, part: any, current: Build): Parti
         const cpuSocket = getSocket(current.processor);
         if (cpuSocket && newSocket !== cpuSocket) {
             updates.processor = null;
-            toast.error('Processor removed due to socket incompatibility.');
+            toast.warning('Processor removed due to motherboard socket incompatibility.');
+        }
+
+        const newRamType = part?.memory_type;
+        const ramType = current.memory?.memory_type;
+        if (ramType && newRamType !== ramType) {
+            updates.memory = null;
+            toast.warning('Memory removed due to motherboard RAM type incompatibility.');
+        }
+
+        const newFormFactor = part?.form_factor;
+        const caseFormFactors = current.case?.supported_mb_sizes || [];
+        if (current.case && !caseFormFactors.includes(newFormFactor)) {
+            updates.case = null;
+            toast.warning('Case removed due to incompatible motherboard size.');
         }
     }
+
+    // RAM & Motherboard
+    if (type === 'memory') {
+        const newRamType = part?.memory_type;
+        const mbRamType = current.motherboard?.memory_type;
+        if (mbRamType && newRamType !== mbRamType) {
+            updates.motherboard = null;
+            toast.warning('Motherboard removed due to RAM type incompatibility.');
+        }
+    }
+
+    // GPU & Case
+    if (type === 'gpu') {
+        const newLength = part?.length_mm;
+        const caseLimit = current.case?.max_gpu_length_mm;
+        if (caseLimit && newLength > caseLimit) {
+            updates.case = null;
+            toast.warning('Case removed due to GPU being too long.');
+        }
+    }
+
+    // Case & Motherboard
+    if (type === 'case') {
+        const supportedSizes = part?.supported_mb_sizes || [];
+        const mbSize = current.motherboard?.form_factor;
+        if (mbSize && !supportedSizes.includes(mbSize)) {
+            updates.motherboard = null;
+            toast.warning('Motherboard removed due to case incompatibility.');
+        }
+
+        const gpuLength = current.gpu?.length_mm;
+        const maxGpuLength = part?.max_gpu_length_mm;
+        if (gpuLength && maxGpuLength && gpuLength > maxGpuLength) {
+            updates.gpu = null;
+            toast.warning('GPU removed due to case incompatibility.');
+        }
+    }
+
+    // PSU & GPU
+    if (type === 'psu') {
+        const psuWattage = part?.wattage;
+        const gpuWattage = current.gpu?.recommended_wattage;
+        if (gpuWattage && psuWattage < gpuWattage) {
+            updates.gpu = null;
+            toast.warning('GPU removed due to PSU wattage too low.');
+        }
+    }
+
     return updates;
 }
 

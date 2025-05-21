@@ -29,13 +29,24 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 ### 5. Compatibility Check (MVP)
 - Logic integrated to check if components are compatible
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
+- 
+|	Component   |	Depends on              |	Check
+|	Processor   |	Motherboard             |	Socket must match
+|	Motherboard	| Processor, Memory, Case |Socket, RAM type (e.g., DDR4/DDR5), form factor
+|	Memory	    | Motherboard	            | RAM type (e.g., DDR4 vs DDR5) and slots (optional)
+|	GPU         | Case, Motherboard	      | PCIe slot, GPU length vs case max GPU length
+|	Storage   	| Motherboard             |	SATA vs M.2 availability
+|	PSU	        | GPU, Case	              | Wattage capacity, PSU form factor
+|	Case	      | Motherboard, GPU, PSU	  | Motherboard form factor, GPU length, PSU size
 
 ### 6. Wishlist and Comparison (nice to have)
 - Option to compare components
 - Wishlist for future purchases
 
-### API Integration (nice to have)
+### 7. API Integration (nice to have)
 - External API used to fetch real-time component data (price, specs, availability)
+
+#### Compatibility Rules (MVP)
 
 ## Tech Stack
 - [Next.js](https://nextjs.org)

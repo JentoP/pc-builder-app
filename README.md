@@ -1,5 +1,5 @@
 # PC Builder Application
-The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize and compare their ideal PC setups.
+The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize their ideal PC setup.
 
 ## Features in development
 ### 1. Authentication and User Management (MVP)
@@ -39,7 +39,7 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Users can save builds in their profile
 - Share via a unique link
 - Option to copy and modify builds
-- 
+  
 ### 7. Wishlist and Comparison (nice to have)
 - Option to compare components
 - Wishlist for future purchases
@@ -47,7 +47,6 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 ### 7. API Integration (nice to have)
 - External API used to fetch real-time component data (price, specs, availability)
 
-#### Compatibility Rules (MVP)
 
 ## Tech Stack
 - [Next.js](https://nextjs.org)

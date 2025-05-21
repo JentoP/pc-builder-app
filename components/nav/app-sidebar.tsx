@@ -23,7 +23,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     const user = {
         name: `${profile.firstName} ${profile.lastName}`.trim() || "Loading...",
         email: profile.email || "Loading...",
-        avatar: `${profile.avatarUrl}` || " @public/images/avatar.png",
+        avatar: profile.avatarUrl || "/images/avatar.png",
     }
 
     const navMain = [

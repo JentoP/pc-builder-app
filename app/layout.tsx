@@ -52,7 +52,7 @@ export default function RootLayout({children,}: Readonly<{
                             className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                             <SidebarTrigger className="ml-3"/>
                             <Separator orientation="vertical" className="mr-2 h-4"/>
-                            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12">
+                            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 ">
                                 <div className="w-full flex items-center justify-between text-sm">
                                     <Logo/>
                                     <ThemeSwitcher/>
@@ -67,11 +67,11 @@ export default function RootLayout({children,}: Readonly<{
                         </div>
 
                         {/* Footer */}
-                        <footer className="w-full flex flex-col border-t mx-auto text-xs gap-4 p-5">
+                        <footer className="w-full flex flex-col border-t mx-auto p-5">
                             <div className="text-sm flex justify-between">
                                 <p>PC Builder © {new Date().getFullYear()}</p>
-                                {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
-                                <div className="flex text-center gap-4">
+                                <div className="flex text-end gap-4">
+                                    {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
                                 </div>
                             </div>
                         </footer>

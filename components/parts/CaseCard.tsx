@@ -73,7 +73,6 @@ export default function CaseCard({ pcCase, onAddToBuild }: CaseCardProps) {
                 </Link>
                 <div className="flex justify-between text-sm mb-3">
                     <p>{pcCase.form_factor}</p>
-                    <p>{pcCase.max_gpu_length} mm GPU</p>
                     <p>{pcCase.color}</p>
                 </div>
                 <div className="flex justify-between items-center">

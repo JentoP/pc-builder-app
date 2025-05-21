@@ -94,6 +94,17 @@ export async function GET(request: Request) {
 
         if (imageUrl) {
             imageCache.set(searchQuery, imageUrl)
+            
+            // Update the image_url in the corresponding table
+            const { error: updateError } = await supabase
+                .from(tableName)
+                .update({ image_url: imageUrl })
+                .ilike('name', `%${query}%`)
+                .maybeSingle()
+
+            if (updateError) {
+                console.error(`Error updating image_url in ${tableName}:`, updateError)
+            }
         } else {
             console.warn(`No image found for: ${searchQuery}`)
         }

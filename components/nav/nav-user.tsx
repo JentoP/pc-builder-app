@@ -30,6 +30,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link";
+import {Skeleton} from "@/components/ui/skeleton";
 
 export function NavUser({user}: {
     user: {
@@ -69,22 +70,26 @@ export function NavUser({user}: {
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarImage src={user.avatar} alt={user.name}/>
+                                    {user.avatar ? (
+                                        <AvatarImage src={user.avatar} alt={user.name}/>
+                                    ) : (
+                                        <Skeleton className="h-8 w-8 rounded-lg"/>
+                                    )}
                                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">{user.name}</span>
-                                    {/*<span className="truncate font-semibold">{user.lastName}</span>*/}
-                                    <span className="truncate text-xs">{user.email}</span>
+                                     <span className="truncate font-semibold">
+                                    {user.name ? user.name : <Skeleton className="h-4 w-24"/>}
+                                     </span>
+                                    <span className="truncate text-xs">
+                                     {user.email ? user.email : <Skeleton className="h-4 w-32"/>}
+                                    </span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
+
                         <DropdownMenuSeparator/>
                         <DropdownMenuGroup>
-                            {/*<DropdownMenuItem>*/}
-                            {/*  <Sparkles />*/}
-                            {/*  Upgrade to Pro*/}
-                            {/*</DropdownMenuItem>*/}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator/>
                         <DropdownMenuGroup>
@@ -94,14 +99,6 @@ export function NavUser({user}: {
                                     Account
                                 </DropdownMenuItem>
                             </a>
-                            {/*<DropdownMenuItem>*/}
-                            {/*    <CreditCard/>*/}
-                            {/*    Billing*/}
-                            {/*</DropdownMenuItem>*/}
-                            {/*<DropdownMenuItem>*/}
-                            {/*  <Bell />*/}
-                            {/*  Notifications*/}
-                            {/*</DropdownMenuItem>*/}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem>

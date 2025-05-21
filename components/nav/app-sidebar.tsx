@@ -22,15 +22,9 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     const { profile, loading } = useProfile()
 
     const user = {
-        name: profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}`.trim() : (
-            <Skeleton className="h-4 w-24" />
-        ),
-        email: profile.email || (
-            <Skeleton className="h-4 w-32" />
-        ),
-        avatar: profile.avatarUrl || (
-            <Skeleton className="h-8 w-8 rounded-lg" />
-        ),
+        name: profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}`.trim() : "",
+        email: profile.email || "",
+        avatar: profile.avatarUrl || "",
     }
 
     const navMain = [

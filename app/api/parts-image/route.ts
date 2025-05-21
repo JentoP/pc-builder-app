@@ -66,7 +66,7 @@ export async function GET(request: Request) {
         return NextResponse.json({image: dbMatch.image_url})
     }
 
-    // Fallback to SerpAPI
+// Fallback to SerpAPI
     const apiKey = process.env.SERPAPI_KEY
     if (!apiKey) {
         return NextResponse.json({error: 'Missing SerpAPI key'}, {status: 500})
@@ -88,8 +88,6 @@ export async function GET(request: Request) {
         }
 
         const images: ImageResult[] = data.images_results || []
-
-
         const imageUrl = images.find(img => img.original)?.original || images[0]?.thumbnail || null
 
         if (imageUrl) {
@@ -100,10 +98,9 @@ export async function GET(request: Request) {
                 .from(tableName)
                 .update({ image_url: imageUrl })
                 .ilike('name', `%${query}%`)
-                .maybeSingle()
 
             if (updateError) {
-                console.error(`Error updating image_url in ${tableName}:`, updateError)
+                console.warn(`Failed to update image_url in Supabase: ${updateError.message}`)
             }
         } else {
             console.warn(`No image found for: ${searchQuery}`)

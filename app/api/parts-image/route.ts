@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 
 const imageCache = new Map<string, string>()
+
 const typeKeywords: Record<string, string> = {
     cpu: 'CPU box',
     gpu: 'graphics card box',
@@ -18,10 +19,26 @@ const typeKeywords: Record<string, string> = {
     default: ''
 }
 
+const tableMap: Record<string, string> = {
+    cpu: "processors",
+    gpu: "graphic_cards",
+    motherboard: "motherboards",
+    ram: "memory",
+    ssd: "storage",
+    hdd: "storage",
+    psu: "power_supplies",
+    case: "cases",
+    cooler: "coolers",
+    monitor: "monitors",
+    keyboard: "keyboards",
+    mouse: "mice"
+}
+
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
     const type = searchParams.get('type')?.toLowerCase() || 'default'
+    const tableName = tableMap[type] || "default_table"
 
     if (!query) {
         return NextResponse.json({ error: 'Missing query' }, { status: 400 })
@@ -39,7 +56,7 @@ export async function GET(request: Request) {
 
     // Supabase DB check first
     const { data: dbMatch, error: dbError } = await supabase
-        .from(type + 's')
+        .from(tableName)
         .select('image_url')
         .ilike('name', `%${query}%`)
         .maybeSingle()
@@ -49,6 +66,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ image: dbMatch.image_url })
     }
 
+    // Fallback to SerpAPI
     const apiKey = process.env.SERPAPI_KEY
     if (!apiKey) {
         return NextResponse.json({ error: 'Missing SerpAPI key' }, { status: 500 })
@@ -64,18 +82,11 @@ export async function GET(request: Request) {
 
         const data = await res.json()
         const images = data.images_results || []
+        // @ts-ignore
         const imageUrl = images.find(img => img.original)?.original || images[0]?.thumbnail || null
 
         if (imageUrl) {
             imageCache.set(searchQuery, imageUrl)
-
-            // Optional: store it in the table if exact match found
-            if (dbMatch) {
-                await supabase
-                    .from(type + 's')
-                    .update({ image_url: imageUrl })
-                    .ilike('name', `%${query}%`)
-            }
         } else {
             console.warn(`No image found for: ${searchQuery}`)
         }

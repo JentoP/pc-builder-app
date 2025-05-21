@@ -41,8 +41,8 @@ export default function ProcessorCard({cpu}: { cpu: Processor }) {
     }, [cpu.name])
 
     return (
-        <Link href={`/parts/processors/${cpu.id}`} className="">
-            <div className="border rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
+        <Link href={`/parts/processors/${cpu.id}`} className="w-full">
+            <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200">
                 <div className="mb-3">
                     {error ? (
                         <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
@@ -64,13 +64,16 @@ export default function ProcessorCard({cpu}: { cpu: Processor }) {
                         </div>
                     )}
                 </div>
-                <h2 className="text-2xl font-semibold mb-1">{cpu.manufacturer} {cpu.name}</h2>
+                <h2 className="text-xl font-semibold mb-1">{cpu.manufacturer} {cpu.name}</h2>
                 <div className="flex gap-2 items-center justify-between mb-3">
                     <p className="text-l mb-2">{cpu.socket}</p>
                     <p className="text-l mb-2">{cpu.cores} Cores</p>
                     <p className="text-l mb-2">{cpu.base_clock} GHz</p>
                 </div>
-                <p className="font-semibold text-xl">Price: ${cpu.price.toFixed(2)}</p>
+                <div className="flex justify-between items-center">
+                    <span className="font-semibold text-md">Price:</span>
+                    <span className="font-semibold text-md">${cpu.price.toFixed(2)}</span>
+                </div>
             </div>
         </Link>
     )

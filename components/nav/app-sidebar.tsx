@@ -12,18 +12,25 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarRail,
+    SidebarRail
 } from "@/components/ui/sidebar"
 import {NavUser} from "@/components/nav/nav-user"
 import {useProfile} from "@/hooks/fetch-user"
+import {Skeleton} from "@/components/ui/skeleton"
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     const { profile, loading } = useProfile()
 
     const user = {
-        name: `${profile.firstName} ${profile.lastName}`.trim() || "Loading...",
-        email: profile.email || "Loading...",
-        avatar: profile.avatarUrl || "/images/avatar.png",
+        name: profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}`.trim() : (
+            <Skeleton className="h-4 w-24" />
+        ),
+        email: profile.email || (
+            <Skeleton className="h-4 w-32" />
+        ),
+        avatar: profile.avatarUrl || (
+            <Skeleton className="h-8 w-8 rounded-lg" />
+        ),
     }
 
     const navMain = [

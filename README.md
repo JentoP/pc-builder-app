@@ -9,8 +9,9 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 ### 2. Component Library (MVP)
 - Components retrieved via a manually imported database
 - Pages for components like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling,...
-- Filters for brand, price, compatibility, etc.
-- Image fetching through API as a fallback.
+- Filters for brand, price, etc.
+- Sort by option
+- Image fetching through API as a fallback (nice to have).
 
 ### 3. PC Builder Interface (MVP)
 - Selection for each component

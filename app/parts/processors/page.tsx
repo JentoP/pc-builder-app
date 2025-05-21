@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import ProcessorCard from '@/components/parts/ProcessorCard'
 import { useBuild } from '@/hooks/useBuild'
+import {toast} from "sonner";
 
 type Processor = {
     id: string
@@ -53,7 +54,7 @@ export default function ProcessorsPage() {
     }
     const handleAddToBuild = (cpu: Processor) => {
         updateBuild('processor', cpu);
-        alert(`${cpu.name} added to current build!`);
+        toast.success(`${cpu.name} added to current build!`);
     };
 
     return (

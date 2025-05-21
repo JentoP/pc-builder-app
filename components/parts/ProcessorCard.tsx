@@ -2,6 +2,7 @@
 import {useEffect, useState} from 'react'
 import {Skeleton} from "@/components/ui/skeleton";
 import Link from "next/link";
+import {Button} from "@/components/ui/button";
 
 type Processor = {
     id: string
@@ -45,8 +46,9 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
 
     return (
         <div className="w-full">
-            <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200">
-                <Link href={`/parts/processors/${cpu.id}`}>
+            <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200 items-center">
+                <div>
+                    <Link  href={`/parts/processors/${cpu.id}`}>
                     {error ? (
                         <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
                             <p className="text-sm">{error}</p>
@@ -55,7 +57,7 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
                         <img
                             src={image}
                             alt={cpu.name}
-                            className="w-full h-40 object-contain rounded"
+                            className="w-full h-32 object-contain rounded"
                             onError={() => {
                                 setError('Image failed to load')
                                 setImage(null)
@@ -67,6 +69,7 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
                         </div>
                     )}
                     <h2 className="text-xl font-semibold mb-1">{cpu.manufacturer} {cpu.name}</h2>
+                    </Link>
                     <div className="flex gap-2 items-center justify-between mb-3">
                         <p className="text-l mb-2">{cpu.socket}</p>
                         <p className="text-l mb-2">{cpu.cores} Cores</p>
@@ -74,19 +77,18 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="font-semibold text-md">Price:</span>
-                        <span className="font-semibold text-md">${cpu.price.toFixed(2)}</span>
+                        <span className="font-semibold text-md">€ {cpu.price.toFixed(2)}</span>
                     </div>
-                </Link>
-                {
-                    onAddToBuild && (
-                        <button
-                            className="mt-3 bg-green-500 text-white px-4 py-1 rounded"
-                            onClick={() => onAddToBuild(cpu)}
-                        >
+                </div>
+                <div className="flex justify-center">
+                {onAddToBuild && (
+                        <Button
+                            className="mt-3 px-4 py-1 rounded"
+                            onClick={() => onAddToBuild(cpu)}>
                             Add to Build
-                        </button>
-                    )
-                }
+                        </Button>
+                    )}
+                </div>
             </div>
         </div>
     )

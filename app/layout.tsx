@@ -15,6 +15,7 @@ import * as React from "react";
 import {hasEnvVars} from "@/utils/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
+import { Toaster } from 'sonner';
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -63,6 +64,7 @@ export default function RootLayout({children,}: Readonly<{
                         {/* Main Content */}
                         <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl p-5">
                             {children}
+                            <Toaster position="bottom-right" richColors expand />
                             <SpeedInsights/>
                         </div>
 

@@ -16,20 +16,11 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Selection for each component
 - Live price calculation
 - Dynamic preview of the build
-  
-### 3. Admin Environment (MVP)
-- Admin can manage or edit components in the Supabase database
-- Logs for builds and user activity
 
-### 4. Save and Share Builds (nice to have)
-- Users can save builds in their profile
-- Share via a unique link
-- Option to copy and modify builds
-
-### 5. Compatibility Check (MVP)
+### 4. Compatibility Check (MVP)
 - Logic integrated to check if components are compatible
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
-- 
+
 | Component   | Depends on              | Check                                              |
 |-------------|-------------------------|----------------------------------------------------|
 | Processor   | Motherboard             | Socket must match                                  |
@@ -40,8 +31,16 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 | PSU         | GPU, Case               | Wattage capacity, PSU form factor                  |
 | Case        | Motherboard, GPU, PSU   | Motherboard form factor, GPU length, PSU size      |
 
+### 5. Admin Environment (nice to have)
+- Admin can manage or edit components in the Supabase database
+- Logs for builds and user activity
 
-### 6. Wishlist and Comparison (nice to have)
+### 6. Save and Share Builds (nice to have)
+- Users can save builds in their profile
+- Share via a unique link
+- Option to copy and modify builds
+- 
+### 7. Wishlist and Comparison (nice to have)
 - Option to compare components
 - Wishlist for future purchases
 

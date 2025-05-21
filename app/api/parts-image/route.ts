@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/utils/supabase/server'
+import {NextResponse} from 'next/server'
+import {createClient} from '@/utils/supabase/server'
 
 const imageCache = new Map<string, string>()
 
@@ -35,13 +35,13 @@ const tableMap: Record<string, string> = {
 }
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url)
+    const {searchParams} = new URL(request.url)
     const query = searchParams.get('q')
     const type = searchParams.get('type')?.toLowerCase() || 'default'
     const tableName = tableMap[type] || "default_table"
 
     if (!query) {
-        return NextResponse.json({ error: 'Missing query' }, { status: 400 })
+        return NextResponse.json({error: 'Missing query'}, {status: 400})
     }
 
     const keyword = typeKeywords[type] || typeKeywords.default
@@ -49,13 +49,13 @@ export async function GET(request: Request) {
 
     // In-memory cache check
     if (imageCache.has(searchQuery)) {
-        return NextResponse.json({ image: imageCache.get(searchQuery) })
+        return NextResponse.json({image: imageCache.get(searchQuery)})
     }
 
     const supabase = await createClient()
 
     // Supabase DB check first
-    const { data: dbMatch, error: dbError } = await supabase
+    const {data: dbMatch, error: dbError} = await supabase
         .from(tableName)
         .select('image_url')
         .ilike('name', `%${query}%`)
@@ -63,13 +63,13 @@ export async function GET(request: Request) {
 
     if (dbMatch?.image_url) {
         imageCache.set(searchQuery, dbMatch.image_url)
-        return NextResponse.json({ image: dbMatch.image_url })
+        return NextResponse.json({image: dbMatch.image_url})
     }
 
     // Fallback to SerpAPI
     const apiKey = process.env.SERPAPI_KEY
     if (!apiKey) {
-        return NextResponse.json({ error: 'Missing SerpAPI key' }, { status: 500 })
+        return NextResponse.json({error: 'Missing SerpAPI key'}, {status: 500})
     }
 
     const url = `https://serpapi.com/search?engine=google_images_light&q=${encodeURIComponent(searchQuery)}&tbm=isch&api_key=${apiKey}`
@@ -81,8 +81,15 @@ export async function GET(request: Request) {
         }
 
         const data = await res.json()
-        const images = data.images_results || []
-        // @ts-ignore
+
+        interface ImageResult {
+            original: string
+            thumbnail: string
+        }
+
+        const images: ImageResult[] = data.images_results || []
+
+
         const imageUrl = images.find(img => img.original)?.original || images[0]?.thumbnail || null
 
         if (imageUrl) {
@@ -91,12 +98,12 @@ export async function GET(request: Request) {
             console.warn(`No image found for: ${searchQuery}`)
         }
 
-        return NextResponse.json({ image: imageUrl })
+        return NextResponse.json({image: imageUrl})
     } catch (error) {
         console.error('Error fetching image:', error)
         return NextResponse.json({
             image: null,
             error: error instanceof Error ? error.message : 'Unknown error'
-        }, { status: 500 })
+        }, {status: 500})
     }
 }

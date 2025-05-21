@@ -40,8 +40,7 @@ export default function ProcessorsPage() {
         fetchProcessors()
     }, [])
 
-    // @ts-ignore
-    const socketOptions = ['All', ...new Set(processors.map(p => p.socket))]
+    const socketOptions: string[] = ['All', ...Array.from(new Set(processors.map(p => p.socket)))]
 
     const handleFilterChange = (socket: string) => {
         setSocketFilter(socket)

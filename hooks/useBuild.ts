@@ -1,6 +1,5 @@
-'use client';
-
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 export type Build = {
     processor?: any;
@@ -22,6 +21,34 @@ const defaultBuild: Build = {
     case: null,
 };
 
+function getSocket(part: any): string | null {
+    return part?.socket || part?.cpu_socket || null;
+}
+
+function checkCompatibility(type: keyof Build, part: any, current: Build): Partial<Build> {
+    const updates: Partial<Build> = {};
+
+    if (type === 'processor') {
+        const newSocket = getSocket(part);
+        const mbSocket = getSocket(current.motherboard);
+        if (mbSocket && newSocket !== mbSocket) {
+            updates.motherboard = null;
+            toast.error('Motherboard removed due to socket incompatibility.');
+        }
+    }
+
+    if (type === 'motherboard') {
+        const newSocket = getSocket(part);
+        const cpuSocket = getSocket(current.processor);
+        if (cpuSocket && newSocket !== cpuSocket) {
+            updates.processor = null;
+            toast.error('Processor removed due to socket incompatibility.');
+        }
+    }
+
+    return updates;
+}
+
 export function useBuild() {
     const [build, setBuild] = useState<Build>(defaultBuild);
 
@@ -33,13 +60,16 @@ export function useBuild() {
     }, []);
 
     const updateBuild = (type: keyof Build, part: any) => {
-        const updated = { ...build, [type]: part };
+        const incompatibleParts = checkCompatibility(type, part, build);
+        const updated = { ...build, ...incompatibleParts, [type]: part };
         setBuild(updated);
         localStorage.setItem('build', JSON.stringify(updated));
     };
 
     const clearPart = (type: keyof Build) => {
-        updateBuild(type, null);
+        const updated = { ...build, [type]: null };
+        setBuild(updated);
+        localStorage.setItem('build', JSON.stringify(updated));
     };
 
     return {

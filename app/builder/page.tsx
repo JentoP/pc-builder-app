@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import {Build, useBuild} from '@/hooks/useBuild'
+import BuildDisplay from "@/components/BuildDisplay";
 
 const routeMap: Record<keyof Build, string> = {
     processor: 'processors',
@@ -54,14 +55,7 @@ export default function BuilderPage() {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-6">Build Your PC</h1>
-
-            {builderRow('Processor', 'processor', (p) => `${p.name} - $${p.price.toFixed(2)}`)}
-            {builderRow('Motherboard', 'motherboard', (p) => `${p.name} - $${p.price.toFixed(2)}`)}
-            {builderRow('Memory (RAM)', 'memory', (p) => `${p.name} - ${p.size * p.modules}GB - $${p.price.toFixed(2)}`)}
-            {builderRow('GPU', 'gpu', (p) => `${p.name} - $${p.price.toFixed(2)}`)}
-            {builderRow('Storage', 'storage', (p) => `${p.name} - ${p.capacity}GB - $${p.price.toFixed(2)}`)}
-            {builderRow('Power Supply (PSU)', 'psu', (p) => `${p.name} - ${p.wattage}W - $${p.price.toFixed(2)}`)}
-            {builderRow('Case', 'case', (p) => `${p.name} - ${p.form_factor} - $${p.price.toFixed(2)}`)}
+            <BuildDisplay />
         </div>
     )
 }

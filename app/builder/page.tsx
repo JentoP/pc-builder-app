@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import {useState} from 'react';
 import ProcessorModal from '@/components/modals/ProcessorModal';
 import MemoryModal from '@/components/modals/MemoryModal';
 import MotherboardModal from '@/components/modals/MotherboardModal';
@@ -7,6 +7,7 @@ import GpuModal from '@/components/modals/GpuModal';
 import StorageModal from '@/components/modals/StorageModal';
 import PsuModal from '@/components/modals/PsuModal';
 import CaseModal from '@/components/modals/CaseModal';
+import {useBuild} from '@/hooks/useBuild'
 
 type Build = {
     processor: any;
@@ -19,23 +20,13 @@ type Build = {
 };
 
 export default function BuilderPage() {
-    const [build, setBuild] = useState<Build>({
-        processor: null,
-        motherboard: null,
-        memory: null,
-        gpu: null,
-        storage: null,
-        psu: null,
-        case: null,
-    });
-
+    const {build, updateBuild, clearPart} = useBuild();
     const [modalOpen, setModalOpen] = useState<keyof Build | null>(null);
 
     const handleSelect = (type: keyof Build, part: any) => {
-        setBuild((prev) => ({ ...prev, [type]: part }));
+        updateBuild(type, part);
         setModalOpen(null);
     };
-
     const builderRow = (label: string, partKey: keyof Build, showValue: (part: any) => string) => (
         <div className="mb-4">
             <p className="font-semibold">{label}:</p>
@@ -46,7 +37,7 @@ export default function BuilderPage() {
                 Choose {label}
             </button>
             {build[partKey] && (
-                <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded" onClick={() => handleSelect(partKey, null)}>
+                <button className="mt-2 bg-red-600 text-white px-4 py-2 rounded" onClick={() => clearPart(partKey)}>
                     Remove {label}
                 </button>
             )}
@@ -69,7 +60,7 @@ export default function BuilderPage() {
                 <ProcessorModal
                     socket={build.motherboard?.socket}
                     onSelect={(cpu) => handleSelect('processor', cpu)}
-                    onClose={() => setModalOpen(null)} />
+                    onClose={() => setModalOpen(null)}/>
             )}
             {modalOpen === 'motherboard' && (
                 <MotherboardModal
@@ -86,7 +77,7 @@ export default function BuilderPage() {
                 />
             )}
             {modalOpen === 'gpu' && (
-                <GpuModal onSelect={(gpu) => handleSelect('gpu', gpu)} onClose={() => setModalOpen(null)} />
+                <GpuModal onSelect={(gpu) => handleSelect('gpu', gpu)} onClose={() => setModalOpen(null)}/>
             )}
             {modalOpen === 'storage' && (
                 <StorageModal
@@ -96,10 +87,10 @@ export default function BuilderPage() {
                 />
             )}
             {modalOpen === 'psu' && (
-                <PsuModal onSelect={(psu) => handleSelect('psu', psu)} onClose={() => setModalOpen(null)} />
+                <PsuModal onSelect={(psu) => handleSelect('psu', psu)} onClose={() => setModalOpen(null)}/>
             )}
             {modalOpen === 'case' && (
-                <CaseModal onSelect={(pcCase) => handleSelect('case', pcCase)} onClose={() => setModalOpen(null)} />
+                <CaseModal onSelect={(pcCase) => handleSelect('case', pcCase)} onClose={() => setModalOpen(null)}/>
             )}
         </div>
     );

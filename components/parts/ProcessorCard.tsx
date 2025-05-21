@@ -15,8 +15,11 @@ type Processor = {
     tdp: number
     price: number
 }
-
-export default function ProcessorCard({cpu}: { cpu: Processor }) {
+type ProcessorCardProps = {
+    cpu: Processor;
+    onAddToBuild?: (cpu: Processor) => void;
+};
+export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
     const [image, setImage] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
 
@@ -41,9 +44,9 @@ export default function ProcessorCard({cpu}: { cpu: Processor }) {
     }, [cpu.name])
 
     return (
-        <Link href={`/parts/processors/${cpu.id}`} className="w-full">
+        <div className="w-full">
             <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200">
-                <div className="mb-3">
+                <Link href={`/parts/processors/${cpu.id}`}>
                     {error ? (
                         <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
                             <p className="text-sm">{error}</p>
@@ -63,18 +66,28 @@ export default function ProcessorCard({cpu}: { cpu: Processor }) {
                             <Skeleton className="w-full h-full"/>
                         </div>
                     )}
-                </div>
-                <h2 className="text-xl font-semibold mb-1">{cpu.manufacturer} {cpu.name}</h2>
-                <div className="flex gap-2 items-center justify-between mb-3">
-                    <p className="text-l mb-2">{cpu.socket}</p>
-                    <p className="text-l mb-2">{cpu.cores} Cores</p>
-                    <p className="text-l mb-2">{cpu.base_clock} GHz</p>
-                </div>
-                <div className="flex justify-between items-center">
-                    <span className="font-semibold text-md">Price:</span>
-                    <span className="font-semibold text-md">${cpu.price.toFixed(2)}</span>
-                </div>
+                    <h2 className="text-xl font-semibold mb-1">{cpu.manufacturer} {cpu.name}</h2>
+                    <div className="flex gap-2 items-center justify-between mb-3">
+                        <p className="text-l mb-2">{cpu.socket}</p>
+                        <p className="text-l mb-2">{cpu.cores} Cores</p>
+                        <p className="text-l mb-2">{cpu.base_clock} GHz</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <span className="font-semibold text-md">Price:</span>
+                        <span className="font-semibold text-md">${cpu.price.toFixed(2)}</span>
+                    </div>
+                </Link>
+                {
+                    onAddToBuild && (
+                        <button
+                            className="mt-3 bg-green-500 text-white px-4 py-1 rounded"
+                            onClick={() => onAddToBuild(cpu)}
+                        >
+                            Add to Build
+                        </button>
+                    )
+                }
             </div>
-        </Link>
+        </div>
     )
 }

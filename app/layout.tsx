@@ -15,7 +15,8 @@ import * as React from "react";
 import {hasEnvVars} from "@/utils/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
-import { Toaster } from 'sonner';
+import {Toaster} from 'sonner';
+import BuildDrawer from "@/components/BuildDrawer";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -56,6 +57,7 @@ export default function RootLayout({children,}: Readonly<{
                             <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 ">
                                 <div className="w-full flex items-center justify-between text-sm">
                                     <Logo/>
+                                    <BuildDrawer/>
                                     <ThemeSwitcher/>
                                 </div>
                             </nav>
@@ -64,7 +66,7 @@ export default function RootLayout({children,}: Readonly<{
                         {/* Main Content */}
                         <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl p-5">
                             {children}
-                            <Toaster position="bottom-right" richColors expand />
+                            <Toaster position="bottom-right" richColors expand/>
                             <SpeedInsights/>
                         </div>
 

@@ -9,6 +9,7 @@ export default function Logo() {
             alt="Logo"
             width="250" height="180"
             className="p-2"
+            priority
         />
         </Link>
     )

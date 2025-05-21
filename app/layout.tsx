@@ -52,29 +52,26 @@ export default function RootLayout({children,}: Readonly<{
                             className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                             <SidebarTrigger className="ml-3"/>
                             <Separator orientation="vertical" className="mr-2 h-4"/>
-                            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12">
+                            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 ">
                                 <div className="w-full flex items-center justify-between text-sm">
                                     <Logo/>
-                                    <div className="flex items-center justify-center flex-grow"/>
-                                    {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
-
+                                    <ThemeSwitcher/>
                                 </div>
                             </nav>
                         </header>
 
                         {/* Main Content */}
-                        <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl mx-12 p-5">
+                        <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl p-5">
                             {children}
                             <SpeedInsights/>
                         </div>
 
                         {/* Footer */}
-                        <footer className="w-full flex flex-col border-t mx-auto text-xs gap-4 p-5">
+                        <footer className="w-full flex flex-col border-t mx-auto p-5">
                             <div className="text-sm flex justify-between">
                                 <p>PC Builder © {new Date().getFullYear()}</p>
-                                <p>Powered by Supabase & NextJS</p>
-                                <div className="flex text-center gap-4">
-                                    <ThemeSwitcher/>
+                                <div className="flex text-end gap-4">
+                                    {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
                                 </div>
                             </div>
                         </footer>

@@ -4,7 +4,7 @@ import {createClient} from '@/utils/supabase/server'
 const imageCache = new Map<string, string>()
 
 const typeKeywords: Record<string, string> = {
-    cpu: 'CPU box',
+    cpu: 'boxed',
     gpu: 'graphics card box',
     motherboard: 'motherboard box',
     ram: 'RAM stick',

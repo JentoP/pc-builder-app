@@ -15,7 +15,7 @@ export default function BuildDrawer() {
         <>
             <Drawer>
                 <DrawerTrigger
-                    className="border border-primary px-4 py-1 rounded-md text-sm text-primary hover:bg-primary/90 hover:text-primary-foreground">
+                    className="border px-5 py-2 rounded-md text-sm hover:text-primary text-purple-700 hover:border-purple-700">
                     View Build
                 </DrawerTrigger>
                 <DrawerContent className="max-h-screen">

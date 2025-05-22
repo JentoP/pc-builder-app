@@ -89,7 +89,7 @@ export default function BuildDisplay() {
                     const imageUrl = part?.image_url || `/images/icons/gradient/${imageKey}.png`
 
                     return (
-                        <div key={key} className="flex items-center gap-4 border-b py-2 px-2">
+                        <div key={key} className="flex items-center gap-4 border rounded py-2 px-2 m-1">
                             {/* Left: Buttons */}
                             <div className="flex flex-col gap-1">
 
@@ -122,7 +122,7 @@ export default function BuildDisplay() {
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                className="text-blue-600 hover:text-blue-700"
+                                                className="text-blue-600 hover:text-blue-700 min-w-20"
                                             >
                                                 View
                                             </Button>
@@ -130,7 +130,7 @@ export default function BuildDisplay() {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            className="text-purple-600 hover:text-purple-700"
+                                            className="text-purple-600 hover:text-purple-700 min-w-20"
                                             onClick={() => clearPart(key)}
                                         >
                                             Remove
@@ -141,7 +141,7 @@ export default function BuildDisplay() {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            className="text-blue-600 hover:text-blue-700"
+                                            className="text-purple-600 hover:text-purple-700 min-w-20"
                                         >
                                             Select
                                         </Button>
@@ -154,11 +154,11 @@ export default function BuildDisplay() {
                 })}
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-2">
-                <Button variant="destructive" onClick={resetBuild} className="w-full md:w-auto bg-purple-600 hover:bg-purple-700">
+            <div className="mt-4 flex flex-col sm:flex-row gap-2 m-2">
+                <Button variant="destructive" onClick={resetBuild} className="w-full md:w-auto text-white bg-purple-600 hover:bg-purple-700 min-w-20">
                     Reset
                 </Button>
-                <Button onClick={saveBuild} className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 ">
+                <Button onClick={saveBuild} className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 min-w-20">
                     Save
                 </Button>
             </div>

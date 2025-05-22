@@ -48,25 +48,25 @@ export default function StorageCard({ drive, onAddToBuild }: Props) {
         <div className="w-full">
             <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200 items-center">
                 <Link href={`/parts/storage/${drive.id}`}>
-                    {error ? (
-                        <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
-                            <p className="text-sm">{error}</p>
-                        </div>
-                    ) : image ? (
-                        <img
-                            src={image}
-                            alt={drive.name}
-                            className="w-full h-32 object-contain rounded"
-                            onError={() => {
-                                setError('Image failed to load')
-                                setImage(null)
-                            }}
-                        />
-                    ) : (
-                        <div className="w-full h-40 flex items-center justify-center text-sm rounded">
-                            <Skeleton className="w-full h-full" />
-                        </div>
-                    )}
+                    {/*{error ? (*/}
+                    {/*    <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">*/}
+                    {/*        <p className="text-sm">{error}</p>*/}
+                    {/*    </div>*/}
+                    {/*) : image ? (*/}
+                    {/*    <img*/}
+                    {/*        src={image}*/}
+                    {/*        alt={drive.name}*/}
+                    {/*        className="w-full h-32 object-contain rounded"*/}
+                    {/*        onError={() => {*/}
+                    {/*            setError('Image failed to load')*/}
+                    {/*            setImage(null)*/}
+                    {/*        }}*/}
+                    {/*    />*/}
+                    {/*) : (*/}
+                    {/*    <div className="w-full h-40 flex items-center justify-center text-sm rounded">*/}
+                    {/*        <Skeleton className="w-full h-full" />*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                     <h2 className="text-xl font-semibold mb-1">{drive.manufacturer} {drive.name}</h2>
                 </Link>
                 <div className="flex gap-2 justify-between mb-3 text-sm">

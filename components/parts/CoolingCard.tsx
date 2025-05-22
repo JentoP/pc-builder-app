@@ -48,25 +48,25 @@ export default function CoolerCard({ cooler, onAddToBuild }: CoolerCardProps) {
         <div className="w-full">
             <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200 items-center">
                 <Link href={`/parts/cooling/${cooler.id}`}>
-                    {error ? (
-                        <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
-                            <p className="text-sm">{error}</p>
-                        </div>
-                    ) : image ? (
-                        <img
-                            src={image}
-                            alt={cooler.name}
-                            className="w-full h-32 object-contain rounded"
-                            onError={() => {
-                                setError('Image failed to load')
-                                setImage(null)
-                            }}
-                        />
-                    ) : (
-                        <div className="w-full h-40 flex items-center justify-center text-sm rounded">
-                            <Skeleton className="w-full h-full" />
-                        </div>
-                    )}
+                    {/*{error ? (*/}
+                    {/*    <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">*/}
+                    {/*        <p className="text-sm">{error}</p>*/}
+                    {/*    </div>*/}
+                    {/*) : image ? (*/}
+                    {/*    <img*/}
+                    {/*        src={image}*/}
+                    {/*        alt={cooler.name}*/}
+                    {/*        className="w-full h-32 object-contain rounded"*/}
+                    {/*        onError={() => {*/}
+                    {/*            setError('Image failed to load')*/}
+                    {/*            setImage(null)*/}
+                    {/*        }}*/}
+                    {/*    />*/}
+                    {/*) : (*/}
+                    {/*    <div className="w-full h-40 flex items-center justify-center text-sm rounded">*/}
+                    {/*        <Skeleton className="w-full h-full" />*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                     <h2 className="text-xl font-semibold mb-1">
                         {cooler.manufacturer} {cooler.name}
                     </h2>

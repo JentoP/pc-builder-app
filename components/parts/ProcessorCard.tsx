@@ -49,25 +49,25 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
             <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200 items-center">
                 <div>
                     <Link  href={`/parts/processors/${cpu.id}`}>
-                    {error ? (
-                        <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">
-                            <p className="text-sm">{error}</p>
-                        </div>
-                    ) : image ? (
-                        <img
-                            src={image}
-                            alt={cpu.name}
-                            className="w-full h-32 object-contain rounded"
-                            onError={() => {
-                                setError('Image failed to load')
-                                setImage(null)
-                            }}
-                        />
-                    ) : (
-                        <div className="w-full h-40 flex items-center justify-center text-sm rounded">
-                            <Skeleton className="w-full h-full"/>
-                        </div>
-                    )}
+                    {/*{error ? (*/}
+                    {/*    <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">*/}
+                    {/*        <p className="text-sm">{error}</p>*/}
+                    {/*    </div>*/}
+                    {/*) : image ? (*/}
+                    {/*    <img*/}
+                    {/*        src={image}*/}
+                    {/*        alt={cpu.name}*/}
+                    {/*        className="w-full h-32 object-contain rounded"*/}
+                    {/*        onError={() => {*/}
+                    {/*            setError('Image failed to load')*/}
+                    {/*            setImage(null)*/}
+                    {/*        }}*/}
+                    {/*    />*/}
+                    {/*) : (*/}
+                    {/*    <div className="w-full h-40 flex items-center justify-center text-sm rounded">*/}
+                    {/*        <Skeleton className="w-full h-full"/>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                     <h2 className="text-xl font-semibold mb-1">{cpu.manufacturer} {cpu.name}</h2>
                     </Link>
                     <div className="flex gap-2 items-center justify-between mb-3">

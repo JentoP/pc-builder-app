@@ -26,7 +26,7 @@ export default function PowerSupplyCard({ psu, onAddToBuild }: PowerSupplyCardPr
     const imageToShow =
         !imageError && psu.image_url
             ? psu.image_url
-            : '/images/icons/gradient/power-supply.png'
+            : '/images/icons/gradient/psu.png'
 
     return (
         <div className="w-full">

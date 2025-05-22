@@ -5,9 +5,11 @@ import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-type PageProps = {
-    params: { id: string };
-};
+interface PageProps {
+    params: {
+        id: string;
+    };
+}
 
 export const dynamic = 'force-dynamic';
 

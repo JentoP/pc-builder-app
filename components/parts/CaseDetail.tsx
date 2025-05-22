@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useBuild } from '@/hooks/useBuild';
-import Link from 'next/link';
 
 type Case = {
     id: string;
@@ -46,23 +45,20 @@ export default function CaseDetail({ pcCase }: { pcCase: Case }) {
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
-                <Link href={`/builds/new`}
-                      onClick={(e) => {
-                          e.preventDefault();
-                          updateBuild('case', pcCase);
-                      }}
-                      className="w-full">
-                    <Button variant="outline" size="sm">
-                        Add to Build
-                    </Button>
-                </Link>
-                {isAdmin && (
-                    <Link href={`/admin/parts/${pcCase.id}/edit`} className="w-full">
-                        <Button variant="outline" size="sm">
-                            Edit
-                        </Button>
-                    </Link>
-                )}
+                <Button onClick={() => updateBuild('case', pcCase)}
+                        variant="outline"
+                        size="sm"
+                        className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700">
+                    Add to Build
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-3 px-4 py-1 text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    <a href={`https://www.google.com/search?q=${pcCase.name}`} target="_blank" rel="noopener noreferrer">
+                        Search
+                    </a>
+                </Button>
             </div>
             {/* {isAdmin && (
         <div className="mt-6 border-t pt-4">

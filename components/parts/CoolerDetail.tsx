@@ -22,7 +22,7 @@ export default function CoolerDetail({ cooler }: { cooler: Cooler }) {
 
     const imageSrc = !imageError && cooler.image_url
         ? cooler.image_url
-        : '/images/icons/gradient/cooler.png';
+        : '/images/icons/gradient/cooling.png';
 
     const isAdmin = true; // Replace with actual admin logic
 

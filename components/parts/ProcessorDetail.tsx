@@ -3,7 +3,6 @@
 import {useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {useBuild} from '@/hooks/useBuild';
-import Link from 'next/link';
 
 type Processor = {
     id: string;
@@ -48,29 +47,17 @@ export default function ProcessorDetail({cpu}: { cpu: Processor }) {
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
-                <Link href={`/builds/new`}
-                      onClick={(e) => {
-                          e.preventDefault();
-                          updateBuild('processor', cpu);
-                      }}
-                      className="w-full">
-                    <Button variant="outline" size="sm">
-                        Add to Build
-                    </Button>
-                </Link>
-                {isAdmin && (
-                    <Link href={`/admin/parts/${cpu.id}/edit`} className="w-full">
-                        <Button variant="outline" size="sm">
-                            Edit
-                        </Button>
-                    </Link>
-                )}
-                {/*    links to google search for component*/}
+
+                <Button onClick={() => updateBuild('processor', cpu)}
+                        variant="outline"
+                        size="sm"
+                        className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700">
+                    Add to Build
+                </Button>
                 <Button
                     variant="outline"
                     size="sm"
                     className="mt-3 px-4 py-1 text-blue-600 hover:border-blue-700 hover:text-blue-700">
-
                     <a href={`https://www.google.com/search?q=${cpu.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

@@ -15,6 +15,8 @@ import * as React from "react";
 import {hasEnvVars} from "@/utils/supabase/check-env-vars";
 import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
+import {Toaster} from 'sonner';
+import BuildDrawer from "@/components/BuildDrawer";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
@@ -55,7 +57,10 @@ export default function RootLayout({children,}: Readonly<{
                             <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 ">
                                 <div className="w-full flex items-center justify-between text-sm">
                                     <Logo/>
-                                    <ThemeSwitcher/>
+                                    <div className="flex items-center gap-2">
+                                        <BuildDrawer/>
+                                        <ThemeSwitcher/>
+                                    </div>
                                 </div>
                             </nav>
                         </header>
@@ -63,13 +68,14 @@ export default function RootLayout({children,}: Readonly<{
                         {/* Main Content */}
                         <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl p-5">
                             {children}
+                            <Toaster position="bottom-right" richColors expand/>
                             <SpeedInsights/>
                         </div>
 
                         {/* Footer */}
                         <footer className="w-full flex flex-col border-t mx-auto p-5">
                             <div className="text-sm flex justify-between">
-                                <p>PC Builder © {new Date().getFullYear()}</p>
+                                <p>PC Builder &copy; {new Date().getFullYear()}</p>
                                 <div className="flex text-end gap-4">
                                     {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
                                 </div>

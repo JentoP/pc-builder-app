@@ -21,28 +21,28 @@ type Props = {
 }
 
 export default function PowerSupplyCard({ psu, onAddToBuild }: Props) {
-    const [image, setImage] = useState<string | null>(null)
-    const [error, setError] = useState<string | null>(null)
+    // const [image, setImage] = useState<string | null>(null)
+    // const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const res = await fetch(`/api/parts-image?q=${encodeURIComponent(psu.name)}`)
-                const data = await res.json()
-                if (data.error) {
-                    setError(data.error)
-                    setImage(null)
-                } else {
-                    setImage(data.image || null)
-                }
-            } catch (err) {
-                setError('Failed to fetch image')
-                setImage(null)
-            }
-        }
-
-        fetchImage()
-    }, [psu.name])
+    // useEffect(() => {
+    //     const fetchImage = async () => {
+    //         try {
+    //             const res = await fetch(`/api/parts-image?q=${encodeURIComponent(psu.name)}`)
+    //             const data = await res.json()
+    //             if (data.error) {
+    //                 setError(data.error)
+    //                 setImage(null)
+    //             } else {
+    //                 setImage(data.image || null)
+    //             }
+    //         } catch (err) {
+    //             setError('Failed to fetch image')
+    //             setImage(null)
+    //         }
+    //     }
+    //
+    //     fetchImage()
+    // }, [psu.name])
 
     return (
         <div className="w-full">

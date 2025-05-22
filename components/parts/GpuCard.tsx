@@ -23,28 +23,28 @@ type GraphicCardProps = {
 }
 
 export default function GraphicCard({ gpu, onAddToBuild }: GraphicCardProps) {
-    const [image, setImage] = useState<string | null>(null)
-    const [error, setError] = useState<string | null>(null)
-
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const res = await fetch(`/api/parts-image?q=${encodeURIComponent(gpu.name)}`)
-                const data = await res.json()
-                if (data.error) {
-                    setError(data.error)
-                    setImage(null)
-                } else {
-                    setImage(data.image || null)
-                }
-            } catch (err) {
-                setError('Failed to fetch image')
-                setImage(null)
-            }
-        }
-
-        fetchImage()
-    }, [gpu.name])
+    // const [image, setImage] = useState<string | null>(null)
+    // const [error, setError] = useState<string | null>(null)
+    //
+    // useEffect(() => {
+    //     const fetchImage = async () => {
+    //         try {
+    //             const res = await fetch(`/api/parts-image?q=${encodeURIComponent(gpu.name)}`)
+    //             const data = await res.json()
+    //             if (data.error) {
+    //                 setError(data.error)
+    //                 setImage(null)
+    //             } else {
+    //                 setImage(data.image || null)
+    //             }
+    //         } catch (err) {
+    //             setError('Failed to fetch image')
+    //             setImage(null)
+    //         }
+    //     }
+    //
+    //     fetchImage()
+    // }, [gpu.name])
 
     return (
         <div className="w-full">

@@ -21,28 +21,28 @@ type ProcessorCardProps = {
     onAddToBuild?: (cpu: Processor) => void;
 };
 export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
-    const [image, setImage] = useState<string | null>(null)
-    const [error, setError] = useState<string | null>(null)
-
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const res = await fetch(`/api/parts-image?q=${encodeURIComponent(cpu.name)}`)
-                const data = await res.json()
-                if (data.error) {
-                    setError(data.error)
-                    setImage(null)
-                } else {
-                    setImage(data.image || null)
-                }
-            } catch (err) {
-                setError('Failed to fetch image')
-                setImage(null)
-            }
-        }
-
-        fetchImage()
-    }, [cpu.name])
+    // const [image, setImage] = useState<string | null>(null)
+    // const [error, setError] = useState<string | null>(null)
+    //
+    // useEffect(() => {
+    //     const fetchImage = async () => {
+    //         try {
+    //             const res = await fetch(`/api/parts-image?q=${encodeURIComponent(cpu.name)}`)
+    //             const data = await res.json()
+    //             if (data.error) {
+    //                 setError(data.error)
+    //                 setImage(null)
+    //             } else {
+    //                 setImage(data.image || null)
+    //             }
+    //         } catch (err) {
+    //             setError('Failed to fetch image')
+    //             setImage(null)
+    //         }
+    //     }
+    //
+    //     fetchImage()
+    // }, [cpu.name])
 
     return (
         <div className="w-full">

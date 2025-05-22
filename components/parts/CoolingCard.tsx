@@ -21,28 +21,28 @@ type CoolerCardProps = {
 }
 
 export default function CoolerCard({ cooler, onAddToBuild }: CoolerCardProps) {
-    const [image, setImage] = useState<string | null>(null)
-    const [error, setError] = useState<string | null>(null)
+    // const [image, setImage] = useState<string | null>(null)
+    // const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const res = await fetch(`/api/parts-image?q=${encodeURIComponent(cooler.name)}`)
-                const data = await res.json()
-                if (data.error) {
-                    setError(data.error)
-                    setImage(null)
-                } else {
-                    setImage(data.image || null)
-                }
-            } catch (err) {
-                setError('Failed to fetch image')
-                setImage(null)
-            }
-        }
-
-        fetchImage()
-    }, [cooler.name])
+    // useEffect(() => {
+    //     const fetchImage = async () => {
+    //         try {
+    //             const res = await fetch(`/api/parts-image?q=${encodeURIComponent(cooler.name)}`)
+    //             const data = await res.json()
+    //             if (data.error) {
+    //                 setError(data.error)
+    //                 setImage(null)
+    //             } else {
+    //                 setImage(data.image || null)
+    //             }
+    //         } catch (err) {
+    //             setError('Failed to fetch image')
+    //             setImage(null)
+    //         }
+    //     }
+    //
+    //     fetchImage()
+    // }, [cooler.name])
 
     return (
         <div className="w-full">

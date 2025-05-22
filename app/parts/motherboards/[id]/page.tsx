@@ -43,22 +43,22 @@ export default async function MotherboardDetailPage({ params }: PageProps) {
             <MotherboardDetail motherboard={motherboard} />
             <div className="flex flex-col justify-center">
                 <div className="border-t pt-4 flex flex-row justify-between">
-                    <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700" disabled={!prev}>
-                        <Link href={prev ? `/parts/motherboards/${prev.id}` : '#'}>
+                    <Link href={prev ? `/parts/motherboards/${prev.id}` : '#'}>
+                        <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700" disabled={!prev}>
                             <ArrowLeftFromLine />
-                        </Link>
-                    </Button>
-                    <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700" disabled={!next}>
-                        <Link href={next ? `/parts/motherboards/${next.id}` : '#'}>
-                            <ArrowRightFromLine />
-                        </Link>
-                    </Button>
-                </div>
-                <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
-                    <Link href="/parts/motherboards">
-                        Back to Motherboards
+                        </Button>
                     </Link>
-                </Button>
+                    <Link href={next ? `/parts/motherboards/${next.id}` : '#'}>
+                        <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700" disabled={!next}>
+                            <ArrowRightFromLine />
+                        </Button>
+                    </Link>
+                </div>
+                <Link href="/parts/motherboards">
+                    <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                        Back to Motherboards
+                    </Button>
+                </Link>
             </div>
         </div>
     );

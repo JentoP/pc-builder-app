@@ -184,7 +184,7 @@ export function useBuild() {
     };
 
 
-    const clearPart = (type: keyof Build) => {
+    const clearPart = (type: string) => {
         const updated = { ...build, [type]: null };
         saveBuild(updated);
     };

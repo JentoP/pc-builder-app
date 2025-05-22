@@ -54,9 +54,19 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
                     <span className="font-semibold text-l">€ {cpu.price.toFixed(2)}</span>
                 </div>
                 {onAddToBuild && (
-                    <div className="flex justify-center">
-                        <Button className="mt-3 px-4 py-1 rounded" onClick={() => onAddToBuild(cpu)}>
+                    <div className="flex justify-between">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700"
+                            onClick={() => onAddToBuild(cpu)}>
                             Add to Build
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                            <Link href={`/parts/processors/${cpu.id}`}>View Details</Link>
                         </Button>
                     </div>
                 )}

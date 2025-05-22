@@ -52,7 +52,6 @@ export default function CasesPage() {
 
     const handleAddToBuild = (pcCase: Case) => {
         updateBuild('case', pcCase)
-        toast.success(`${pcCase.name} added to current build!`)
     }
 
     return (

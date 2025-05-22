@@ -53,7 +53,6 @@ export default function PowerSuppliesPage() {
     const handleAddToBuild = (psu: PowerSupply) => {
         // adds the selected power supply to the current build, type is
         updateBuild('psu', psu)
-        toast.success(`${psu.name} added to current build!`)
     }
 
     return (

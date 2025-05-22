@@ -52,7 +52,6 @@ export default function StoragePage() {
 
     const handleAddToBuild = (drive: Storage) => {
         updateBuild('storage', drive)
-        toast.success(`${drive.name} added to current build!`)
     }
 
     return (

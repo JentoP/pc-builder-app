@@ -55,7 +55,6 @@ export default function MotherboardsPage() {
 
     const handleAddToBuild = (mobo: Motherboard) => {
         updateBuild('motherboard', mobo)
-        toast.success(`${mobo.name} added to current build!`)
     }
 
     return (

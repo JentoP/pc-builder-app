@@ -54,7 +54,6 @@ export default function GraphicCardsPage() {
 
     const handleAddToBuild = (gpu: GraphicCard) => {
         updateBuild('gpu', gpu)
-        toast.success(`${gpu.name} added to current build!`)
     }
 
     return (

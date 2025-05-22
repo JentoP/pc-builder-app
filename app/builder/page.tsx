@@ -1,8 +1,9 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
 import {Build, useBuild} from '@/hooks/useBuild'
 import BuildDisplay from "@/components/BuildDisplay";
+import {Button} from "@/components/ui/button";
 
 const routeMap: Record<keyof Build, string> = {
     processor: 'processors',
@@ -16,7 +17,7 @@ const routeMap: Record<keyof Build, string> = {
 }
 
 export default function BuilderPage() {
-    const { build, updateBuild, clearPart } = useBuild()
+    const {build, updateBuild, clearPart, resetBuild} = useBuild()
     const router = useRouter()
 
     const builderRow = (
@@ -55,7 +56,7 @@ export default function BuilderPage() {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-6">Build Your PC</h1>
-            <BuildDisplay />
+            <BuildDisplay/>
         </div>
     )
 }

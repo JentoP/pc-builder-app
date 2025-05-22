@@ -52,7 +52,6 @@ export default function CoolingPage() {
 
     const handleAddToBuild = (cooler: Cooler) => {
         updateBuild('cooling', cooler)
-        toast.success(`${cooler.name} added to current build!`)
     }
 
     return (

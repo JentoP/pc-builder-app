@@ -54,7 +54,6 @@ export default function MemoryPage() {
 
     const handleAddToBuild = (ram: Memory) => {
         updateBuild('memory', ram)
-        toast.success(`${ram.name} added to current build!`)
     }
 
     return (

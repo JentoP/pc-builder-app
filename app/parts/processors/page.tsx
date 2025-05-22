@@ -54,7 +54,6 @@ export default function ProcessorsPage() {
     }
     const handleAddToBuild = (cpu: Processor) => {
         updateBuild('processor', cpu);
-        toast.success(`${cpu.name} added to current build!`);
     };
 
     return (

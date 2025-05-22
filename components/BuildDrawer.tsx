@@ -15,14 +15,14 @@ export default function BuildDrawer() {
         <>
             <Drawer>
                 <DrawerTrigger
-                    className="rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2">
-                    View Current Build
+                    className="border border-primary px-4 py-1 rounded-md text-sm text-primary hover:bg-primary/90 hover:text-primary-foreground">
+                    View Build
                 </DrawerTrigger>
                 <DrawerContent className="max-h-screen">
                     <DrawerHeader>
                         <div className="flex justify-between items-center">
                             <DrawerTitle>Current Build</DrawerTitle>
-                            <DrawerClose className="px-4 py-2 rounded bg-red-600 text-white">Close</DrawerClose>
+                            <DrawerClose className="px-4 py-1 rounded text-sm bg-red-600 text-white">Close</DrawerClose>
                         </div>
                         <DrawerDescription>
                             <span>This is your current build. </span>
@@ -30,9 +30,12 @@ export default function BuildDrawer() {
                             <span> to go to the build page.</span>
                         </DrawerDescription>
                     </DrawerHeader>
-                    <div className="p-4">
-                        <BuildDisplay/>
+                    <div className="w-full h-full p-4">
+                        <div className="h-full overflow-y-auto max-h-[50vh]">
+                            <BuildDisplay />
+                        </div>
                     </div>
+
                 </DrawerContent>
             </Drawer>
         </>

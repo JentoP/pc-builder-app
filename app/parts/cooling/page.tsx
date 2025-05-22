@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
-import CoolerCard from '@/components/parts/CoolingCard'
+import CoolerCard from '@/components/parts/CoolerCard'
 import { useBuild } from '@/hooks/useBuild'
 import { toast } from 'sonner'
 
@@ -11,10 +11,12 @@ type Cooler = {
     id: string
     name: string
     manufacturer: string
-    type: string // e.g., Air, AIO
-    supported_sockets: string[]
-    noise_level: number
+    type: string        // e.g., Air, Liquid, AIO
+    socket_compatibility: string
+    fan_rpm?: number    // optional
+    noise_level?: number // optional, in dB
     price: number
+    image_url?: string | null
 }
 
 export default function CoolingPage() {

@@ -7,6 +7,10 @@ import {createClient} from '@/utils/supabase/client'
 import {toast} from 'sonner'
 import {useEffect, useState} from 'react'
 import SignInWarning from "@/components/SignInWarning";
+import {useRouter} from 'next/navigation'
+import {getNextPartType} from '@/utils/compatibility'
+import {Blocks} from "lucide-react";
+import {Input} from "@/components/ui/input";
 
 const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
@@ -36,8 +40,10 @@ const displayNames: Record<string, string> = {
 
 export default function BuildDisplay() {
     const {build, clearPart, resetBuild, updatePart} = useBuild();
+    const router = useRouter();
     const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [buildName, setBuildName] = useState(build.name || "My PC Build");
     const supabase = createClient();
 
     useEffect(() => {
@@ -51,6 +57,11 @@ export default function BuildDisplay() {
         };
         getUser();
     }, []);
+
+    useEffect(() => {
+        setBuildName(build.name || "My PC Build");
+    }, [build]);
+
     if (loading || !userId) {
         return (
             <SignInWarning/>
@@ -66,15 +77,25 @@ export default function BuildDisplay() {
         const {error} = await supabase.from('builds').insert([
             {
                 user_id: userId,
-                build_data: build,
+                build_data: {
+                    ...build,
+                    name: buildName
+                },
             },
         ]);
 
         if (error) {
             toast.error("Failed to save build.");
         } else {
+            resetBuild();
             toast.success("Build saved successfully!");
+            router.push('/saved');
         }
+    }
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBuildName(e.target.value);
+        updatePart('name', e.target.value);
     }
 
     const totalPrice =
@@ -212,8 +233,45 @@ export default function BuildDisplay() {
         }
     }
 
+    const renderNextPartButton = () => {
+        const nextPart = getNextPartType(build);
+        if (!nextPart) return null;
+
+        // Use partRoutes if available, otherwise construct the route with absolute path
+        const route = partRoutes[nextPart] || `/parts/${nextPart}`;
+        const displayName = displayNames[nextPart] || nextPart;
+
+        return (
+            <div className="">
+                <Link href={`/${route}`}>
+                    <Button variant="outline" className="w-full max-w-md">
+                        <p >{displayName}</p>
+                        <Blocks size={40} />
+                    </Button>
+                </Link>
+            </div>
+        );
+    };
+
     return (
         <div className="flex flex-col h-full">
+            <div className="flex flex-wrap items-center gap-2 border rounded my-4 py-4 px-6 m-1 shadow-border shadow bg-sidebar justify-between">
+                <div className="flex flex-row items-center">
+                    <p className="min-w-24">Build Name: </p>
+                    <Input
+                        value={buildName}
+                        onChange={handleNameChange}
+                        placeholder="Enter build name"
+                        className="w-full max-w-md"
+                    />
+                </div>
+                <div className="flex items-center gap-2">
+                    <p className="text-muted-foreground">Next up:</p>
+                    {renderNextPartButton()}
+                </div>
+
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
                 {partKeys.map((key) => renderPart(key))}
                 {renderMemory()}

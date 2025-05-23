@@ -6,7 +6,6 @@ import Link from 'next/link'
 import {useEffect, useState} from 'react'
 import {createClient} from '@/utils/supabase/client'
 import {UserProfileCard} from "@/components/user/UserProfileCard";
-import {FunFactCardList} from "@/components/FunFactsCard";
 import {useBuild} from "@/hooks/useBuild";
 import {Computer, LibraryBig, User, RotateCcw, Save, Code, BookOpenCheck} from "lucide-react";
 
@@ -214,7 +213,6 @@ export default function DashboardPage() {
                         <p>
                             <span className="text-muted-foreground">Coming soon!</span>
                         </p>
-                        {/*<FunFactsCardList/>*/}
                     </div>
                 )}
             </div>

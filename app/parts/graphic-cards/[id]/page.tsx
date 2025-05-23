@@ -1,45 +1,52 @@
-import { createClient } from '@/utils/supabase/server';
-import GraphicCardDetail from '@/components/parts/GraphicCardDetail';
-import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+'use client'
 
-interface PageProps {
-    params: { id: string };
-}
+import { useEffect, useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
+import { createClient } from '@/utils/supabase/client'
+import GraphicCardDetail from '@/components/parts/GraphicCardDetail'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
-export const dynamic = 'force-dynamic';
+export default function GraphicCardDetailPage() {
+    const { id } = useParams()
+    const supabase = createClient()
+    const [card, setCard] = useState(null)
+    const [loading, setLoading] = useState(true)
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { id } = params;
-    return {
-        title: `Graphic Card Detail - ${id}`,
-    };
-}
+    useEffect(() => {
+        if (!id) return
+        const fetchCard = async () => {
+            const { data, error } = await supabase.from('graphic_cards').select('*').eq('id', id).single()
+            if (error) {
+                console.error("Error: graphic card not found")
+                setCard(null)
+            } else {
+                setCard(data)
+            }
+            setLoading(false)
+        }
+        fetchCard()
+    }, [id, supabase])
 
-export default async function GraphicCardDetailPage({ params }: PageProps) {
-    const { id } = params;
-    const supabase = await createClient();
+    if (loading) {
+        return <Skeleton className="h-60 w-full rounded-lg" />
+    }
 
-    const { data: card, error } = await supabase
-        .from('graphic_cards')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-    if (error || !card) return notFound();
+    if (!card) {
+        return <p className="text-center text-red-600">Graphic Card not found.</p>
+    }
 
     return (
         <div className="p-6 max-w-4xl mx-auto space-y-6">
             <GraphicCardDetail card={card} />
-            <div className="flex flex-col justify-center">
-                <Link href="/parts/graphic-cards" className="w-full">
-                    <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
+            <div className="flex justify-center">
+                <Link href="/parts/graphic-cards" className="w-auto mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    <Button variant="outline" size="sm">
                         Back to Graphic Cards
                     </Button>
                 </Link>
             </div>
         </div>
-    );
+    )
 }

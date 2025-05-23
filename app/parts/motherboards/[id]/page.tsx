@@ -1,45 +1,52 @@
-import { createClient } from '@/utils/supabase/server';
-import MotherboardDetail from '@/components/parts/MotherboardDetail';
-import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+'use client'
 
-interface PageProps {
-    params: { id: string };
-}
+import { useEffect, useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
+import { createClient } from '@/utils/supabase/client'
+import MotherboardDetail from '@/components/parts/MotherboardDetail'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
-export const dynamic = 'force-dynamic';
+export default function MotherboardDetailPage() {
+    const { id } = useParams()
+    const supabase = createClient()
+    const [motherboard, setMotherboard] = useState(null)
+    const [loading, setLoading] = useState(true)
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { id } = params;
-    return {
-        title: `Motherboard Detail - ${id}`,
-    };
-}
+    useEffect(() => {
+        if (!id) return
+        const fetchMotherboard = async () => {
+            const { data, error } = await supabase.from('motherboards').select('*').eq('id', id).single()
+            if (error) {
+                console.error("Error: motherboard not found")
+                setMotherboard(null)
+            } else {
+                setMotherboard(data)
+            }
+            setLoading(false)
+        }
+        fetchMotherboard()
+    }, [id, supabase])
 
-export default async function MotherboardDetailPage({ params }: PageProps) {
-    const { id } = params;
-    const supabase = await createClient();
+    if (loading) {
+        return <Skeleton className="h-60 w-full rounded-lg" />
+    }
 
-    const { data: motherboard, error } = await supabase
-        .from('motherboards')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-    if (error || !motherboard) return notFound();
+    if (!motherboard) {
+        return <p className="text-center text-red-600">Motherboard not found.</p>
+    }
 
     return (
         <div className="p-6 max-w-4xl mx-auto space-y-6">
             <MotherboardDetail motherboard={motherboard} />
-            <div className="flex flex-col justify-center">
-                <Link href="/parts/motherboards" className="w-full">
-                    <Button variant="outline" size="sm" className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
+            <div className="flex justify-center">
+                <Link href="/parts/motherboards" className="w-auto mt-3 px-4 py-1 rounded text-blue-600 border-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    <Button variant="outline" size="sm">
                         Back to Motherboards
                     </Button>
                 </Link>
             </div>
         </div>
-    );
+    )
 }

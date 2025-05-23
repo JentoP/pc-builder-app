@@ -27,7 +27,7 @@ export default function ProcessorDetail({cpu}: { cpu: Processor }) {
     const isAdmin = true; // replace with your admin logic
 
     return (
-        <div className="shadow rounded-lg p-6 border hover:border-purple-700">
+        <div className="bg-sidebar shadow rounded-lg p-6 border">
             <div className="flex items-start gap-4">
                 <img
                     src={imageSrc}
@@ -35,14 +35,14 @@ export default function ProcessorDetail({cpu}: { cpu: Processor }) {
                     className="w-24 h-24 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div>
-                    <h1 className="text-2xl font-bold mb-2">{cpu.manufacturer} {cpu.name}</h1>
-                    <p className=""><strong>Socket:</strong> {cpu.socket}</p>
-                    <p className=""><strong>Cores:</strong> {cpu.cores}</p>
-                    <p className=""><strong>Threads:</strong> {cpu.threads}</p>
-                    <p className=""><strong>Base Clock:</strong> {cpu.base_clock} GHz</p>
-                    <p className=""><strong>Boost Clock:</strong> {cpu.boost_clock} GHz</p>
-                    <p className=""><strong>TDP:</strong> {cpu.tdp} W</p>
+                <div className="p-4 rounded-lg">
+                    <h1 className="text-2xl font-bold my-4">{cpu.manufacturer} {cpu.name}</h1>
+                    <p className="mt-2"><strong>Socket:</strong> {cpu.socket}</p>
+                    <p className="mt-2"><strong>Cores:</strong> {cpu.cores}</p>
+                    <p className="mt-2"><strong>Threads:</strong> {cpu.threads}</p>
+                    <p className="mt-2"><strong>Base Clock:</strong> {cpu.base_clock} GHz</p>
+                    <p className="mt-2"><strong>Boost Clock:</strong> {cpu.boost_clock} GHz</p>
+                    <p className="mt-2"><strong>Max Wattage:</strong> {cpu.tdp} W</p>
                     <p className="text-xl font-semibold mt-4 mb-3"><strong>Price:</strong> € {cpu.price.toFixed(2)}</p>
                 </div>
             </div>
@@ -51,13 +51,13 @@ export default function ProcessorDetail({cpu}: { cpu: Processor }) {
                 <Button onClick={() => updateBuild('processor', cpu)}
                         variant="outline"
                         size="sm"
-                        className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700">
+                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
                     Add to Build
                 </Button>
                 <Button
                     variant="outline"
                     size="sm"
-                    className="mt-3 px-4 py-1 text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
                     <a href={`https://www.google.com/search?q=${cpu.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

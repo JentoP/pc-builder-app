@@ -5,25 +5,29 @@ import { Metadata } from 'next';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-type PageProps = {
-    params: { id: string };
-};
+interface PageProps {
+    params: Promise<{
+        id: string;
+    }>;
+}
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { id } = await params;
     return {
-        title: `Graphic Card Detail - ${params.id}`,
+        title: `Graphic Card Detail - ${id}`,
     };
 }
 
 export default async function GraphicCardDetailPage({ params }: PageProps) {
+    const { id } = await params;
     const supabase = await createClient();
 
     const { data: card, error } = await supabase
         .from('graphic_cards')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error || !card) return notFound();

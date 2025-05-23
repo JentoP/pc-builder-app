@@ -5,25 +5,29 @@ import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-type PageProps = {
-    params: { id: string };
-};
+interface PageProps {
+    params: Promise<{
+        id: string;
+    }>;
+}
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { id } = await params;
     return {
-        title: `Cooler Detail - ${params.id}`,
+        title: `Cooler Detail - ${id}`,
     };
 }
 
 export default async function CoolerDetailPage({ params }: PageProps) {
+    const { id } = await params;
     const supabase = await createClient();
 
     const { data: cooler, error } = await supabase
         .from('coolers')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error || !cooler) return notFound();

@@ -97,7 +97,6 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         const testStorage = [...(current.storage || [])];
         const nvmeCount = testStorage.filter((s: any) => s.interface === 'NVMe').length;
         const sataCount = testStorage.filter((s: any) => s.interface === 'SATA').length;
-console.log( nvmeCount, nvmeLimit, sataCount, sataLimit);
         if (nvmeCount > nvmeLimit) {
             conflicts.push({
                 partType: 'storage',
@@ -112,7 +111,7 @@ console.log( nvmeCount, nvmeLimit, sataCount, sataLimit);
         }
 
         // Add memory module count validation
-        const maxModules = part?.memory_slots || 4; // Default to 4 if not specified
+        const maxModules = part?.memory_slots || 4;
         const currentMemory = current.memory || [];
         if (currentMemory.length > maxModules) {
             conflicts.push({
@@ -141,7 +140,7 @@ console.log( nvmeCount, nvmeLimit, sataCount, sataLimit);
             });
         }
 
-        const newRamType = part?.type || 'DDR4'; // Use type directly from memory part
+        const newRamType = part?.type || '';
         for (const ram of currentMemory) {
             if (ram.type !== newRamType) {
                 conflicts.push({

@@ -5,25 +5,29 @@ import {Metadata} from 'next';
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 
-type PageProps = {
-    params: { id: string };
-};
+interface PageProps {
+    params: Promise<{
+        id: string;
+    }>;
+}
 
 export const dynamic = 'force-dynamic'; // Optional: helpful if data updates often
 
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
+    const {id} = await params;
     return {
-        title: `Processor Detail - ${params.id}`,
+        title: `Processor Detail - ${id}`,
     };
 }
 
 export default async function ProcessorDetailPage({params}: PageProps) {
+    const {id} = await params;
     const supabase = await createClient();
 
     const {data: cpu, error} = await supabase
         .from('processors')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error || !cpu) return notFound();

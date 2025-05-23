@@ -6,26 +6,28 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 interface PageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { id } = await params;
     return {
-        title: `Case Detail - ${params.id}`,
+        title: `Case Detail - ${id}`,
     };
 }
 
 export default async function CaseDetailPage({ params }: PageProps) {
+    const { id } = await params;
     const supabase = await createClient();
 
     const { data: pcCase, error } = await supabase
         .from('cases')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error || !pcCase) return notFound();

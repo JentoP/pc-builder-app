@@ -12,8 +12,9 @@ type PageProps = {
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const id = await params.id;
     return {
-        title: `Memory Detail - ${params.id}`,
+        title: `Memory Detail - ${id}`,
     };
 }
 

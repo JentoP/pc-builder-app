@@ -5,25 +5,29 @@ import { Metadata } from 'next';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-type PageProps = {
-    params: { id: string };
-};
+interface PageProps {
+    params: Promise<{
+        id: string;
+    }>;
+}
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { id } = await params;
     return {
-        title: `Motherboard Detail - ${params.id}`,
+        title: `Motherboard Detail - ${id}`,
     };
 }
 
 export default async function MotherboardDetailPage({ params }: PageProps) {
+    const { id } = await params;
     const supabase = await createClient();
 
     const { data: motherboard, error } = await supabase
         .from('motherboards')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error || !motherboard) return notFound();

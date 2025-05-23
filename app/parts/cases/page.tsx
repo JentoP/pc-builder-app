@@ -10,8 +10,8 @@ type Case = {
     id: string
     name: string
     manufacturer: string
-    form_factor: string
-    form_factor_compatibility: string
+    mobo_form_factor: string
+    psu_form_factor: string
     max_gpu_length: number
     color?: string
     side_panel: string
@@ -41,14 +41,14 @@ export default function CasesPage() {
         fetchCases()
     }, [])
 
-    const formFactors = ['All', ...Array.from(new Set(cases.map(c => c.form_factor)))]
+    const formFactors = ['All', ...Array.from(new Set(cases.map(c => c.mobo_form_factor)))]
 
     const handleFilterChange = (value: string) => {
         setFormFactorFilter(value)
         if (value === 'All') {
             setFiltered(cases)
         } else {
-            setFiltered(cases.filter(c => c.form_factor === value))
+            setFiltered(cases.filter(c => c.mobo_form_factor === value))
         }
     }
 

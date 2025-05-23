@@ -259,7 +259,7 @@ export default function BuildDisplay() {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => clearPart('storage', drive.id)}
+                                        onClick={() => clearPart('storage', index + 1)}
                                         className="min-w-20"
                                     >
                                         Remove

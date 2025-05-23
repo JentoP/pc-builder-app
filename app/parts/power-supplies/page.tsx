@@ -68,7 +68,6 @@ export default function PowerSuppliesPage() {
                     value={efficiencyFilter}
                     onChange={(e) => handleFilterChange(e.target.value)}
                     className="border focus:border-gray-300 rounded-md px-3 py-2 text-sm outline-none bg-sidebar">
-                >
                     {efficiencyOptions.map(option => (
                         <option key={option} value={option}>
                             {option}

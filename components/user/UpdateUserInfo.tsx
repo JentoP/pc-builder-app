@@ -7,7 +7,7 @@ import { useProfile } from "@/hooks/fetch-user";
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserProfileCard } from "@/components/user/UserProfileCard";
 import { toast } from "sonner";
 
 export default function UpdateUserProfile() {
@@ -77,26 +77,16 @@ export default function UpdateUserProfile() {
             {!loadingProfile && (
                 <div className="flex flex-col md:flex-row gap-6">
                     {/* Profile Info Card */}
+
                     <div className="flex-1">
-                        <div className="rounded-lg border p-4">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="h-40 w-40">
-                                    <AvatarImage src={profile.avatarUrl} alt="Profile" />
-                                    <AvatarFallback>
-                                        {profile.firstName?.[0]?.toUpperCase() || "U"}
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <h3 className="font-medium">
-                                        {profile.firstName} {profile.lastName}
-                                    </h3>
-                                    <p className="text-sm text-muted-foreground">
-                                        {profile.bio || "No bio set"}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <UserProfileCard
+                            avatarUrl={profile.avatarUrl}
+                            firstName={profile.firstName}
+                            lastName={profile.lastName}
+                            bio={profile.bio}
+                        />
                     </div>
+
 
                     {/* Update Form */}
                     <div className="flex-1">

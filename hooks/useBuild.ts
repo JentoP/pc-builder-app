@@ -3,6 +3,7 @@ import {toast} from 'sonner';
 import {addPartToBuild, getCompatibilityConflicts, resolveConflicts} from '@/utils/compatibility';
 
 export type Build = {
+    name?: string;
     processor?: any;
     motherboard?: any;
     memory?: any[];
@@ -14,6 +15,7 @@ export type Build = {
 };
 
 const defaultBuild: Build = {
+    name: "My PC Build",
     processor: null,
     motherboard: null,
     memory: [],

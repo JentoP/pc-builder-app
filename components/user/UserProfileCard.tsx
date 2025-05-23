@@ -6,7 +6,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
-export function UserProfileCard() {
+interface UserProfileCardProps {
+    avatarUrl?: string;
+    firstName?: string;
+    lastName?: string;
+    bio?: string;
+}
+
+export function UserProfileCard({ avatarUrl, firstName, lastName, bio }: UserProfileCardProps = {}) {
     const supabase = createClient();
     const [profile, setProfile] = useState<{
         avatarUrl?: string;
@@ -18,6 +25,18 @@ export function UserProfileCard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // If props are provided, use them directly and skip fetching
+        if (avatarUrl || firstName || lastName || bio) {
+            setProfile({
+                avatarUrl,
+                firstName,
+                lastName,
+                bio
+            });
+            setLoading(false);
+            return;
+        }
+
         const fetchProfile = async () => {
             const { data: userData, error: userError } = await supabase.auth.getUser();
 
@@ -64,25 +83,32 @@ export function UserProfileCard() {
         );
     }
 
-    if (!profile) return null;
+    const displayProfile = profile || {
+        avatarUrl: avatarUrl,
+        firstName: firstName,
+        lastName: lastName,
+        bio: bio
+    };
+
+    if (!displayProfile) return null;
 
     return (
         <div className="bg-sidebar rounded-lg border p-4">
             <div className="flex items-center gap-4">
-                <Avatar className="h-40 w-40">
+                <Avatar className="h-32 w-32">
                     <AvatarImage
-                        src={profile.avatarUrl}
-                        alt="User avatar"
+                        src={displayProfile.avatarUrl}
+                        alt={`${displayProfile.firstName} ${displayProfile.lastName}`}
                         onError={(e) => e.currentTarget.src = "/images/user/placeholder.jpg"}
                     />
-                    <AvatarFallback>{profile.firstName?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+                    <AvatarFallback>{displayProfile.firstName?.[0]?.toUpperCase() || "U"}</AvatarFallback>
                 </Avatar>
                 <div>
                     <h3 className="font-medium text-lg">
-                        {profile.firstName} {profile.lastName}
+                        {displayProfile.firstName} {displayProfile.lastName}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                        {profile.bio || "No bio set"}
+                        {displayProfile.bio || "No bio set"}
                     </p>
                 </div>
             </div>

@@ -5,7 +5,6 @@ import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import MotherboardCard from '@/components/parts/MotherboardCard'
 import { useBuild } from '@/hooks/useBuild'
-import { toast } from 'sonner'
 
 type Motherboard = {
     id: string;

@@ -89,7 +89,7 @@ export default function GraphicCardsPage() {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-200 hover:shadow-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filtered.map(gpu => (
                         <GpuCard key={gpu.id} gpu={gpu} onAddToBuild={handleAddToBuild} />
                     ))}

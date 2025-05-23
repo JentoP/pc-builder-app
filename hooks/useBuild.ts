@@ -6,7 +6,7 @@ export type Build = {
     motherboard?: any;
     memory?: any;
     gpu?: any;
-    storage?: any;
+    storage?: any[]; // Updated to array
     psu?: any;
     case?: any;
     cooling?: any;
@@ -17,7 +17,7 @@ const defaultBuild: Build = {
     motherboard: null,
     memory: null,
     gpu: null,
-    storage: null,
+    storage: [], // Default to empty array
     psu: null,
     case: null,
     cooling: null,
@@ -71,6 +71,25 @@ function getCompatibilityConflicts(type: keyof Build, part: any, current: Build)
             conflicts.push({
                 partType: 'case',
                 reason: 'Motherboard form factor is not supported by the current case.',
+            });
+        }
+
+        // Check NVMe/SATA slot limits
+        const nvmeLimit = part?.nvme_slots || 0;
+        const sataLimit = part?.sata_ports || 0;
+        const nvmeCount = (current.storage || []).filter((s: any) => s.interface === 'NVMe').length;
+        const sataCount = (current.storage || []).filter((s: any) => s.interface === 'SATA').length;
+
+        if (nvmeCount > nvmeLimit) {
+            conflicts.push({
+                partType: 'storage',
+                reason: `Motherboard supports only ${nvmeLimit} NVMe device(s).`,
+            });
+        }
+        if (sataCount > sataLimit) {
+            conflicts.push({
+                partType: 'storage',
+                reason: `Motherboard supports only ${sataLimit} SATA device(s).`,
             });
         }
     }
@@ -147,6 +166,35 @@ export function useBuild() {
     };
 
     const updateBuild = (type: keyof Build, part: any, force = false) => {
+        const newBuild = { ...build };
+
+        if (type === 'storage') {
+            const updatedStorage = [...(build.storage || [])];
+            updatedStorage.push(part);
+
+            const tempBuild = { ...build, storage: updatedStorage };
+            const conflicts = getCompatibilityConflicts(type, part, tempBuild);
+
+            if (conflicts.length > 0 && !force) {
+                toast.error(`Incompatible ${type}`, {
+                    description: conflicts.map(c => `• ${c.reason}`).join('\n'),
+                    action: {
+                        label: 'Add anyway',
+                        onClick: () => {
+                            saveBuild({ ...build, storage: updatedStorage });
+                            toast.success(`${type} added with conflicts resolved`);
+                        },
+                    },
+                });
+
+                return;
+            }
+
+            saveBuild({ ...build, storage: updatedStorage });
+            toast.success(`${type.toUpperCase()} added successfully`);
+            return;
+        }
+
         const conflicts = getCompatibilityConflicts(type, part, build);
 
         if (conflicts.length > 0 && !force) {
@@ -155,43 +203,67 @@ export function useBuild() {
                 action: {
                     label: 'Add anyway',
                     onClick: () => {
-                        const updated = { ...build };
-                        conflicts.forEach(c => updated[c.partType] = null);
-                        updated[type] = part;
-                        saveBuild(updated);
+                        conflicts.forEach(c => newBuild[c.partType] = null);
+                        newBuild[type] = part;
+                        saveBuild(newBuild);
                         toast.success(`${type} added with conflicts resolved`);
                     },
                 },
             });
 
-            // Add warning toast for default path (if user does not click "Add anyway")
-            toast.warning(`Did not add ${type}`, {
-                description: `Conflicts found. Review and try again.`,
-            });
-
             return;
         }
 
-        const updated = { ...build };
         if (force) {
             getCompatibilityConflicts(type, part, build).forEach(c => {
-                updated[c.partType] = null;
+                newBuild[c.partType] = null;
             });
         }
-        updated[type] = part;
-        saveBuild(updated);
+
+        newBuild[type] = part;
+        saveBuild(newBuild);
         toast.success(`${type.toUpperCase()} added successfully`);
+    };
+    const updatePart = (type: keyof Build, value: any) => {
+        const updated = { ...build, [type]: value };
+        saveBuild(updated);
+    };
+
+    const clearPart = (type: string, id?: number) => {
+        const updated = { ...build };
+
+        if (type === 'storage' && id) {
+            const newStorage = (updated.storage || []).filter((s: any) => s.id !== id);
+
+            // Promote the next available storage to primary if primary was removed
+            if (build.storage?.[0]?.id === id && newStorage.length > 0) {
+                const [newPrimary, ...rest] = newStorage;
+                updated.storage = [newPrimary, ...rest];
+            } else {
+                updated.storage = newStorage;
+            }
+        } else {
+            // @ts-ignore
+            updated[type] = null;
+        }
+
+        saveBuild(updated);
     };
 
 
-    const clearPart = (type: string) => {
-        const updated = { ...build, [type]: null };
-        saveBuild(updated);
+    const markAsPrimaryStorage = (id: string) => {
+        const storage = [...(build.storage || [])];
+        const index = storage.findIndex((s: any) => s.id === id);
+        if (index === -1) return;
+        const [primary] = storage.splice(index, 1);
+        storage.unshift(primary);
+        saveBuild({ ...build, storage });
     };
 
     const resetBuild = () => {
         setBuild(defaultBuild);
         localStorage.removeItem('build');
+        toast.success('Build reset successfully');
     };
 
     return {
@@ -199,5 +271,7 @@ export function useBuild() {
         updateBuild,
         clearPart,
         resetBuild,
+        updatePart,
+        markAsPrimaryStorage,
     };
 }

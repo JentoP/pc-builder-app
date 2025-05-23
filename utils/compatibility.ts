@@ -92,8 +92,8 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             });
         }
 
-        const nvmeLimit = part?.m2_slots || 0;
-        const sataLimit = part?.sata_slots || 0;
+        const nvmeLimit = part?.nvme_ports || 0;
+        const sataLimit = part?.sata_ports || 0;
         const testStorage = [...(current.storage || [])];
         const nvmeCount = testStorage.filter((s: any) => s.interface === 'NVMe').length;
         const sataCount = testStorage.filter((s: any) => s.interface === 'SATA').length;

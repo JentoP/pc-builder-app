@@ -1,5 +1,5 @@
 # PC Builder Application
-The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize and compare their ideal PC setups.
+The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize their ideal PC setup.
 
 ## Features in development
 ### 1. Authentication and User Management (MVP)
@@ -7,36 +7,47 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Profile page with saved builds
 
 ### 2. Component Library (MVP)
-- Components retrieved via an external API (nice to have), or imported manually into the database
-- Support for categories like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling
-- Filters for brand, price, compatibility, etc.
+- Components retrieved via a manually imported database
+- Pages for components like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling,...
+- Filters for brand, price, etc.
+- Sort by option
+- Image fetching through API as a fallback (nice to have).
 
 ### 3. PC Builder Interface (MVP)
-- Dropdown selection for each component
-- Live price calculation and compatibility checks
+- Selection for each component
+- Live price calculation
 - Dynamic preview of the build
-  
-### 3. Admin Environment (MVP)
+
+### 4. Compatibility Check (MVP)
+- Logic integrated to check if components are compatible
+- Warnings for conflicts (e.g., wrong socket or insufficient wattage)
+
+| Component   | Depends on              | Check                                              |
+|-------------|-------------------------|----------------------------------------------------|
+| Processor   | Motherboard             | Socket must match                                  |
+| Motherboard | Processor, Memory, Case | Socket, RAM type (e.g., DDR4/DDR5), form factor    |
+| Memory      | Motherboard             | RAM type (e.g., DDR4 vs DDR5) and slots (optional) |
+| GPU         | Case, Motherboard       | PCIe slot, GPU length vs case max GPU length       |
+| Storage     | Motherboard             | SATA vs M.2 availability                           |
+| PSU         | GPU, Case               | Wattage capacity, PSU form factor                  |
+| Case        | Motherboard, GPU, PSU   | Motherboard form factor, GPU length, PSU size      |
+
+### 5. Admin Environment (nice to have)
 - Admin can manage or edit components in the Supabase database
 - Logs for builds and user activity
 
-### 4. Save and Share Builds (nice to have)
+### 6. Save and Share Builds (nice to have)
 - Users can save builds in their profile
 - Share via a unique link
 - Option to copy and modify builds
-
-### 5. Compatibility Check (nice to have)
-- Logic integrated (or via API) to check if components are compatible
-- Warnings for conflicts (e.g., wrong socket or insufficient wattage)
-
-### 6. Wishlist and Comparison (nice to have)
+  
+### 7. Wishlist and Comparison (nice to have)
 - Option to compare components
 - Wishlist for future purchases
 
+### 7. API Integration (nice to have)
+- External API used to fetch real-time component data (price, specs, availability)
 
-
-### API Integration
-- External API is used to fetch real-time component data (price, specs, availability)
 
 ## Tech Stack
 - [Next.js](https://nextjs.org)

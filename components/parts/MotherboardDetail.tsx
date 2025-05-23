@@ -61,12 +61,12 @@ export default function MotherboardDetail({ motherboard }: { motherboard: Mother
                             <span>{motherboard.memory_type}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="font-medium">Memory Slots</span>
-                            <span>{motherboard.memory_slots}</span>
-                        </div>
-                        <div className="flex justify-between">
                             <span className="font-medium">Max Memory</span>
                             <span>{motherboard.max_memory} GB</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Memory Slots</span>
+                            <span>{motherboard.memory_slots}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="font-medium">SATA Slots</span>

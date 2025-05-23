@@ -69,7 +69,7 @@ export default function CoolingPage() {
                     id="typeFilter"
                     value={typeFilter}
                     onChange={(e) => handleFilterChange(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
+                    className="border focus:border-gray-300 rounded-md px-3 py-2 text-sm outline-none bg-sidebar">
                 >
                     {coolerTypes.map(type => (
                         <option key={type} value={type}>

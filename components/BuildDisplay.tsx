@@ -299,7 +299,7 @@ export default function BuildDisplay() {
             {/*    <div className="flex flex-col gap-2 px-2">*/}
             {/*    </div>*/}
             {/*</div>*/}
-            <div className="font-semibold text-xl text-center border-t-2 mt-4 p-2">
+            <div className="font-semibold text-xl text-center border-t-2 mt-8 p-4">
                 Total: € {totalPrice.toFixed(2)}
             </div>
             <div className="mt-4 flex flex-row sm:flex-row gap-2 m-2 justify-center">

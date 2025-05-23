@@ -61,7 +61,7 @@ export default function ProcessorsPage() {
             <h1 className="text-2xl font-bold mb-6">Processors</h1>
 
             {/* Filter */}
-            <div className="mb-6">
+            <div className="my-6 mr-8">
                 <label htmlFor="socketFilter" className="block text-sm font-medium mb-2">
                     Filter by Socket
                 </label>
@@ -69,7 +69,7 @@ export default function ProcessorsPage() {
                     id="socketFilter"
                     value={socketFilter}
                     onChange={(e) => handleFilterChange(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2">
+                    className="border focus:border-gray-300 rounded-md px-3 py-2 text-sm outline-none bg-sidebar">
                     {socketOptions.map(socket => (
                         <option key={socket} value={socket}>
                             {socket}

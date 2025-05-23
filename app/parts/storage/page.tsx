@@ -58,7 +58,7 @@ export default function StoragePage() {
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-6">Storage Devices</h1>
 
-            <div className="mb-6">
+            <div className="my-6 mr-8">
                 <label htmlFor="typeFilter" className="block text-sm font-medium mb-2">
                     Filter by Type
                 </label>
@@ -66,7 +66,7 @@ export default function StoragePage() {
                     id="typeFilter"
                     value={typeFilter}
                     onChange={(e) => handleFilterChange(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
+                    className="border focus:border-gray-300 rounded-md px-3 py-2 text-sm outline-none bg-sidebar">
                 >
                     {typeOptions.map(type => (
                         <option key={type} value={type}>

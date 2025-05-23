@@ -14,8 +14,8 @@ type Motherboard = {
     memory_slots: number;
     max_memory: number;
     memory_type: string;
-    sata_slots: number;
-    m2_slots: number;
+    sata_ports: number;
+    nvme_ports: number;
     price: number;
     image_url?: string | null;
 };
@@ -47,8 +47,8 @@ export default function MotherboardDetail({ motherboard }: { motherboard: Mother
                     <p><strong>RAM Interface:</strong> {motherboard.memory_type}</p>
                     <p><strong>Memory Slots:</strong> {motherboard.memory_slots}</p>
                     <p><strong>Max Memory:</strong> {motherboard.max_memory} GB</p>
-                    <p><strong>SATA Slots:</strong> {motherboard.sata_slots}</p>
-                    <p><strong>M.2 Slots:</strong> {motherboard.m2_slots}</p>
+                    <p><strong>SATA Slots:</strong> {motherboard.nvme_ports}</p>
+                    <p><strong>M.2 Slots:</strong> {motherboard.nvme_ports}</p>
                     <p className="text-xl font-semibold mt-4 mb-3"><strong>Price:</strong> € {motherboard.price.toFixed(2)}</p>
                 </div>
             </div>

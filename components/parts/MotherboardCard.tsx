@@ -54,7 +54,7 @@ export default function MotherboardCard({ motherboard, onAddToBuild }: Motherboa
                 <div className="flex gap-2 items-center justify-between m-3">
                     <p className="text-l mb-2">{motherboard.socket}</p>
                     <p className="text-l mb-2">{motherboard.form_factor}</p>
-                    <p className="text-l mb-2">{motherboard.memory_type}</p>
+                    <p className="text-l mb-2">{motherboard.chipset}</p>
                 </div>
                 <div className="flex justify-between items-center m-3">
                     <span className="font-semibold text-l">Price:</span>

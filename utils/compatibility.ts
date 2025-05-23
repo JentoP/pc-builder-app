@@ -250,16 +250,16 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             const nvmeCount = (current.storage || []).filter((s: any) => s.interface === 'NVMe').length;
             const sataCount = (current.storage || []).filter((s: any) => s.interface === 'SATA').length;
 
-            if (part.interface === 'NVMe' && nvmeCount + 1 > (mb.m2_slots || 0)) {
+            if (part.interface === 'NVMe' && nvmeCount + 1 > (mb.nvme_ports || 0)) {
                 conflicts.push({
                     partType: 'storage',
-                    reason: `Motherboard supports only ${mb.m2_slots || 0} NVMe device(s).`,
+                    reason: `Motherboard supports only ${mb.nvme_ports || 0} NVMe device(s).`,
                 });
             }
-            if (part.interface === 'SATA' && sataCount + 1 > (mb.sata_slots || 0)) {
+            if (part.interface === 'SATA' && sataCount + 1 > (mb.sata_ports || 0)) {
                 conflicts.push({
                     partType: 'storage',
-                    reason: `Motherboard supports only ${mb.sata_slots || 0} SATA device(s).`,
+                    reason: `Motherboard supports only ${mb.sata_ports || 0} SATA device(s).`,
                 });
             }
         }

@@ -9,20 +9,21 @@ import {
 } from '@/components/ui/drawer'
 import BuildDisplay from '@/components/BuildDisplay'
 import Link from 'next/link'
+import { Computer } from 'lucide-react'
 
 export default function BuildDrawer() {
     return (
         <>
             <Drawer>
                 <DrawerTrigger
-                    className="border px-5 py-2 rounded-md text-sm hover:text-primary shadow text-purple-700 border-purple-700">
-                    View Build
+                    className="border px-12 py-2 rounded-md text-sm hover:text-primary shadow text-muted-foreground hover:bg-accent hover:border-purple-600 hover:text-purple-600">
+                    <Computer size={20}/>
                 </DrawerTrigger>
                 <DrawerContent className="max-h-screen">
                     <DrawerHeader>
                         <div className="flex justify-between items-center">
                             <DrawerTitle>Current Build</DrawerTitle>
-                            <DrawerClose className="px-4 py-1 rounded text-sm bg-red-600 text-white">Close</DrawerClose>
+                            <DrawerClose className="px-4 py-1 rounded text-sm shadow text-primary">Close</DrawerClose>
                         </div>
                         <DrawerDescription>
                             <span>This is your current build. </span>

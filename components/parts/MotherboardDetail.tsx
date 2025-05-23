@@ -31,7 +31,7 @@ export default function MotherboardDetail({ motherboard }: { motherboard: Mother
     const isAdmin = true; // Replace with actual admin logic
 
     return (
-        <div className="shadow rounded-lg p-6 border hover:border-purple-700">
+        <div className="bg-sidebar shadow rounded-lg p-6 border">
             <div className="flex items-start gap-4">
                 <img
                     src={imageSrc}
@@ -39,30 +39,61 @@ export default function MotherboardDetail({ motherboard }: { motherboard: Mother
                     className="w-24 h-24 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div>
-                    <h1 className="text-2xl font-bold mb-2">{motherboard.manufacturer} {motherboard.name}</h1>
-                    <p><strong>Chipset:</strong> {motherboard.chipset}</p>
-                    <p><strong>Socket:</strong> {motherboard.socket}</p>
-                    <p><strong>Form Factor:</strong> {motherboard.form_factor}</p>
-                    <p><strong>RAM Interface:</strong> {motherboard.memory_type}</p>
-                    <p><strong>Memory Slots:</strong> {motherboard.memory_slots}</p>
-                    <p><strong>Max Memory:</strong> {motherboard.max_memory} GB</p>
-                    <p><strong>SATA Slots:</strong> {motherboard.nvme_ports}</p>
-                    <p><strong>M.2 Slots:</strong> {motherboard.nvme_ports}</p>
-                    <p className="text-xl font-semibold mt-4 mb-3"><strong>Price:</strong> € {motherboard.price.toFixed(2)}</p>
+                <div className="p-4 rounded-lg w-full">
+                    <h1 className="text-2xl font-bold my-4">
+                        {motherboard.manufacturer} {motherboard.name}
+                    </h1>
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <span className="font-medium">Chipset</span>
+                            <span>{motherboard.chipset}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Socket</span>
+                            <span>{motherboard.socket}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Form Factor</span>
+                            <span>{motherboard.form_factor}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">RAM Interface</span>
+                            <span>{motherboard.memory_type}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Max Memory</span>
+                            <span>{motherboard.max_memory} GB</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Memory Slots</span>
+                            <span>{motherboard.memory_slots}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">SATA Slots</span>
+                            <span>{motherboard.sata_ports}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">M.2 Slots</span>
+                            <span>{motherboard.nvme_ports}</span>
+                        </div>
+                        <div className="flex justify-between pt-3 text-xl font-semibold">
+                            <span>Price</span>
+                            <span>€ {motherboard.price.toFixed(2)}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
                 <Button onClick={() => updateBuild('motherboard', motherboard)}
                         variant="outline"
                         size="sm"
-                        className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700">
+                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
                     Add to Build
                 </Button>
                 <Button
                     variant="outline"
                     size="sm"
-                    className="mt-3 px-4 py-1 text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
                     <a href={`https://www.google.com/search?q=${motherboard.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

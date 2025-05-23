@@ -32,7 +32,7 @@ export function addPartToBuild(build: Build, type: keyof Build, part: any): Buil
     } else if (type === 'memory') {
         const currentMemory = updated.memory || [];
         const motherboard = build.motherboard;
-        const maxModules = motherboard?.memory_slots || 4; // Default to 4 if not specified
+        const maxModules = motherboard?.memory_slots || 4;
 
         // Check if we would exceed max modules
         if (currentMemory.length + 1 > maxModules) {
@@ -92,8 +92,8 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             });
         }
 
-        const nvmeLimit = part?.m2_slots || 0;
-        const sataLimit = part?.sata_slots || 0;
+        const nvmeLimit = part?.nvme_ports || 0;
+        const sataLimit = part?.sata_ports || 0;
         const testStorage = [...(current.storage || [])];
         const nvmeCount = testStorage.filter((s: any) => s.interface === 'NVMe').length;
         const sataCount = testStorage.filter((s: any) => s.interface === 'SATA').length;
@@ -266,4 +266,28 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
     }
 
     return conflicts;
+}
+
+export function getNextPartType(build: Build): string | null {
+    const requiredParts: (keyof Build)[] = [
+        'processor',
+        'motherboard',
+        'memory',
+        'storage',
+        'cooling',
+        'gpu',
+        'psu',
+        'case'
+    ];
+
+    for (const part of requiredParts) {
+        if (part === 'memory' || part === 'storage') {
+            if (!build[part] || (Array.isArray(build[part]) && build[part].length === 0)) {
+                return part;
+            }
+        } else if (!build[part]) {
+            return part;
+        }
+    }
+    return null;
 }

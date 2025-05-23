@@ -1,6 +1,6 @@
 import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
-import UpdateUserProfile from "@/components/update-user-info";
+import UpdateUserProfile from "@/components/user/UpdateUserInfo";
 
 export default async function Settings() {
     const supabase = await createClient();
@@ -18,8 +18,7 @@ export default async function Settings() {
             <h1 className="text-2xl font-bold">Settings</h1>
             <div className="gap-4 left-0">
                 <h2 className="text-lg font-medium">Account Info</h2>
-                <UpdateUserProfile/>
-
+                <UpdateUserProfile />
             </div>
         </div>
     );

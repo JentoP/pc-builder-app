@@ -28,7 +28,7 @@ export default function CaseDetail({ pcCase }: { pcCase: Case }) {
     const isAdmin = true; // Replace with your admin check logic
 
     return (
-        <div className="shadow rounded-lg p-6 border hover:border-purple-700">
+        <div className="bg-sidebar shadow rounded-lg p-6 border">
             <div className="flex items-start gap-4">
                 <img
                     src={imageSrc}
@@ -36,37 +36,58 @@ export default function CaseDetail({ pcCase }: { pcCase: Case }) {
                     className="w-24 h-24 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div>
-                    <h1 className="text-2xl font-bold mb-2">{pcCase.manufacturer} {pcCase.name}</h1>
-                    <p><strong>Side Panel:</strong> {pcCase.side_panel}</p>
-                    <p><strong>Motherboard Form Factor:</strong> {pcCase.mobo_form_factor}</p>
-                    <p><strong>PSU Form Factor:</strong> {pcCase.psu_form_factor}</p>
-                    <p><strong>Color:</strong> {pcCase.color}</p>
-                    <p className="text-xl font-semibold mt-4 mb-3"><strong>Price:</strong> € {pcCase.price.toFixed(2)}</p>
+                <div className="p-4 rounded-lg w-full">
+                    <h1 className="text-2xl font-bold my-4">
+                        {pcCase.manufacturer} {pcCase.name}
+                    </h1>
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <span className="font-medium">Side Panel</span>
+                            <span>{pcCase.side_panel}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Motherboard Form Factor</span>
+                            <span>{pcCase.mobo_form_factor}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">PSU Form Factor</span>
+                            <span>{pcCase.psu_form_factor}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Color</span>
+                            <span>{pcCase.color}</span>
+                        </div>
+                        <div className="flex justify-between pt-3 text-xl font-semibold">
+                            <span>Price</span>
+                            <span>€ {pcCase.price.toFixed(2)}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
                 <Button onClick={() => updateBuild('case', pcCase)}
                         variant="outline"
                         size="sm"
-                        className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700">
+                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
                     Add to Build
                 </Button>
                 <Button
                     variant="outline"
                     size="sm"
-                    className="mt-3 px-4 py-1 text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
                     <a href={`https://www.google.com/search?q=${pcCase.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>
                 </Button>
             </div>
             {/* {isAdmin && (
-        <div className="mt-6 border-t pt-4">
-          <h2 className="text-lg font-semibold mb-2">Admin Controls</h2>
-          <Button variant="secondary">Edit Case</Button>
-        </div>
-      )} */}
+                <div className="mt-6 border-t pt-4">
+                    <h2 className="text-lg font-semibold mb-2">Admin Controls</h2>
+                    <Button variant="secondary">
+                        Edit Case
+                    </Button>
+                </div>
+            )} */}
         </div>
     );
 }

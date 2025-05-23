@@ -27,7 +27,7 @@ export default function CoolerDetail({ cooler }: { cooler: Cooler }) {
     const isAdmin = true; // Replace with actual admin logic
 
     return (
-        <div className="shadow rounded-lg p-6 border hover:border-purple-700">
+        <div className="bg-sidebar shadow rounded-lg p-6 border">
             <div className="flex items-start gap-4">
                 <img
                     src={imageSrc}
@@ -35,37 +35,62 @@ export default function CoolerDetail({ cooler }: { cooler: Cooler }) {
                     className="w-24 h-24 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div>
-                    <h1 className="text-2xl font-bold mb-2">{cooler.manufacturer} {cooler.name}</h1>
-                    <p><strong>Type:</strong> {cooler.type}</p>
-                    <p><strong>Socket Compatibility:</strong> {cooler.socket_compatibility}</p>
-                    {cooler.radiator_size && <p><strong>Radiator Size:</strong> {cooler.radiator_size}</p>}
-                    {cooler.noise_level && <p><strong>Noise Level:</strong> {cooler.noise_level}</p>}
-                    <p className="text-xl font-semibold mt-4 mb-3"><strong>Price:</strong> € {cooler.price.toFixed(2)}</p>
+                <div className="p-4 rounded-lg w-full">
+                    <h1 className="text-2xl font-bold my-4">
+                        {cooler.manufacturer} {cooler.name}
+                    </h1>
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <span className="font-medium">Type</span>
+                            <span>{cooler.type}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Socket Compatibility</span>
+                            <span>{cooler.socket_compatibility}</span>
+                        </div>
+                        {cooler.radiator_size && (
+                            <div className="flex justify-between">
+                                <span className="font-medium">Radiator Size</span>
+                                <span>{cooler.radiator_size}</span>
+                            </div>
+                        )}
+                        {cooler.noise_level && (
+                            <div className="flex justify-between">
+                                <span className="font-medium">Noise Level</span>
+                                <span>{cooler.noise_level}</span>
+                            </div>
+                        )}
+                        <div className="flex justify-between pt-3 text-xl font-semibold">
+                            <span>Price</span>
+                            <span>€ {cooler.price.toFixed(2)}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
                 <Button onClick={() => updateBuild('cooling', cooler)}
                         variant="outline"
                         size="sm"
-                        className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700">
+                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
                     Add to Build
                 </Button>
                 <Button
                     variant="outline"
                     size="sm"
-                    className="mt-3 px-4 py-1 text-blue-600 hover:border-blue-700 hover:text-blue-700">
+                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
                     <a href={`https://www.google.com/search?q=${cooler.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>
                 </Button>
             </div>
             {/* {isAdmin && (
-        <div className="mt-6 border-t pt-4">
-          <h2 className="text-lg font-semibold mb-2">Admin Controls</h2>
-          <Button variant="secondary">Edit Cooler</Button>
-        </div>
-      )} */}
+                <div className="mt-6 border-t pt-4">
+                    <h2 className="text-lg font-semibold mb-2">Admin Controls</h2>
+                    <Button variant="secondary">
+                        Edit Cooler
+                    </Button>
+                </div>
+            )} */}
         </div>
     );
 }

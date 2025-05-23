@@ -5,12 +5,13 @@ import {Badge} from "@/components/ui/badge"
 import {Button} from "@/components/ui/button"
 import {createClient} from "@/utils/supabase/server"
 import * as React from "react"
+import BuildDrawer from "@/components/BuildDrawer";
 
 export default async function AuthButton() {
     const supabase = await createClient()
 
     const {
-        data: { user },
+        data: {user},
     } = await supabase.auth.getUser()
 
     if (!hasEnvVars) {
@@ -33,7 +34,7 @@ export default async function AuthButton() {
 
     if (user) {
         // Fetch user profile from 'profiles' table
-        const { data: profile } = await supabase
+        const {data: profile} = await supabase
             .from("profiles")
             .select("first_name, last_name")
             .eq("id", user.id)
@@ -42,23 +43,16 @@ export default async function AuthButton() {
         const name = profile ? `${profile.first_name} ${profile.last_name}`.trim() : user.email
 
         return (
-            <div className="flex items-center gap-4">
-                Hey, {name}!
-                <form action={signOutAction}>
-                    <Button type="submit" variant="outline">
-                        Sign out
-                    </Button>
-                </form>
-            </div>
+            <BuildDrawer/>
         )
     }
 
     return (
         <div className="flex gap-2">
-            <Button asChild size="sm" variant="outline">
+            <Button asChild size="sm" variant="outline" className="bg-sidebar shadow">
                 <Link href="/sign-in">Sign in</Link>
             </Button>
-            <Button asChild size="sm" variant="default">
+            <Button asChild size="sm" variant="default" className="bg-blue-700 hover:bg-purple-600 text-white">
                 <Link href="/sign-up">Sign up</Link>
             </Button>
         </div>

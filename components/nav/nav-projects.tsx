@@ -73,31 +73,19 @@ export function NavProjects({
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <Link href="/builder/projects/new">
+                                    <Link href="/builder">
                                         <FolderPlus className="text-muted-foreground"/>
                                         <span>New</span>
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Link href="/builder/projects">
+                                    <Link href="/saved">
                                         <span>
                                             <Folder className="text-muted-foreground"/>
                                             View</span>
                                     </Link>
                                 </DropdownMenuItem>
-                                {/*<DropdownMenuItem>*/}
-                                {/*    <Link href="/builder/projects/shared">*/}
-                                {/*        <Forward className="text-muted-foreground"/>*/}
-                                {/*        <span>Shared Projects</span>*/}
-                                {/*    </Link>*/}
-                                {/*</DropdownMenuItem>*/}
-                                {/*<DropdownMenuSeparator/>*/}
-                                {/*<DropdownMenuItem>*/}
-                                {/*    <Link href="/builder/projects/deleted">*/}
-                                {/*        <Trash2 className="text-muted-foreground"/>*/}
-                                {/*        <span>Deleted Projects</span>*/}
-                                {/*    </Link>*/}
-                                {/*</DropdownMenuItem>*/}
+
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </SidebarMenuItem>

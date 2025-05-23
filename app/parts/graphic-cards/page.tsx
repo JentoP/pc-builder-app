@@ -3,20 +3,23 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
-import GraphicCard from '@/components/parts/GpuCard'
+import GpuCard from '@/components/parts/GpuCard'
 import { useBuild } from '@/hooks/useBuild'
 import { toast } from 'sonner'
 
 type GraphicCard = {
-    id: string
-    name: string
-    manufacturer: string
-    chipset: string
-    memory: number
-    core_clock: number
-    boost_clock: number
-    tdp: number
-    price: number
+    id: string;
+    name: string;
+    manufacturer: string;
+    chipset: string;
+    memory_size: number;
+    memory_type: string;
+    length_mm: number;
+    nr_of_cores: number;
+    core_clock_mhz: number;
+    tdp: number;
+    price: number;
+    image_url?: string | null;
 }
 
 export default function GraphicCardsPage() {
@@ -69,7 +72,7 @@ export default function GraphicCardsPage() {
                     id="chipsetFilter"
                     value={chipsetFilter}
                     onChange={(e) => handleFilterChange(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500">
+                    className="border focus:border-gray-300 rounded-md px-3 py-2 text-sm outline-none bg-sidebar">
                     {chipsetOptions.map(chipset => (
                         <option key={chipset} value={chipset}>
                             {chipset}
@@ -86,9 +89,9 @@ export default function GraphicCardsPage() {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-200 hover:shadow-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filtered.map(gpu => (
-                        <GraphicCard key={gpu.id} gpu={gpu} onAddToBuild={handleAddToBuild} />
+                        <GpuCard key={gpu.id} gpu={gpu} onAddToBuild={handleAddToBuild} />
                     ))}
                 </div>
             )}

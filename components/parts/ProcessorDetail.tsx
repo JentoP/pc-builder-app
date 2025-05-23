@@ -35,15 +35,40 @@ export default function ProcessorDetail({cpu}: { cpu: Processor }) {
                     className="w-24 h-24 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg">
-                    <h1 className="text-2xl font-bold my-4">{cpu.manufacturer} {cpu.name}</h1>
-                    <p className="mt-2"><strong>Socket:</strong> {cpu.socket}</p>
-                    <p className="mt-2"><strong>Cores:</strong> {cpu.cores}</p>
-                    <p className="mt-2"><strong>Threads:</strong> {cpu.threads}</p>
-                    <p className="mt-2"><strong>Base Clock:</strong> {cpu.base_clock} GHz</p>
-                    <p className="mt-2"><strong>Boost Clock:</strong> {cpu.boost_clock} GHz</p>
-                    <p className="mt-2"><strong>Max Wattage:</strong> {cpu.tdp} W</p>
-                    <p className="text-xl font-semibold mt-4 mb-3"><strong>Price:</strong> € {cpu.price.toFixed(2)}</p>
+                <div className="p-4 rounded-lg w-full">
+                    <h1 className="text-2xl font-bold my-4">
+                        {cpu.manufacturer} {cpu.name}
+                    </h1>
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <span className="font-medium">Socket</span>
+                            <span>{cpu.socket}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Cores</span>
+                            <span>{cpu.cores}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Threads</span>
+                            <span>{cpu.threads}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Base Clock</span>
+                            <span>{cpu.base_clock} GHz</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Boost Clock</span>
+                            <span>{cpu.boost_clock} GHz</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Max Wattage</span>
+                            <span>{cpu.tdp} W</span>
+                        </div>
+                        <div className="flex justify-between pt-3 text-xl font-semibold">
+                            <span>Price</span>
+                            <span>€ {cpu.price.toFixed(2)}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">

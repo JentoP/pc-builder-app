@@ -5,26 +5,25 @@ import { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-type PageProps = {
+interface PageProps {
     params: { id: string };
-};
+}
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const id = await params.id;
-    return {
-        title: `Memory Detail - ${id}`,
-    };
+    const { id } = params;
+    return { title: `Memory Detail - ${id}` };
 }
 
 export default async function MemoryDetailPage({ params }: PageProps) {
-    const supabase = await createClient();
+    const { id } = params;
 
+    const supabase = await createClient();
     const { data: ram, error } = await supabase
         .from('memory')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
 
     if (error || !ram) return notFound();

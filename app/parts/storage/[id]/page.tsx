@@ -6,24 +6,22 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 interface PageProps {
-    params: Promise<{
-        id: string;
-    }>;
+    params: { id: string };
 }
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { id } = await params;
+    const { id } = params;
     return {
         title: `Storage Detail - ${id}`,
     };
 }
 
 export default async function StorageDetailPage({ params }: PageProps) {
-    const { id } = await params;
-    const supabase = await createClient();
+    const { id } = params;
 
+    const supabase = await createClient();
     const { data: storage, error } = await supabase
         .from('storage')
         .select('*')

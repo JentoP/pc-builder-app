@@ -6,22 +6,20 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 interface PageProps {
-    params: Promise<{
-        id: string;
-    }>;
+    params: { id: string };
 }
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { id } = await params;
+    const { id } = params;
     return {
         title: `Case Detail - ${id}`,
     };
 }
 
 export default async function CaseDetailPage({ params }: PageProps) {
-    const { id } = await params;
+    const { id } = params;
     const supabase = await createClient();
 
     const { data: pcCase, error } = await supabase

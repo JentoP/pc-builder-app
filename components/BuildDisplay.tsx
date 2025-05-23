@@ -16,7 +16,7 @@ const partRoutes: Record<string, string> = {
     motherboard: 'parts/motherboards',
     memory: 'parts/memory',
     storage: 'parts/storage',
-    cooling: 'parts/coolers',
+    cooling: 'parts/cooling',
     psu: 'parts/power-supplies',
     case: 'parts/cases',
     gpu: 'parts/graphic-cards',
@@ -103,7 +103,7 @@ export default function BuildDisplay() {
                     {part ? (
                         <>
                             <p>{part.manufacturer} {part.name}</p>
-                            <p className="text-sm text-muted-foreground">€ {part.price.toFixed(2)}</p>
+                            <p className="text-sm text-muted-foreground">€ {part.price ? part.price.toFixed(2) : '0.00'}</p>
                         </>
                     ) : (
                         <p className="text-muted-foreground">No part selected</p>
@@ -156,7 +156,7 @@ export default function BuildDisplay() {
                             {primary ? (
                                 <>
                                     <p>{primary.manufacturer} {primary.name}</p>
-                                    <p className="text-sm text-muted-foreground">€ {primary.price.toFixed(2)}</p>
+                                    <p className="text-sm text-muted-foreground">€ {primary.price ? primary.price.toFixed(2) : '0.00'}</p>
                                 </>
                             ) : (
                                 <p className="text-muted-foreground">No primary part selected</p>
@@ -194,7 +194,7 @@ export default function BuildDisplay() {
                                 <div className="flex-1">
                                     <p className="font-semibold">Additional Storage {index + 1}</p>
                                     <p>{drive.manufacturer} {drive.name}</p>
-                                    <p className="text-sm text-muted-foreground">€ {drive.price.toFixed(2)}</p>
+                                    <p className="text-sm text-muted-foreground">€ {drive.price ? drive.price.toFixed(2) : '0.00'}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <Link href={`/parts/storage/${drive.id}`}>

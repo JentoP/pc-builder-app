@@ -27,7 +27,7 @@ export default function CoolerCard({ cooler, onAddToBuild }: CoolerCardProps) {
     const imageToShow =
         !imageError && cooler.image_url
             ? cooler.image_url
-            : '/images/icons/gradient/cooler.png'
+            : '/images/icons/gradient/cooling.png'
 
     return (
         <div className="w-full">

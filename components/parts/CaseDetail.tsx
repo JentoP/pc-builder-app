@@ -8,10 +8,11 @@ type Case = {
     id: string;
     name: string;
     manufacturer: string;
-    side_panel: string;
     mobo_form_factor: string;
     psu_form_factor: string;
-    color: string;
+    max_gpu_length: number;
+    color?: string;
+    side_panel: string;
     price: number;
     image_url?: string | null;
 };

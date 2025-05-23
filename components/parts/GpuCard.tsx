@@ -22,7 +22,7 @@ type GraphicCardProps = {
     onAddToBuild?: (gpu: GraphicCard) => void
 }
 
-export default function GraphicCardCard({ gpu, onAddToBuild }: GraphicCardProps) {
+export default function GpuCard({ gpu, onAddToBuild }: GraphicCardProps) {
     const [imageError, setImageError] = useState(false)
 
     const imageToShow =

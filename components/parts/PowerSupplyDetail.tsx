@@ -22,7 +22,7 @@ export default function PowerSupplyDetail({ psu }: { psu: PowerSupply }) {
 
     const imageSrc = !imageError && psu.image_url
         ? psu.image_url
-        : '/images/icons/gradient/power_supply.png';
+        : '/images/icons/gradient/psu.png';
 
     const isAdmin = true; // Replace with actual logic
 

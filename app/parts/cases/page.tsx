@@ -12,9 +12,12 @@ type Case = {
     name: string
     manufacturer: string
     form_factor: string
+    form_factor_compatibility: string
     max_gpu_length: number
-    color: string
+    color?: string
+    side_panel: string
     price: number
+    image_url?: string | null
 }
 
 export default function CasesPage() {
@@ -70,7 +73,7 @@ export default function CasesPage() {
                     className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
                     {formFactors.map(option => (
-                        <option key={option} value={option}>
+                        <option key={`form-factor-${option}`} value={option}>
                             {option}
                         </option>
                     ))}

@@ -8,9 +8,11 @@ type Case = {
     id: string
     name: string
     manufacturer: string
-    form_factor_compatibility: string  // e.g. ATX, Micro-ATX, Mini-ITX
+    mobo_form_factor: string
+    psu_form_factor: string
+    max_gpu_length: number
     color?: string
-    side_panel: string                // e.g. Tempered Glass, Solid
+    side_panel: string
     price: number
     image_url?: string | null
 }
@@ -47,7 +49,7 @@ export default function CaseCard({ pcCase, onAddToBuild }: CaseCardProps) {
                     </Link>
                 </div>
                 <div className="flex gap-2 items-center justify-between m-3">
-                    <p className="text-l mb-2">{pcCase.form_factor_compatibility}</p>
+                    <p className="text-l mb-2">{pcCase.mobo_form_factor}</p>
                     {pcCase.color && <p className="text-l mb-2">{pcCase.color}</p>}
                     <p className="text-l mb-2">{pcCase.side_panel}</p>
                 </div>

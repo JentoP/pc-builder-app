@@ -5,6 +5,7 @@ import {Build, useBuild} from '@/hooks/useBuild'
 import BuildDisplay from "@/components/BuildDisplay";
 
 const routeMap: Record<keyof Build, string> = {
+    name: 'builds',
     processor: 'processors',
     motherboard: 'motherboards',
     memory: 'memory',

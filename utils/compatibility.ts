@@ -269,7 +269,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
 }
 
 export function getNextPartType(build: Build): string | null {
-    const requiredParts = [
+    const requiredParts: (keyof Build)[] = [
         'processor',
         'motherboard',
         'memory',

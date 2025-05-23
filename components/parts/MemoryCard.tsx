@@ -30,8 +30,8 @@ export default function MemoryCard({ memory, onAddToBuild }: MemoryCardProps) {
             : '/images/icons/gradient/memory.png'
 
     return (
-        <div className="w-full">
-            <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200 items-center">
+        <div className="w-full min-w-64">
+            <div className="border bg-sidebar rounded-lg p-4 shadow hover:shadow-lg transition duration-200 items-center">
                 <div className="flex gap-3">
                     <Link href={`/parts/memory/${memory.id}`}>
             <span className="flex items-start">
@@ -41,27 +41,27 @@ export default function MemoryCard({ memory, onAddToBuild }: MemoryCardProps) {
                   className="w-12 h-12 object-contain rounded"
                   onError={() => setImageError(true)}
               />
-              <h2 className="text-xl font-semibold ml-2">
+              <h2 className="text-xl font-semibold mx-4">
                 {memory.manufacturer} {memory.name}
               </h2>
             </span>
                     </Link>
                 </div>
-                <div className="flex gap-2 items-center justify-between m-3">
-                    <p className="text-l mb-2">{memory.type}</p>
-                    <p className="text-l mb-2">{memory.size} GB</p>
-                    <p className="text-l mb-2">{memory.speed} MHz</p>
+                <div className="flex gap-2 items-center justify-between my-4 mx-2">
+                    <p className="text-sm">{memory.type}</p>
+                    <p className="text-sm">{memory.size} GB</p>
+                    <p className="text-sm">{memory.speed} MHz</p>
                 </div>
-                <div className="flex justify-between items-center m-3">
-                    <span className="font-semibold text-l">Price:</span>
-                    <span className="font-semibold text-l">€ {memory.price.toFixed(2)}</span>
+                <div className="flex justify-between items-center mb-2 mx-2">
+                    <span className="text-l">Price </span>
+                    <span className="text-l">€ {memory.price.toFixed(2)}</span>
                 </div>
                 {onAddToBuild && (
-                    <div className="flex justify-between">
+                    <div className="flex justify-between p-1">
                         <Button
                             variant="outline"
                             size="sm"
-                            className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700"
+                            className="mt-3 px-4 py-1 text-purple-600 border-purple-600 hover:text-primary"
                             onClick={() => onAddToBuild(memory)}
                         >
                             Add to Build
@@ -69,7 +69,7 @@ export default function MemoryCard({ memory, onAddToBuild }: MemoryCardProps) {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700"
+                            className="mt-3 px-4 py-1 rounded text-blue-600 border-blue-600 hover:text-primary"
                         >
                             <Link href={`/parts/memory/${memory.id}`}>View Details</Link>
                         </Button>

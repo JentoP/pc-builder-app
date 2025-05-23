@@ -12,6 +12,8 @@ type GraphicCard = {
     memory_size: number;
     memory_type: string;
     length_mm: number;
+    nr_of_cores: number;
+    core_clock_mhz: number;
     tdp: number;
     price: number;
     image_url?: string | null;
@@ -48,6 +50,14 @@ export default function GraphicCardDetail({ card }: { card: GraphicCard }) {
                         <div className="flex justify-between">
                             <span className="font-medium">Memory</span>
                             <span>{card.memory_size} GB {card.memory_type}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Cores</span>
+                            <span>{card.nr_of_cores}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="font-medium">Core Clock Speed</span>
+                            <span>{card.core_clock_mhz} MHz</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="font-medium">Length</span>

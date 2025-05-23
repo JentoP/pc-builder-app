@@ -3,20 +3,23 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
-import GraphicCard from '@/components/parts/GpuCard'
+import GpuCard from '@/components/parts/GpuCard'
 import { useBuild } from '@/hooks/useBuild'
 import { toast } from 'sonner'
 
 type GraphicCard = {
-    id: string
-    name: string
-    manufacturer: string
-    chipset: string
-    memory: number
-    core_clock: number
-    boost_clock: number
-    tdp: number
-    price: number
+    id: string;
+    name: string;
+    manufacturer: string;
+    chipset: string;
+    memory_size: number;
+    memory_type: string;
+    length_mm: number;
+    nr_of_cores: number;
+    core_clock_mhz: number;
+    tdp: number;
+    price: number;
+    image_url?: string | null;
 }
 
 export default function GraphicCardsPage() {
@@ -88,7 +91,7 @@ export default function GraphicCardsPage() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-200 hover:shadow-lg">
                     {filtered.map(gpu => (
-                        <GraphicCard key={gpu.id} gpu={gpu} onAddToBuild={handleAddToBuild} />
+                        <GpuCard key={gpu.id} gpu={gpu} onAddToBuild={handleAddToBuild} />
                     ))}
                 </div>
             )}

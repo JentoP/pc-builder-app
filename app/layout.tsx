@@ -54,19 +54,19 @@ export default function RootLayout({children,}: Readonly<{
                             className="bg-sidebar flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                             <SidebarTrigger className="ml-3 p-4 shadow border"/>
                             <Separator orientation="vertical" className="mr-2 h-8"/>
-                            <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 ">
+                            <nav className="w-full flex justify-center h-12 ">
                                 <div className="w-full flex items-center justify-between text-sm">
                                     <Logo/>
                                     <div className="flex items-center gap-2 mr-8">
-                                        <BuildDrawer/>
                                         <ThemeSwitcher/>
+                                        <HeaderAuth/>
                                     </div>
                                 </div>
                             </nav>
                         </header>
 
                         {/* Main Content */}
-                        <div className="w-full flex-1 flex flex-col gap-20 max-w-5xl p-5">
+                        <div className="w-full flex-1 flex flex-col gap-20 max-w-10xl p-5">
                             {children}
                             <Toaster position="bottom-right" richColors expand/>
                             <SpeedInsights/>
@@ -77,7 +77,6 @@ export default function RootLayout({children,}: Readonly<{
                             <div className="text-sm flex justify-between">
                                 <p>PC Builder &copy; {new Date().getFullYear()}</p>
                                 <div className="flex text-end gap-4">
-                                    {!hasEnvVars ? <EnvVarWarning/> : <HeaderAuth/>}
                                 </div>
                             </div>
                         </footer>

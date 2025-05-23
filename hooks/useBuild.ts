@@ -79,12 +79,23 @@ export function useBuild() {
         saveBuild(updated);
     };
 
-    const clearPart = (type: string, id?: number) => {
+    const clearPart = (type: string, id?: number | string) => {
         const updated = { ...build };
 
-        if (type === 'storage' && id) {
-            updated.storage = (updated.storage || []).filter(s => s._uid !== id);
-        } else if (type === 'memory' && id) {
+        if (type === 'storage') {
+            if (typeof id === 'number') {
+                // Handle array index removal
+                updated.storage = (updated.storage || []).filter((_: any, i: number) => i !== id);
+            } else {
+                // Handle _uid removal
+                updated.storage = (updated.storage || []).filter(s => s._uid !== id);
+            }
+            // If removing primary storage, update the array structure
+            if (updated.storage?.length > 0) {
+                const [primary, ...additional] = updated.storage;
+                updated.storage = [primary, ...additional];
+            }
+        } else if (type === 'memory' && typeof id === 'number') {
             const index = Number(id);
             if (!isNaN(index)) {
                 updated.memory = (updated.memory || []).filter((_: any, i: number) => i !== index);

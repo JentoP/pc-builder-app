@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { applyConflicts } from '@/utils/compatiblity';
 
 export type Build = {
     processor?: any;
@@ -165,37 +166,16 @@ export function useBuild() {
         localStorage.setItem('build', JSON.stringify(updated));
     };
 
+
     const updateBuild = (type: keyof Build, part: any, force = false) => {
-        const newBuild = { ...build };
+        const isStorage = type === 'storage';
+        const currentStorage = build.storage || [];
 
-        if (type === 'storage') {
-            const updatedStorage = [...(build.storage || [])];
-            updatedStorage.push(part);
+        const updatedBuild = isStorage
+            ? { ...build, storage: [...currentStorage, part] }
+            : { ...build, [type]: part };
 
-            const tempBuild = { ...build, storage: updatedStorage };
-            const conflicts = getCompatibilityConflicts(type, part, tempBuild);
-
-            if (conflicts.length > 0 && !force) {
-                toast.error(`Incompatible ${type}`, {
-                    description: conflicts.map(c => `• ${c.reason}`).join('\n'),
-                    action: {
-                        label: 'Add anyway',
-                        onClick: () => {
-                            saveBuild({ ...build, storage: updatedStorage });
-                            toast.success(`${type} added with conflicts resolved`);
-                        },
-                    },
-                });
-
-                return;
-            }
-
-            saveBuild({ ...build, storage: updatedStorage });
-            toast.success(`${type.toUpperCase()} added successfully`);
-            return;
-        }
-
-        const conflicts = getCompatibilityConflicts(type, part, build);
+        const conflicts = getCompatibilityConflicts(type, part, updatedBuild);
 
         if (conflicts.length > 0 && !force) {
             toast.error(`Incompatible ${type}`, {
@@ -203,27 +183,23 @@ export function useBuild() {
                 action: {
                     label: 'Add anyway',
                     onClick: () => {
-                        conflicts.forEach(c => newBuild[c.partType] = null);
-                        newBuild[type] = part;
-                        saveBuild(newBuild);
-                        toast.success(`${type} added with conflicts resolved`);
+                        const resolvedBuild = applyConflicts(build, conflicts, type, part);
+                        saveBuild(resolvedBuild);
+                        toast.success(`${type.toUpperCase()} added with conflicts resolved`);
                     },
                 },
             });
-
             return;
         }
 
-        if (force) {
-            getCompatibilityConflicts(type, part, build).forEach(c => {
-                newBuild[c.partType] = null;
-            });
-        }
+        const finalBuild = force && conflicts.length > 0
+            ? applyConflicts(build, conflicts, type, part)
+            : updatedBuild;
 
-        newBuild[type] = part;
-        saveBuild(newBuild);
+        saveBuild(finalBuild);
         toast.success(`${type.toUpperCase()} added successfully`);
     };
+
     const updatePart = (type: keyof Build, value: any) => {
         const updated = { ...build, [type]: value };
         saveBuild(updated);

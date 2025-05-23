@@ -95,7 +95,8 @@ export default function BuildDisplay() {
         const imageUrl = part?.image_url || `/images/icons/gradient/${imageKey}.png`;
 
         return (
-            <div key={key} className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm">
+            // Displays each part
+            <div key={key} className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
                 <img src={imageUrl} alt={part?.name || displayName} className="w-16 h-16 object-contain rounded" />
                 <div className="flex-1">
                     <p className="font-semibold">{displayName}</p>
@@ -142,12 +143,13 @@ export default function BuildDisplay() {
     }
 
     return (
+        // Displays storage part
         <div className="flex flex-col h-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
                 {partKeys.map((key) => renderPart(key))}
 
                 {/* Primary Storage */}
-                    <div className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm">
+                    <div className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
                         <img src={primary?.image_url || '/images/icons/gradient/storage.png'} alt={primary?.name || 'Primary Storage'} className="w-16 h-16 object-contain rounded" />
                         <div className="flex-1">
                             <p className="font-semibold">Primary Storage</p>
@@ -187,7 +189,7 @@ export default function BuildDisplay() {
                     <h3 className="text-lg font-semibold px-2">Additional Storage & Extras</h3>
                     <div className="flex flex-col gap-2 px-2">
                         {additional.map((drive, index) => (
-                            <div key={index + 1} className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm">
+                            <div key={index + 1} className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
                                 <img src={drive?.image_url || `/images/icons/gradient/storage.png`} alt={drive?.name || 'Storage'} className="w-16 h-16 object-contain rounded" />
                                 <div className="flex-1">
                                     <p className="font-semibold">Additional Storage {index + 1}</p>

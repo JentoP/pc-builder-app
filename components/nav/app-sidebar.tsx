@@ -28,7 +28,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 
     const navMain = [
         {
-            title: "Hardware Components",
+            title: "Hardware",
             url: "#",
             icon: PcCase,
             isActive: true,

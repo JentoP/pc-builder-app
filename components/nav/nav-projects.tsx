@@ -75,28 +75,29 @@ export function NavProjects({
                                 <DropdownMenuItem>
                                     <Link href="/builder/projects/new">
                                         <FolderPlus className="text-muted-foreground"/>
-                                        <span>New Project</span>
+                                        <span>New</span>
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
                                     <Link href="/builder/projects">
-                                        <Folder className="text-muted-foreground"/>
-                                        <span>View Projects</span>
+                                        <span>
+                                            <Folder className="text-muted-foreground"/>
+                                            View</span>
                                     </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Link href="/builder/projects/shared">
-                                        <Forward className="text-muted-foreground"/>
-                                        <span>Shared Projects</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator/>
-                                <DropdownMenuItem>
-                                    <Link href="/builder/projects/deleted">
-                                        <Trash2 className="text-muted-foreground"/>
-                                        <span>Deleted Projects</span>
-                                    </Link>
-                                </DropdownMenuItem>
+                                {/*<DropdownMenuItem>*/}
+                                {/*    <Link href="/builder/projects/shared">*/}
+                                {/*        <Forward className="text-muted-foreground"/>*/}
+                                {/*        <span>Shared Projects</span>*/}
+                                {/*    </Link>*/}
+                                {/*</DropdownMenuItem>*/}
+                                {/*<DropdownMenuSeparator/>*/}
+                                {/*<DropdownMenuItem>*/}
+                                {/*    <Link href="/builder/projects/deleted">*/}
+                                {/*        <Trash2 className="text-muted-foreground"/>*/}
+                                {/*        <span>Deleted Projects</span>*/}
+                                {/*    </Link>*/}
+                                {/*</DropdownMenuItem>*/}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </SidebarMenuItem>

@@ -5,19 +5,21 @@ import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import MotherboardCard from '@/components/parts/MotherboardCard'
 import { useBuild } from '@/hooks/useBuild'
-import { toast } from 'sonner'
 
 type Motherboard = {
-    id: string
-    name: string
-    manufacturer: string
-    chipset: string
-    socket: string
-    form_factor: string
-    memory_type: string
-    memory_slots: number
-    max_memory: number
-    price: number
+    id: string;
+    name: string;
+    manufacturer: string;
+    chipset: string;
+    socket: string;
+    form_factor: string;
+    memory_slots: number;
+    max_memory: number;
+    memory_type: string;
+    sata_ports: number;
+    nvme_ports: number;
+    price: number;
+    image_url?: string | null;
 }
 
 export default function MotherboardsPage() {

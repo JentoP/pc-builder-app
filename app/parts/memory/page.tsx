@@ -12,11 +12,12 @@ type Memory = {
     id: string
     name: string
     manufacturer: string
-    speed: number
-    size: number
-    modules: number
     type: string
+    size: number
+    speed: number
+    modules: number
     price: number
+    image_url?: string | null
 }
 
 export default function MemoryPage() {
@@ -25,11 +26,11 @@ export default function MemoryPage() {
     const [loading, setLoading] = useState(true)
     const [typeFilter, setTypeFilter] = useState('All')
     const supabase = createClient()
-    const { updateBuild } = useBuild()
+    const {updateBuild} = useBuild()
 
     useEffect(() => {
         const fetchMemory = async () => {
-            const { data, error } = await supabase.from('memory').select('*')
+            const {data, error} = await supabase.from('memory').select('*')
             if (error) {
                 console.error('Error fetching memory:', error.message)
             } else {
@@ -80,13 +81,13 @@ export default function MemoryPage() {
             {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[...Array(6)].map((_, i) => (
-                        <Skeleton key={i} className="h-60 w-full rounded-lg" />
+                        <Skeleton key={i} className="h-60 w-full rounded-lg"/>
                     ))}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filtered.map(ram => (
-                        <MemoryCard key={ram.id} ram={ram} onAddToBuild={handleAddToBuild} />
+                        <MemoryCard key={ram.id} memory={ram} onAddToBuild={handleAddToBuild}/>
                     ))}
                 </div>
             )}

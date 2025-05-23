@@ -5,16 +5,18 @@ import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import CaseCard from '@/components/parts/CaseCard'
 import { useBuild } from '@/hooks/useBuild'
-import { toast } from 'sonner'
 
 type Case = {
     id: string
     name: string
     manufacturer: string
-    form_factor: string
+    mobo_form_factor: string
+    psu_form_factor: string
     max_gpu_length: number
-    color: string
+    color?: string
+    side_panel: string
     price: number
+    image_url?: string | null
 }
 
 export default function CasesPage() {
@@ -39,14 +41,14 @@ export default function CasesPage() {
         fetchCases()
     }, [])
 
-    const formFactors = ['All', ...Array.from(new Set(cases.map(c => c.form_factor)))]
+    const formFactors = ['All', ...Array.from(new Set(cases.map(c => c.mobo_form_factor)))]
 
     const handleFilterChange = (value: string) => {
         setFormFactorFilter(value)
         if (value === 'All') {
             setFiltered(cases)
         } else {
-            setFiltered(cases.filter(c => c.form_factor === value))
+            setFiltered(cases.filter(c => c.mobo_form_factor === value))
         }
     }
 
@@ -70,7 +72,7 @@ export default function CasesPage() {
                     className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-500"
                 >
                     {formFactors.map(option => (
-                        <option key={option} value={option}>
+                        <option key={`form-factor-${option}`} value={option}>
                             {option}
                         </option>
                     ))}

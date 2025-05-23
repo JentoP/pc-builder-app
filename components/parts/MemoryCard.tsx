@@ -1,7 +1,6 @@
-// MemoryCard.tsx
 'use client'
-import { useEffect, useState } from 'react'
-import { Skeleton } from '@/components/ui/skeleton'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
@@ -9,87 +8,73 @@ type Memory = {
     id: string
     name: string
     manufacturer: string
-    speed: number
-    size: number
-    modules: number
     type: string
+    size: number
+    speed: number
+    modules: number
     price: number
+    image_url?: string | null
 }
 
 type MemoryCardProps = {
-    ram: Memory
-    onAddToBuild?: (ram: Memory) => void
+    memory: Memory
+    onAddToBuild?: (memory: Memory) => void
 }
 
-export default function MemoryCard({ ram, onAddToBuild }: MemoryCardProps) {
-    // const [image, setImage] = useState<string | null>(null)
-    // const [error, setError] = useState<string | null>(null)
-    //
-    // useEffect(() => {
-    //     const fetchImage = async () => {
-    //         try {
-    //             const res = await fetch(`/api/parts-image?q=${encodeURIComponent(ram.name)}`)
-    //             const data = await res.json()
-    //             if (data.error) {
-    //                 setError(data.error)
-    //                 setImage(null)
-    //             } else {
-    //                 setImage(data.image || null)
-    //             }
-    //         } catch (err) {
-    //             setError('Failed to fetch image')
-    //             setImage(null)
-    //         }
-    //     }
-    //
-    //     fetchImage()
-    // }, [ram.name])
+export default function MemoryCard({ memory, onAddToBuild }: MemoryCardProps) {
+    const [imageError, setImageError] = useState(false)
+
+    const imageToShow =
+        !imageError && memory.image_url
+            ? memory.image_url
+            : '/images/icons/gradient/memory.png'
 
     return (
         <div className="w-full">
             <div className="border rounded-lg p-5 shadow-sm hover:shadow-md transition duration-200 items-center">
-                <div>
-                    <Link href={`/parts/memory/${ram.id}`}>
-                        {/*{error ? (*/}
-                        {/*    <div className="w-full h-40 flex items-center justify-center text-red-500 rounded">*/}
-                        {/*        <p className="text-sm">{error}</p>*/}
-                        {/*    </div>*/}
-                        {/*) : image ? (*/}
-                        {/*    <img*/}
-                        {/*        src={image}*/}
-                        {/*        alt={ram.name}*/}
-                        {/*        className="w-full h-32 object-contain rounded"*/}
-                        {/*        onError={() => {*/}
-                        {/*            setError('Image failed to load')*/}
-                        {/*            setImage(null)*/}
-                        {/*        }}*/}
-                        {/*    />*/}
-                        {/*) : (*/}
-                        {/*    <div className="w-full h-32 flex items-center justify-center text-sm rounded">*/}
-                        {/*        <Skeleton className="w-full h-full" />*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
-                        <h2 className="text-xl font-semibold mb-1">{ram.manufacturer} {ram.name}</h2>
+                <div className="flex gap-3">
+                    <Link href={`/parts/memory/${memory.id}`}>
+            <span className="flex items-start">
+              <img
+                  src={imageToShow}
+                  alt={memory.name}
+                  className="w-12 h-12 object-contain rounded"
+                  onError={() => setImageError(true)}
+              />
+              <h2 className="text-xl font-semibold ml-2">
+                {memory.manufacturer} {memory.name}
+              </h2>
+            </span>
                     </Link>
-                    <div className="flex gap-2 items-center justify-between mb-3">
-                        <p className="text-l mb-2">{ram.speed} MHz</p>
-                        <p className="text-l mb-2">{ram.size} GB</p>
-                        <p className="text-l mb-2">{ram.modules}x</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="font-semibold text-md">Price:</span>
-                        <span className="font-semibold text-md">€ {ram.price.toFixed(2)}</span>
-                    </div>
                 </div>
-                <div className="flex justify-center">
-                    {onAddToBuild && (
+                <div className="flex gap-2 items-center justify-between m-3">
+                    <p className="text-l mb-2">{memory.type}</p>
+                    <p className="text-l mb-2">{memory.size} GB</p>
+                    <p className="text-l mb-2">{memory.speed} MHz</p>
+                </div>
+                <div className="flex justify-between items-center m-3">
+                    <span className="font-semibold text-l">Price:</span>
+                    <span className="font-semibold text-l">€ {memory.price.toFixed(2)}</span>
+                </div>
+                {onAddToBuild && (
+                    <div className="flex justify-between">
                         <Button
-                            className="mt-3 px-4 py-1 rounded"
-                            onClick={() => onAddToBuild(ram)}>
+                            variant="outline"
+                            size="sm"
+                            className="mt-3 px-4 py-1 text-purple-600 hover:border-purple-700 hover:text-purple-700"
+                            onClick={() => onAddToBuild(memory)}
+                        >
                             Add to Build
                         </Button>
-                    )}
-                </div>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700"
+                        >
+                            <Link href={`/parts/memory/${memory.id}`}>View Details</Link>
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     )

@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
+import {useState, useEffect} from 'react';
+import {toast} from 'sonner';
+import {addPartToBuild, getCompatibilityConflicts, resolveConflicts} from '@/utils/compatibility';
 
 export type Build = {
     processor?: any;
     motherboard?: any;
-    memory?: any;
+    memory?: any[];
     gpu?: any;
-    storage?: any;
+    storage?: any[];
     psu?: any;
     case?: any;
     cooling?: any;
@@ -15,121 +16,13 @@ export type Build = {
 const defaultBuild: Build = {
     processor: null,
     motherboard: null,
-    memory: null,
+    memory: [],
     gpu: null,
-    storage: null,
+    storage: [],
     psu: null,
     case: null,
     cooling: null,
 };
-
-function getSocket(part: any): string | null {
-    return part?.socket || part?.cpu_socket || null;
-}
-
-type Conflict = {
-    partType: keyof Build;
-    reason: string;
-};
-
-function getCompatibilityConflicts(type: keyof Build, part: any, current: Build): Conflict[] {
-    const conflicts: Conflict[] = [];
-
-    if (type === 'processor') {
-        const newSocket = getSocket(part);
-        const mbSocket = getSocket(current.motherboard);
-        if (mbSocket && newSocket !== mbSocket) {
-            conflicts.push({
-                partType: 'motherboard',
-                reason: 'Motherboard socket is incompatible with the selected CPU.',
-            });
-        }
-    }
-
-    if (type === 'motherboard') {
-        const newSocket = getSocket(part);
-        const cpuSocket = getSocket(current.processor);
-        if (cpuSocket && newSocket !== cpuSocket) {
-            conflicts.push({
-                partType: 'processor',
-                reason: 'Processor socket is incompatible with the selected motherboard.',
-            });
-        }
-
-        const newRamType = part?.memory_type;
-        const ramType = current.memory?.memory_type;
-        if (ramType && newRamType !== ramType) {
-            conflicts.push({
-                partType: 'memory',
-                reason: 'RAM type is incompatible with the selected motherboard.',
-            });
-        }
-
-        const newFormFactor = part?.form_factor;
-        const caseFormFactors = current.case?.supported_mb_sizes || [];
-        if (current.case && !caseFormFactors.includes(newFormFactor)) {
-            conflicts.push({
-                partType: 'case',
-                reason: 'Motherboard form factor is not supported by the current case.',
-            });
-        }
-    }
-
-    if (type === 'memory') {
-        const newRamType = part?.memory_type;
-        const mbRamType = current.motherboard?.memory_type;
-        if (mbRamType && newRamType !== mbRamType) {
-            conflicts.push({
-                partType: 'motherboard',
-                reason: 'RAM type is incompatible with the current motherboard.',
-            });
-        }
-    }
-
-    if (type === 'gpu') {
-        const newLength = part?.length_mm;
-        const caseLimit = current.case?.max_gpu_length_mm;
-        if (caseLimit && newLength > caseLimit) {
-            conflicts.push({
-                partType: 'case',
-                reason: 'GPU is too long for the current case.',
-            });
-        }
-    }
-
-    if (type === 'case') {
-        const supportedSizes = part?.mobo_form_factor || [];
-        const mbSize = current.motherboard?.form_factor;
-        if (mbSize && !supportedSizes.includes(mbSize)) {
-            conflicts.push({
-                partType: 'motherboard',
-                reason: 'Motherboard form factor is not supported by the new case.',
-            });
-        }
-
-        const gpuLength = current.gpu?.length_mm;
-        const maxGpuLength = part?.max_gpu_length_mm;
-        if (gpuLength && maxGpuLength && gpuLength > maxGpuLength) {
-            conflicts.push({
-                partType: 'gpu',
-                reason: 'GPU is too long for the new case.',
-            });
-        }
-    }
-
-    if (type === 'psu') {
-        const psuWattage = part?.wattage;
-        const gpuWattage = current.gpu?.recommended_wattage;
-        if (gpuWattage && psuWattage < gpuWattage) {
-            conflicts.push({
-                partType: 'gpu',
-                reason: 'PSU wattage is too low for the current GPU.',
-            });
-        }
-    }
-
-    return conflicts;
-}
 
 export function useBuild() {
     const [build, setBuild] = useState<Build>(defaultBuild);
@@ -137,17 +30,26 @@ export function useBuild() {
     useEffect(() => {
         const stored = localStorage.getItem('build');
         if (stored) {
+            console.log('Loading build from localStorage:', JSON.parse(stored));
             setBuild(JSON.parse(stored));
         }
     }, []);
 
     const saveBuild = (updated: Build) => {
+        console.log('Saving build:', updated);
         setBuild(updated);
         localStorage.setItem('build', JSON.stringify(updated));
     };
 
     const updateBuild = (type: keyof Build, part: any, force = false) => {
+        console.log('Attempting to add:', { type, part });
+        console.log('Current build state:', build);
+        
+        const tentativeBuild = addPartToBuild(build, type, part);
+        console.log('Tentative build state:', tentativeBuild);
+
         const conflicts = getCompatibilityConflicts(type, part, build);
+        console.log('Compatibility conflicts:', conflicts);
 
         if (conflicts.length > 0 && !force) {
             toast.error(`Incompatible ${type}`, {
@@ -155,43 +57,59 @@ export function useBuild() {
                 action: {
                     label: 'Add anyway',
                     onClick: () => {
-                        const updated = { ...build };
-                        conflicts.forEach(c => updated[c.partType] = null);
-                        updated[type] = part;
-                        saveBuild(updated);
-                        toast.success(`${type} added with conflicts resolved`);
+                        const buildWithoutConflicts = resolveConflicts(build, conflicts);
+                        const finalBuild = type === 'memory' 
+                            ? buildWithoutConflicts 
+                            : addPartToBuild(buildWithoutConflicts, type, part);
+                        console.log('Final build after force add:', finalBuild);
+                        saveBuild(finalBuild);
+                        toast.success(`${type.toUpperCase()} added with conflicts resolved`);
                     },
                 },
             });
-
-            // Add warning toast for default path (if user does not click "Add anyway")
-            toast.warning(`Did not add ${type}`, {
-                description: `Conflicts found. Review and try again.`,
-            });
-
             return;
         }
-
-        const updated = { ...build };
-        if (force) {
-            getCompatibilityConflicts(type, part, build).forEach(c => {
-                updated[c.partType] = null;
-            });
-        }
-        updated[type] = part;
-        saveBuild(updated);
+        saveBuild(tentativeBuild);
+        console.log('Build successfully updated:', tentativeBuild);
         toast.success(`${type.toUpperCase()} added successfully`);
     };
 
-
-    const clearPart = (type: keyof Build) => {
-        const updated = { ...build, [type]: null };
+    const updatePart = (type: keyof Build, value: any) => {
+        const updated = { ...build, [type]: value };
         saveBuild(updated);
     };
 
+    const clearPart = (type: string, id?: number) => {
+        const updated = { ...build };
+
+        if (type === 'storage' && id) {
+            updated.storage = (updated.storage || []).filter(s => s._uid !== id);
+        } else if (type === 'memory' && id) {
+            const index = Number(id);
+            if (!isNaN(index)) {
+                updated.memory = (updated.memory || []).filter((_: any, i: number) => i !== index);
+            }
+        } else {
+            // @ts-ignore
+            updated[type] = null;
+        }
+
+        saveBuild(updated);
+    };
+
+    const markAsPrimaryStorage = (uid: string) => {
+        const storage = [...(build.storage || [])];
+        const index = storage.findIndex(s => s._uid === uid);
+        if (index === -1) return;
+        const [primary] = storage.splice(index, 1);
+        storage.unshift(primary);
+        saveBuild({ ...build, storage });
+    };
+
     const resetBuild = () => {
-        setBuild(defaultBuild);
         localStorage.removeItem('build');
+        setBuild({ ...defaultBuild });
+        toast.success('Build reset successfully');
     };
 
     return {
@@ -199,5 +117,7 @@ export function useBuild() {
         updateBuild,
         clearPart,
         resetBuild,
+        updatePart,
+        markAsPrimaryStorage,
     };
 }

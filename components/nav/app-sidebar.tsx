@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/sidebar"
 import {NavUser} from "@/components/nav/nav-user"
 import {useProfile} from "@/hooks/fetch-user"
-import {Skeleton} from "@/components/ui/skeleton"
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     const { profile, loading } = useProfile()
@@ -29,7 +28,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 
     const navMain = [
         {
-            title: "Hardware Components",
+            title: "Hardware",
             url: "#",
             icon: PcCase,
             isActive: true,

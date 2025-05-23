@@ -46,3 +46,13 @@ INSERT INTO graphic_cards (name, manufacturer, chipset, memory_size, memory_type
 ('RTX 4070 Ti', 'ASUS', 'RTX 4070 Ti', 12, 'GDDR6X', 305, 285, 799.99),
 ('RTX 3060 Ventus', 'MSI', 'RTX 3060', 12, 'GDDR6', 242, 170, 329.99),
 ('RX 6700 XT', 'Sapphire', 'RX 6700 XT', 12, 'GDDR6', 267, 230, 479.99);
+
+
+cases (name, manufacturer, side_panel, mobo_form_factor, psu_form_factor, color, price, image_url, max_gpu_length_mm)
+processors (name, manufacturer, socket, cores, threads, base_clock, boost_clock, tdp, price, image_url)
+motherboards (name, manufacturer, chipset, socket, form_factor, memory_slots, max_memory, price, sata_slots, m2_slots, image_url)
+memory (name, manufacturer, type, speed, size, modules, price, image_url)
+storage (name, manufacturer, type, interface, capacity, price, image_url)
+coolers (name, manufacturer, type, socket_compatibility, radiator_size, noise_level, price, image_url)
+power_supplies (name, manufacturer, wattage, form_factor, efficiency_rating, modularity, price, image_url)
+graphic_cards (name, manufacturer, chipset, memory_size, memory_type, length_mm, tdp, price, image_url)

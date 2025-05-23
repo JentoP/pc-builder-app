@@ -51,13 +51,13 @@ export default function RootLayout({children,}: Readonly<{
                     <main className="min-h-screen flex flex-col">
                         {/* Header */}
                         <header
-                            className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-                            <SidebarTrigger className="ml-3"/>
-                            <Separator orientation="vertical" className="mr-2 h-4"/>
+                            className="bg-sidebar flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+                            <SidebarTrigger className="ml-3 p-4 shadow border"/>
+                            <Separator orientation="vertical" className="mr-2 h-8"/>
                             <nav className="w-full flex justify-center border-b border-b-foreground/10 h-12 ">
                                 <div className="w-full flex items-center justify-between text-sm">
                                     <Logo/>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 mr-8">
                                         <BuildDrawer/>
                                         <ThemeSwitcher/>
                                     </div>

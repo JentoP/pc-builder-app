@@ -16,8 +16,8 @@ type Motherboard = {
     memory_slots: number;
     max_memory: number;
     memory_type: string;
-    sata_slots: number;
-    m2_slots: number;
+    sata_ports: number;
+    nvme_ports: number;
     price: number;
     image_url?: string | null;
 }

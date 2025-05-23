@@ -13,6 +13,7 @@ type Motherboard = {
     form_factor: string;
     memory_slots: number;
     max_memory: number;
+    memory_type: string;
     sata_slots: number;
     m2_slots: number;
     price: number;
@@ -43,6 +44,7 @@ export default function MotherboardDetail({ motherboard }: { motherboard: Mother
                     <p><strong>Chipset:</strong> {motherboard.chipset}</p>
                     <p><strong>Socket:</strong> {motherboard.socket}</p>
                     <p><strong>Form Factor:</strong> {motherboard.form_factor}</p>
+                    <p><strong>RAM Interface:</strong> {motherboard.memory_type}</p>
                     <p><strong>Memory Slots:</strong> {motherboard.memory_slots}</p>
                     <p><strong>Max Memory:</strong> {motherboard.max_memory} GB</p>
                     <p><strong>SATA Slots:</strong> {motherboard.sata_slots}</p>

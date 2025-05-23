@@ -5,17 +5,19 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 type Motherboard = {
-    id: string
-    name: string
-    manufacturer: string
-    chipset: string
-    socket: string
-    form_factor: string
-    memory_type: string
-    memory_slots: number
-    max_memory: number
-    price: number
-    image_url?: string | null
+    id: string;
+    name: string;
+    manufacturer: string;
+    chipset: string;
+    socket: string;
+    form_factor: string;
+    memory_slots: number;
+    max_memory: number;
+    memory_type: string;
+    sata_slots: number;
+    m2_slots: number;
+    price: number;
+    image_url?: string | null;
 }
 
 type MotherboardCardProps = {

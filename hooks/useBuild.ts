@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {toast} from 'sonner';
-import {applyConflicts, getCompatibilityConflicts} from '@/utils/compatibility';
+import {addPartToBuild, getCompatibilityConflicts, resolveConflicts} from '@/utils/compatibility';
 
 export type Build = {
     processor?: any;
@@ -30,35 +30,26 @@ export function useBuild() {
     useEffect(() => {
         const stored = localStorage.getItem('build');
         if (stored) {
+            console.log('Loading build from localStorage:', JSON.parse(stored));
             setBuild(JSON.parse(stored));
         }
     }, []);
 
     const saveBuild = (updated: Build) => {
+        console.log('Saving build:', updated);
         setBuild(updated);
         localStorage.setItem('build', JSON.stringify(updated));
     };
 
     const updateBuild = (type: keyof Build, part: any, force = false) => {
-        const isStorage = type === 'storage';
-        const isMemory = type === 'memory';
+        console.log('Attempting to add:', { type, part });
+        console.log('Current build state:', build);
+        
+        const tentativeBuild = addPartToBuild(build, type, part);
+        console.log('Tentative build state:', tentativeBuild);
 
-        const updatedStorage = isStorage
-            ? [...(build.storage || []), {...part, _uid: crypto.randomUUID()}]
-            : build.storage;
-
-        const updatedMemory = isMemory
-            ? [...(build.memory || []), part]
-            : build.memory;
-
-        const updatedBuild: Build = {
-            ...build,
-            ...(isStorage && {storage: updatedStorage}),
-            ...(isMemory && {memory: updatedMemory}),
-            ...(!isStorage && !isMemory && {[type]: part}),
-        };
-
-        const conflicts = getCompatibilityConflicts(type, part, updatedBuild);
+        const conflicts = getCompatibilityConflicts(type, part, build);
+        console.log('Compatibility conflicts:', conflicts);
 
         if (conflicts.length > 0 && !force) {
             toast.error(`Incompatible ${type}`, {
@@ -66,36 +57,38 @@ export function useBuild() {
                 action: {
                     label: 'Add anyway',
                     onClick: () => {
-                        const resolvedBuild = applyConflicts(build, conflicts, type, part);
-                        saveBuild(resolvedBuild);
+                        const buildWithoutConflicts = resolveConflicts(build, conflicts);
+                        const finalBuild = type === 'memory' 
+                            ? buildWithoutConflicts 
+                            : addPartToBuild(buildWithoutConflicts, type, part);
+                        console.log('Final build after force add:', finalBuild);
+                        saveBuild(finalBuild);
                         toast.success(`${type.toUpperCase()} added with conflicts resolved`);
                     },
                 },
             });
             return;
         }
-
-        const finalBuild = force && conflicts.length > 0
-            ? applyConflicts(build, conflicts, type, part)
-            : updatedBuild;
-
-        saveBuild(finalBuild);
+        saveBuild(tentativeBuild);
+        console.log('Build successfully updated:', tentativeBuild);
         toast.success(`${type.toUpperCase()} added successfully`);
     };
 
     const updatePart = (type: keyof Build, value: any) => {
-        const updated = {...build, [type]: value};
+        const updated = { ...build, [type]: value };
         saveBuild(updated);
     };
 
     const clearPart = (type: string, id?: number) => {
-        const updated = {...build};
+        const updated = { ...build };
 
         if (type === 'storage' && id) {
-            updated.storage = (updated.storage || []).filter((s: any) => s._uid !== id);
+            updated.storage = (updated.storage || []).filter(s => s._uid !== id);
         } else if (type === 'memory' && id) {
-            // @ts-ignore
-            updated.memory = (updated.memory || []).filter((m: any, idx) => idx.toString() !== id);
+            const index = Number(id);
+            if (!isNaN(index)) {
+                updated.memory = (updated.memory || []).filter((_: any, i: number) => i !== index);
+            }
         } else {
             // @ts-ignore
             updated[type] = null;
@@ -106,16 +99,16 @@ export function useBuild() {
 
     const markAsPrimaryStorage = (uid: string) => {
         const storage = [...(build.storage || [])];
-        const index = storage.findIndex((s: any) => s._uid === uid);
+        const index = storage.findIndex(s => s._uid === uid);
         if (index === -1) return;
         const [primary] = storage.splice(index, 1);
         storage.unshift(primary);
-        saveBuild({...build, storage});
+        saveBuild({ ...build, storage });
     };
 
     const resetBuild = () => {
         localStorage.removeItem('build');
-        setBuild({...defaultBuild});
+        setBuild({ ...defaultBuild });
         toast.success('Build reset successfully');
     };
 

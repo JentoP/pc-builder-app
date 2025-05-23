@@ -36,11 +36,11 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
                 { title: "Processors", url: "/parts/processors" },
                 { title: "Motherboards", url: "/parts/motherboards" },
                 { title: "Memory", url: "/parts/memory" },
+                { title: "Cooling", url: "/parts/cooling" },
                 { title: "Graphic Cards", url: "/parts/graphic-cards" },
                 { title: "Storage", url: "/parts/storage" },
                 { title: "Power Supplies", url: "/parts/power-supplies" },
                 { title: "Cases", url: "/parts/cases" },
-                { title: "Cooling", url: "/parts/cooling" },
             ],
         },
         {

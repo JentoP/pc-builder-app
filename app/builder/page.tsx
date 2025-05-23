@@ -55,7 +55,6 @@ export default function BuilderPage() {
     return (
         <div className="p-4 mb-32">
             <h1 className="text-2xl font-bold mb-6">Build Your PC</h1>
-            <h3 className="text-lg font-semibold ">Welcome to the PC Builder!</h3>
             <p className="text-muted-foreground mb-4">
                 This builder can help you create the perfect PC setup for your needs.
                 As you select components, the builder checks compatibility for you.

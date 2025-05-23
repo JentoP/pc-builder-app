@@ -1,11 +1,12 @@
 'use client'
 
-import { useBuild } from '@/hooks/useBuild'
-import { Button } from '@/components/ui/button'
+import {useBuild} from '@/hooks/useBuild'
+import {Button} from '@/components/ui/button'
 import Link from 'next/link'
-import { createClient } from '@/utils/supabase/client'
-import { toast } from 'sonner'
-import { useEffect, useState } from 'react'
+import {createClient} from '@/utils/supabase/client'
+import {toast} from 'sonner'
+import {useEffect, useState} from 'react'
+import SignInWarning from "@/components/SignInWarning";
 
 const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
@@ -34,21 +35,27 @@ const displayNames: Record<string, string> = {
 }
 
 export default function BuildDisplay() {
-    const { build, clearPart, resetBuild, updatePart } = useBuild();
+    const {build, clearPart, resetBuild, updatePart} = useBuild();
     const [userId, setUserId] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
     const supabase = createClient();
 
     useEffect(() => {
         const getUser = async () => {
-            const { data: { user }, error } = await supabase.auth.getUser();
+            const {data: {user}, error} = await supabase.auth.getUser();
             if (error) {
                 toast.error("Failed to load user.");
-                return;
             }
             setUserId(user?.id || null);
+            setLoading(false);
         };
         getUser();
     }, []);
+    if (loading || !userId) {
+        return (
+            <SignInWarning/>
+        )
+    }
 
     const saveBuild = async () => {
         if (!userId) {
@@ -56,7 +63,7 @@ export default function BuildDisplay() {
             return;
         }
 
-        const { error } = await supabase.from('builds').insert([
+        const {error} = await supabase.from('builds').insert([
             {
                 user_id: userId,
                 build_data: build,
@@ -103,7 +110,7 @@ export default function BuildDisplay() {
         return (
             <div key={key}
                  className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
-                <img src={imageUrl} alt={part?.name || displayName} className="w-16 h-16 object-contain rounded" />
+                <img src={imageUrl} alt={part?.name || displayName} className="w-16 h-16 object-contain rounded"/>
                 <div className="flex-1">
                     <p className="font-semibold">{displayName}</p>
                     {part ? (
@@ -119,17 +126,20 @@ export default function BuildDisplay() {
                     {part ? (
                         <>
                             <Link href={`/${route}`}>
-                                <Button variant="outline" size="sm" className="min-w-20">Select</Button>
+                                <Button variant="outline" size="sm"
+                                        className="min-w-20 hover:border-purple-600">Select</Button>
                             </Link>
                             <Link href={`/${route}/${part.id}`}>
-                                <Button variant="outline" size="sm" className="min-w-20">View</Button>
+                                <Button variant="outline" size="sm"
+                                        className="min-w-20 hover:border-blue-600">View</Button>
                             </Link>
                             <Button variant="outline" size="sm" onClick={() => clearPart(key)}
-                                    className="min-w-20">Remove</Button>
+                                    className="min-w-20 hover:border-red-600">Remove</Button>
                         </>
                     ) : (
                         <Link href={`/${route}`}>
-                            <Button variant="outline" size="sm" className="min-w-20">Select</Button>
+                            <Button variant="outline" size="sm"
+                                    className="min-w-20 hover:border-purple-600">Select</Button>
                         </Link>
                     )}
                 </div>
@@ -143,21 +153,25 @@ export default function BuildDisplay() {
                 <div key={index}
                      className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
                     <img src={ram?.image_url || '/images/icons/gradient/memory.png'} alt={ram?.name || 'RAM'}
-                         className="w-16 h-16 object-contain rounded" />
+                         className="w-16 h-16 object-contain rounded"/>
                     <div className="flex-1">
                         <p className="font-semibold">Memory Module {index + 1}</p>
                         <p>{ram.manufacturer} {ram.name}</p>
                         <p className="text-sm text-muted-foreground">€ {ram.price?.toFixed(2) || '0.00'}</p>
                     </div>
                     <div className="flex flex-col gap-1">
+                        <Link href={`/parts/memory`}>
+                            <Button variant="outline" size="sm"
+                                    className="min-w-20 hover:border-purple-600">Select</Button>
+                        </Link>
                         <Link href={`/parts/memory/${ram.id}`}>
-                            <Button variant="outline" size="sm" className="min-w-20">View</Button>
+                            <Button variant="outline" size="sm" className="min-w-20 hover:border-blue-600">View</Button>
                         </Link>
                         <Button
                             variant="outline"
                             size="sm"
                             onClick={() => clearPart('memory', index)}
-                            className="min-w-20"
+                            className="min-w-20 hover:border-red-600"
                         >
                             Remove
                         </Button>
@@ -166,15 +180,19 @@ export default function BuildDisplay() {
             ));
         } else {
             return (
-                <div className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
-                    <img src="/images/icons/gradient/memory.png" alt="Memory" className="w-16 h-16 object-contain rounded" />
+                <div
+                    className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
+                    <img src="/images/icons/gradient/memory.png" alt="Memory"
+                         className="w-16 h-16 object-contain rounded"/>
                     <div className="flex-1">
                         <p className="font-semibold">Memory</p>
                         <p className="text-muted-foreground">No memory modules selected</p>
                     </div>
                     <div className="flex flex-col gap-1">
+
                         <Link href={`/parts/memory`}>
-                            <Button variant="outline" size="sm" className="min-w-20">Select</Button>
+                            <Button variant="outline" size="sm"
+                                    className="min-w-20 hover:border-purple-600">Select</Button>
                         </Link>
                     </div>
                 </div>
@@ -204,7 +222,7 @@ export default function BuildDisplay() {
                 <div
                     className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
                     <img src={primary?.image_url || '/images/icons/gradient/storage.png'}
-                         alt={primary?.name || 'Primary Storage'} className="w-16 h-16 object-contain rounded" />
+                         alt={primary?.name || 'Primary Storage'} className="w-16 h-16 object-contain rounded"/>
                     <div className="flex-1">
                         <p className="font-semibold">Primary Storage</p>
                         {primary ? (
@@ -213,24 +231,27 @@ export default function BuildDisplay() {
                                 <p className="text-sm text-muted-foreground">€ {primary.price ? primary.price.toFixed(2) : '0.00'}</p>
                             </>
                         ) : (
-                            <p className="text-muted-foreground">No primary part selected</p>
+                            <p className="text-muted-foreground">No primary storage selected</p>
                         )}
                     </div>
                     <div className="flex flex-col gap-1">
                         {primary ? (
                             <>
                                 <Link href={`/parts/storage`}>
-                                    <Button variant="outline" size="sm" className="min-w-20">Select</Button>
+                                    <Button variant="outline" size="sm"
+                                            className="min-w-20 hover:border-purple-600">Select</Button>
                                 </Link>
                                 <Link href={`/parts/storage/${primary.id}`}>
-                                    <Button variant="outline" size="sm" className="min-w-20">View</Button>
+                                    <Button variant="outline" size="sm"
+                                            className="min-w-20 hover:border-blue-600">View</Button>
                                 </Link>
                                 <Button variant="outline" size="sm" onClick={() => clearPart('storage', 0)}
-                                        className="min-w-20">Remove</Button>
+                                        className="min-w-20 hover:border-red-600">Remove</Button>
                             </>
                         ) : (
                             <Link href={`/parts/storage`}>
-                                <Button variant="outline" size="sm" className="min-w-20">Select</Button>
+                                <Button variant="outline" size="sm"
+                                        className="min-w-20 hover:border-purple-600">Select</Button>
                             </Link>
                         )}
                     </div>
@@ -240,13 +261,13 @@ export default function BuildDisplay() {
             {/* Additional Storage & Extras */}
             {additional.length > 0 && (
                 <div className="mt-4">
-                    <h3 className="text-lg font-semibold px-2">Additional Storage & Extras</h3>
+                    <h3 className="text-lg font-semibold px-2">Additional components</h3>
                     <div className="flex flex-col gap-2 px-2">
                         {additional.map((drive, index) => (
                             <div key={index + 1}
                                  className="flex items-center gap-4 border rounded py-2 px-2 m-1 shadow-border shadow-sm bg-sidebar">
                                 <img src={drive?.image_url || `/images/icons/gradient/storage.png`}
-                                     alt={drive?.name || 'Storage'} className="w-16 h-16 object-contain rounded" />
+                                     alt={drive?.name || 'Storage'} className="w-16 h-16 object-contain rounded"/>
                                 <div className="flex-1">
                                     <p className="font-semibold">Additional Storage {index + 1}</p>
                                     <p>{drive.manufacturer} {drive.name}</p>
@@ -254,13 +275,14 @@ export default function BuildDisplay() {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <Link href={`/parts/storage/${drive.id}`}>
-                                        <Button variant="outline" size="sm" className="min-w-20">View</Button>
+                                        <Button variant="outline" size="sm"
+                                                className="min-w-20 hover:border-blue-600">View</Button>
                                     </Link>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => clearPart('storage', index + 1)}
-                                        className="min-w-20"
+                                        onClick={() => clearPart('storage', drive._uid)}
+                                        className="min-w-20 hover:border-red-600"
                                     >
                                         Remove
                                     </Button>
@@ -272,6 +294,11 @@ export default function BuildDisplay() {
                     </div>
                 </div>
             )}
+            {/*<div className="mt-4">*/}
+            {/*    <h3 className="text-lg font-semibold px-2">Extras</h3>*/}
+            {/*    <div className="flex flex-col gap-2 px-2">*/}
+            {/*    </div>*/}
+            {/*</div>*/}
             <div className="font-semibold text-xl text-center border-t-2 mt-4 p-2">
                 Total: € {totalPrice.toFixed(2)}
             </div>
@@ -280,7 +307,7 @@ export default function BuildDisplay() {
                     onClick={resetConfirm}
                     className="w-full md:w-auto text-white bg-purple-900 hover:bg-purple-950 min-w-24">Reset</Button>
                 <Button onClick={saveBuild}
-                        className="w-full md:w-auto text-white bg-purple-600 hover:bg-purple-700 min-w-24">Save</Button>
+                        className="w-full md:w-auto text-white bg-purple-600 hover:bg-purple-700 min-w-40">Save</Button>
                 <Button
                     className="w-full md:w-auto text-white bg-blue-600 hover:bg-blue-700 min-w-24">Share</Button>
             </div>

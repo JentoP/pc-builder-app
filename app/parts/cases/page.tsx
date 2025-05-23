@@ -70,7 +70,6 @@ export default function CasesPage() {
                     value={formFactorFilter}
                     onChange={(e) => handleFilterChange(e.target.value)}
                     className="border focus:border-gray-300 rounded-md px-3 py-2 text-sm outline-none bg-sidebar">
-                >
                     {formFactors.map(option => (
                         <option key={`form-factor-${option}`} value={option}>
                             {option}

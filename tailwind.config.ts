@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animated from 'tailwindcss-animated';
 
 const config = {
   darkMode: ["class"],
@@ -9,6 +10,7 @@ const config = {
     "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
+  plugins: [animated, require("tailwindcss-animate")],
   theme: {
   	container: {
   		center: true,
@@ -92,7 +94,6 @@ const config = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
 export default config;

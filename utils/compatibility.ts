@@ -20,7 +20,6 @@ export function resolveConflicts(build: Build, conflicts: Conflict[]): Build {
             updated[type] = null;
         }
     }
-
     return updated;
 }
 

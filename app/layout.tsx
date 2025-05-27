@@ -59,7 +59,7 @@ export default function RootLayout({children,}: Readonly<{
                                     <Logo/>
                                     <div className="flex items-center gap-2 mr-8">
                                         <ThemeSwitcher/>
-                                        <HeaderAuth/>
+                                        <HeaderAuth />
                                     </div>
                                 </div>
                             </nav>
@@ -74,7 +74,7 @@ export default function RootLayout({children,}: Readonly<{
 
                         {/* Footer */}
                         <footer className="w-full flex flex-col border-t mx-auto p-5">
-                            <div className="text-sm flex justify-between">
+                            <div className="text-sm flex justify-center">
                                 <p>PC Builder &copy; {new Date().getFullYear()}</p>
                                 <div className="flex text-end gap-4">
                                 </div>

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { useBuild } from '@/hooks/useBuild'
 
 export default function SavedBuildsPage() {
@@ -13,7 +12,7 @@ export default function SavedBuildsPage() {
     const supabase = createClient()
     const [savedBuilds, setSavedBuilds] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
-    const { resetBuild } = useBuild()
+    const { resetBuild, updatePart } = useBuild()
 
     useEffect(() => {
         const loadSavedBuilds = async () => {
@@ -47,11 +46,42 @@ export default function SavedBuildsPage() {
         loadSavedBuilds()
     }, [router])
 
-    const loadBuild = (build: any) => {
-        resetBuild()
-        router.push('/dashboard')
-        toast.success('Build loaded successfully')
-    }
+    const loadBuild = async (build: any) => {
+        try {
+            // Reset the current build first
+            resetBuild();
+            
+            // Get the build data from Supabase
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            if (userError || !user) {
+                throw new Error('User not authenticated');
+            }
+
+            // Update the build state with the loaded data
+            const buildData = build.build_data;
+            
+            // Update each component of the build
+            if (buildData.processor) updatePart('processor', buildData.processor);
+            if (buildData.motherboard) updatePart('motherboard', buildData.motherboard);
+            if (buildData.memory?.length > 0) {
+                updatePart('memory', buildData.memory);
+            }
+            if (buildData.gpu) updatePart('gpu', buildData.gpu);
+            if (buildData.storage?.length > 0) {
+                updatePart('storage', buildData.storage);
+            }
+            if (buildData.psu) updatePart('psu', buildData.psu);
+            if (buildData.case) updatePart('case', buildData.case);
+            if (buildData.cooling) updatePart('cooling', buildData.cooling);
+            
+            // Redirect
+            router.push('/builder');
+            toast.success('Build loaded successfully');
+        } catch (error) {
+            console.error('Error loading build:', error);
+            toast.error('Failed to load build');
+        }
+    };
 
     if (loading) {
         return (

@@ -16,7 +16,7 @@ export default async function AuthButton() {
 
     if (!hasEnvVars) {
         return (
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center animate-pulse duration-[3000ms] ease-in-out">
                 <Badge variant="default" className="font-normal pointer-events-none">
                     Please update .env.local file with anon key and url
                 </Badge>

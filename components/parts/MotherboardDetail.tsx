@@ -32,55 +32,53 @@ export default function MotherboardDetail({ motherboard }: { motherboard: Mother
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={motherboard.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {motherboard.manufacturer} {motherboard.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Chipset</span>
-                            <span>{motherboard.chipset}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Socket</span>
-                            <span>{motherboard.socket}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Form Factor</span>
-                            <span>{motherboard.form_factor}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">RAM Interface</span>
-                            <span>{motherboard.memory_type}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Max Memory</span>
-                            <span>{motherboard.max_memory} GB</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Memory Slots</span>
-                            <span>{motherboard.memory_slots}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">SATA Slots</span>
-                            <span>{motherboard.sata_ports}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">M.2 Slots</span>
-                            <span>{motherboard.nvme_ports}</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {motherboard.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {motherboard.manufacturer} {motherboard.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Chipset</span>
+                    <span>{motherboard.chipset}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Socket</span>
+                    <span>{motherboard.socket}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Form Factor</span>
+                    <span>{motherboard.form_factor}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">RAM Interface</span>
+                    <span>{motherboard.memory_type}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Max Memory</span>
+                    <span>{motherboard.max_memory} GB</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Memory Slots</span>
+                    <span>{motherboard.memory_slots}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">SATA Slots</span>
+                    <span>{motherboard.sata_ports}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">M.2 Slots</span>
+                    <span>{motherboard.nvme_ports}</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {motherboard.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">

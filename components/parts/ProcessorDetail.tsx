@@ -28,51 +28,48 @@ export default function ProcessorDetail({cpu}: { cpu: Processor }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={cpu.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {cpu.manufacturer} {cpu.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Socket</span>
-                            <span>{cpu.socket}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Cores</span>
-                            <span>{cpu.cores}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Threads</span>
-                            <span>{cpu.threads}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Base Clock</span>
-                            <span>{cpu.base_clock} GHz</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Boost Clock</span>
-                            <span>{cpu.boost_clock} GHz</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Max Wattage</span>
-                            <span>{cpu.tdp} W</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {cpu.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {cpu.manufacturer} {cpu.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Socket</span>
+                    <span>{cpu.socket}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Cores</span>
+                    <span>{cpu.cores}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Threads</span>
+                    <span>{cpu.threads}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Base Clock</span>
+                    <span>{cpu.base_clock} GHz</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Boost Clock</span>
+                    <span>{cpu.boost_clock} GHz</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Max Wattage</span>
+                    <span>{cpu.tdp} W</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {cpu.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
-
                 <Button onClick={() => updateBuild('processor', cpu)}
                         variant="outline"
                         size="sm"

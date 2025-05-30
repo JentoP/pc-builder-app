@@ -31,47 +31,45 @@ export default function GraphicCardDetail({ card }: { card: GraphicCard }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={card.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {card.manufacturer} {card.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Chipset</span>
-                            <span>{card.chipset}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Memory</span>
-                            <span>{card.memory_size} GB {card.memory_type}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Cores</span>
-                            <span>{card.nr_of_cores}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Core Clock Speed</span>
-                            <span>{card.core_clock_mhz} MHz</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Length</span>
-                            <span>{card.length_mm} mm</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Max Wattage</span>
-                            <span>{card.tdp} W</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {card.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {card.manufacturer} {card.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Chipset</span>
+                    <span>{card.chipset}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Memory</span>
+                    <span>{card.memory_size} GB {card.memory_type}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Cores</span>
+                    <span>{card.nr_of_cores}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Core Clock Speed</span>
+                    <span>{card.core_clock_mhz} MHz</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Length</span>
+                    <span>{card.length_mm} mm</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Max Wattage</span>
+                    <span>{card.tdp} W</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {card.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">

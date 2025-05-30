@@ -28,39 +28,37 @@ export default function MemoryDetail({ ram }: { ram: Memory }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={ram.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {ram.manufacturer} {ram.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Type</span>
-                            <span>{ram.type}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Speed</span>
-                            <span>{ram.speed} MHz</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Size</span>
-                            <span>{ram.size} GB</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Modules</span>
-                            <span>{ram.modules} x</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {ram.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {ram.manufacturer} {ram.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Type</span>
+                    <span>{ram.type}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Speed</span>
+                    <span>{ram.speed} MHz</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Size</span>
+                    <span>{ram.size} GB</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Modules</span>
+                    <span>{ram.modules} x</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {ram.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">

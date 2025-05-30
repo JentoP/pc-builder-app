@@ -28,39 +28,37 @@ export default function PowerSupplyDetail({ psu }: { psu: PowerSupply }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={psu.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {psu.manufacturer} {psu.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Wattage</span>
-                            <span>{psu.wattage} W</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Form Factor</span>
-                            <span>{psu.form_factor}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Efficiency Rating</span>
-                            <span>{psu.efficiency_rating}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Modularity</span>
-                            <span>{psu.modularity}</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {psu.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {psu.manufacturer} {psu.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Wattage</span>
+                    <span>{psu.wattage} W</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Form Factor</span>
+                    <span>{psu.form_factor}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Efficiency Rating</span>
+                    <span>{psu.efficiency_rating}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Modularity</span>
+                    <span>{psu.modularity}</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {psu.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">

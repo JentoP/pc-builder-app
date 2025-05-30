@@ -80,13 +80,13 @@ export default function ProcessorsPage() {
 
             {/* Cards */}
             {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[...Array(6)].map((_, i) => (
                         <Skeleton key={i} className="h-60 w-full rounded-lg" />
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filtered.map(cpu => (
                         <ProcessorCard key={cpu.id} cpu={cpu} onAddToBuild={handleAddToBuild} />
                     ))}

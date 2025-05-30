@@ -29,39 +29,37 @@ export default function CaseDetail({ pcCase }: { pcCase: Case }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={pcCase.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {pcCase.manufacturer} {pcCase.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Side Panel</span>
-                            <span>{pcCase.side_panel}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Motherboard Form Factor</span>
-                            <span>{pcCase.mobo_form_factor}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">PSU Form Factor</span>
-                            <span>{pcCase.psu_form_factor}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Color</span>
-                            <span>{pcCase.color}</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {pcCase.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {pcCase.manufacturer} {pcCase.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Side Panel</span>
+                    <span>{pcCase.side_panel}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Motherboard Form Factor</span>
+                    <span>{pcCase.mobo_form_factor}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">PSU Form Factor</span>
+                    <span>{pcCase.psu_form_factor}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Color</span>
+                    <span>{pcCase.color}</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {pcCase.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">

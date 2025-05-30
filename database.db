@@ -1,11 +1,11 @@
 -- CASES
 INSERT INTO cases (name, manufacturer, side_panel, mobo_form_factor, psu_form_factor, color, price, image_url, max_gpu_length_mm) VALUES
-('Lian Li O11 Dynamic EVO XL', 'Lian Li', 'Tempered Glass', 'ATX', 'ATX', 'Black', 229.99, NULL, 426),
-('NZXT H7 Flow RGB', 'NZXT', 'Tempered Glass', 'ATX', 'ATX', 'White', 149.99, NULL, 400),
-('Fractal Design North XL', 'Fractal Design', 'Mesh', 'ATX', 'ATX', 'Charcoal Black', 169.99, NULL, 355),
-('Corsair 5000D Airflow', 'Corsair', 'Tempered Glass', 'ATX', 'ATX', 'White', 189.99, NULL, 420),
-('Phanteks Eclipse G500A', 'Phanteks', 'Tempered Glass', 'ATX', 'ATX', 'Black', 159.99, NULL, 435),
-('Cooler Master HAF 700 EVO', 'Cooler Master', 'Tempered Glass', 'E-ATX', 'ATX', 'Black', 349.99, NULL, 490),
+('O11 Dynamic EVO XL', 'Lian Li', 'Tempered Glass', 'ATX', 'ATX', 'Black', 229.99, NULL, 426),
+(' H7 Flow RGB', 'NZXT', 'Tempered Glass', 'ATX', 'ATX', 'White', 149.99, NULL, 400),
+('Design North XL', 'Fractal Design', 'Mesh', 'ATX', 'ATX', 'Charcoal Black', 169.99, NULL, 355),
+('5000D Airflow', 'Corsair', 'Tempered Glass', 'ATX', 'ATX', 'White', 189.99, NULL, 420),
+('Eclipse G500A', 'Phanteks', 'Tempered Glass', 'ATX', 'ATX', 'Black', 159.99, NULL, 435),
+('HAF 700 EVO', 'Cooler Master', 'Tempered Glass', 'E-ATX', 'ATX', 'Black', 349.99, NULL, 490),
 ('Be Quiet! Silent Base 802', 'Be Quiet!', 'Tempered Glass', 'ATX', 'ATX', 'Black', 169.99, NULL, 432),
 ('Thermaltake Core P8', 'Thermaltake', 'Tempered Glass', 'E-ATX', 'ATX', 'Black', 229.99, NULL, 450),
 ('SilverStone Alta F2', 'SilverStone', 'Tempered Glass', 'ATX', 'ATX', 'Silver', 199.99, NULL, 400),

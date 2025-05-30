@@ -41,8 +41,8 @@ export default function ProcessorDetailPage() {
         <div className="p-6 max-w-4xl mx-auto space-y-6">
             <ProcessorDetail cpu={cpu} />
             <div className="flex justify-center">
-                <Link href="/parts/processors" className="w-auto mt-3 px-4 py-1 rounded text-blue-600 border-blue-700 hover:text-primary">
-                    <Button variant="outline" size="sm">
+                <Link href="/parts/processors" className="w-auto mt-3 px-4 py-1 rounded text-blue-600 border-blue-700">
+                    <Button variant="outline" size="sm" className="text-primary border border-blue-700 hover:bg-blue-600 hover:text-white">
                         Back to Processors
                     </Button>
                 </Link>

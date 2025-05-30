@@ -65,16 +65,14 @@ export function useBuild() {
                             : addPartToBuild(buildWithoutConflicts, type, part);
                         console.log('Final build after force add:', finalBuild);
                         saveBuild(finalBuild);
-                        toast.success(`${type.toUpperCase()} added with conflicts resolved`);
-                    },
+                        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} added with conflicts resolved`);                    },
                 },
             });
             return;
         }
         saveBuild(tentativeBuild);
         console.log('Build successfully updated:', tentativeBuild);
-        toast.success(`${type.toUpperCase()} added successfully`);
-    };
+        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} added with conflicts resolved`);};
 
     const updatePart = (type: keyof Build, value: any) => {
         const updated = { ...build, [type]: value };

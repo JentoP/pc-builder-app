@@ -32,8 +32,21 @@ export function useBuild() {
     useEffect(() => {
         const stored = localStorage.getItem('build');
         if (stored) {
-            console.log('Loading build from localStorage:', JSON.parse(stored));
-            setBuild(JSON.parse(stored));
+            try {
+                const parsed = JSON.parse(stored);
+                // Ensure all part arrays are properly initialized
+                const initializedBuild = {
+                    ...defaultBuild,  // Start with default values
+                    ...parsed,        // Override with stored values
+                    memory: Array.isArray(parsed.memory) ? parsed.memory : [],
+                    storage: Array.isArray(parsed.storage) ? parsed.storage : [],
+                };
+                console.log('Loading build from localStorage:', initializedBuild);
+                setBuild(initializedBuild);
+            } catch (error) {
+                console.error('Error parsing stored build:', error);
+                localStorage.removeItem('build'); // Clear invalid build data
+            }
         }
     }, []);
 

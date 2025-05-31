@@ -57,7 +57,7 @@ export default function PowerSuppliesPage() {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-6">Power Supplies</h1>
+            <h1 className="text-3xl font-bold text-center mb-4">Power Supplies</h1>
 
             <div className="mb-6">
                 <label htmlFor="efficiencyFilter" className="block text-sm font-medium mb-2">

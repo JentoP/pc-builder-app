@@ -76,17 +76,15 @@ export default function GraphicCardDetail({ card }: { card: GraphicCard }) {
                 <Button 
                     onClick={() => updateBuild('gpu', card)}
                     variant="outline" 
-                    size="sm" 
-                    className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 hover:bg-purple-600 hover:text-white min-w-24"
-                >
+                    size="sm"
+                    className="mt-3 px-4 py-1 rounded border-purple-800 hover:bg-purple-800 hover:text-white text-primary bg-sidebar min-w-24">
                     Add to Build
                 </Button>
                 <Button 
                     asChild 
                     variant="outline" 
-                    size="sm" 
-                    className="mt-3 px-4 py-1 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                >
+                    size="sm"
+                    className="mt-3 px-4 py-1 rounded border-blue-800 hover:bg-blue-800 hover:text-white text-primary bg-sidebar min-w-24">
                     <a href={`https://www.google.com/search?q=${card.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

@@ -66,13 +66,13 @@ export default function CaseDetail({ pcCase }: { pcCase: Case }) {
                 <Button onClick={() => updateBuild('case', pcCase)}
                         variant="outline"
                         size="sm"
-                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
+                        className="mt-3 px-4 py-1 rounded border-purple-800 hover:bg-purple-800 hover:text-white text-primary bg-sidebar min-w-24">
                     Add to Build
                 </Button>
                 <Button
                     variant="outline"
                     size="sm"
-                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
+                    className="mt-3 px-4 py-1 rounded border-blue-800 hover:bg-blue-800 hover:text-white text-primary bg-sidebar min-w-24">
                     <a href={`https://www.google.com/search?q=${pcCase.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

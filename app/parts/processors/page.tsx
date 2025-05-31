@@ -58,7 +58,7 @@ export default function ProcessorsPage() {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-6">Processors</h1>
+            <h1 className="text-3xl font-bold text-center mb-4">Processors</h1>
 
             {/* Filter */}
             <div className="my-6 mr-8">

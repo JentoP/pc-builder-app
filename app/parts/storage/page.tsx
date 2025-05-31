@@ -5,7 +5,6 @@ import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import StorageCard from '@/components/parts/StorageCard'
 import { useBuild } from '@/hooks/useBuild'
-import { toast } from 'sonner'
 
 type Storage = {
     id: string
@@ -56,7 +55,7 @@ export default function StoragePage() {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-6">Storage Devices</h1>
+            <h1 className="text-3xl font-bold text-center mb-4">Storage Drives</h1>
 
             <div className="my-6 mr-8">
                 <label htmlFor="typeFilter" className="block text-sm font-medium mb-2">

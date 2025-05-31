@@ -43,7 +43,7 @@ export default function BuildDisplay() {
     const router = useRouter();
     const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [buildName, setBuildName] = useState(build.name || "My PC Build");
+    const [buildName, setBuildName] = useState(build.name);
     const supabase = createClient();
 
     useEffect(() => {
@@ -56,11 +56,8 @@ export default function BuildDisplay() {
             setLoading(false);
         };
         getUser();
-    }, []);
-
-    useEffect(() => {
         setBuildName(build.name || "My PC Build");
-    }, [build]);
+    }, []);
 
     if (loading || !userId) {
         return (
@@ -233,23 +230,38 @@ export default function BuildDisplay() {
         }
     }
 
+    const handleNextPartClick = (e: React.MouseEvent, route: string) => {
+        e.preventDefault();
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        setTimeout(() => {
+            window.location.href = `/${route}`;
+        }, 100);
+    };
+
     const renderNextPartButton = () => {
         const nextPart = getNextPartType(build);
-        if (!nextPart) return null;
+        
+        if (!nextPart) {
+            return (
+                <div className="text-blue-600">
+                    Build Complete!
+                </div>
+            );
+        }
 
-        // Use partRoutes if available, otherwise construct the route with absolute path
         const route = partRoutes[nextPart] || `/parts/${nextPart}`;
         const displayName = displayNames[nextPart] || nextPart;
 
         return (
-            <div className="">
-                <Link href={`/${route}`}>
+                <Link
+                    href={`/${route}`}
+                    onClick={(e) => handleNextPartClick(e, route)}
+                >
                     <Button variant="outline" className="w-full max-w-md">
-                        <p >{displayName}</p>
+                        <p>{displayName}</p>
                         <Blocks size={40} />
                     </Button>
                 </Link>
-            </div>
         );
     };
 
@@ -266,10 +278,17 @@ export default function BuildDisplay() {
                     />
                 </div>
                 <div className="flex items-center gap-2">
-                    <p className="text-muted-foreground">Next up:</p>
-                    {renderNextPartButton()}
+                    {getNextPartType(build) ? (
+                        <>
+                            <p className="text-muted-foreground">Next up:</p>
+                            {renderNextPartButton()}
+                        </>
+                    ) : (
+                        <div className="text-blue-600 font-medium">
+                            Build Complete!
+                        </div>
+                    )}
                 </div>
-
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">

@@ -16,7 +16,7 @@ export default function BuildDrawer() {
         <>
             <Drawer>
                 <DrawerTrigger
-                    className="border px-12 py-2 rounded-md text-sm hover:text-primary shadow text-muted-foreground hover:bg-accent hover:border-purple-600 hover:text-purple-600">
+                    className="border px-12 py-2 rounded-md text-sm shadow  hover:bg-accent hover:border-purple-600 hover:text-purple-600 text-blue-600 transition-colors duration-200 ease-in-out">
                     <Computer size={20}/>
                 </DrawerTrigger>
                 <DrawerContent className="max-h-screen">
@@ -36,7 +36,6 @@ export default function BuildDrawer() {
                             <BuildDisplay />
                         </div>
                     </div>
-
                 </DrawerContent>
             </Drawer>
         </>

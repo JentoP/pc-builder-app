@@ -2,9 +2,7 @@
 
 import * as React from "react"
 import {
-    LaptopMinimalCheck,
-    BookOpen,
-    PcCase,
+    LaptopMinimalCheck, PcCase, House, LayoutDashboard, Book,
 } from "lucide-react"
 import {NavMain} from "@/components/nav/nav-main"
 import {NavProjects} from "@/components/nav/nav-projects"
@@ -18,7 +16,7 @@ import {NavUser} from "@/components/nav/nav-user"
 import {useProfile} from "@/hooks/fetch-user"
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
-    const { profile, loading } = useProfile()
+    const {profile, loading} = useProfile()
 
     const user = {
         name: profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}`.trim() : "",
@@ -33,30 +31,38 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
             icon: PcCase,
             isActive: true,
             items: [
-                { title: "Processors", url: "/parts/processors" },
-                { title: "Motherboards", url: "/parts/motherboards" },
-                { title: "Memory", url: "/parts/memory" },
-                { title: "Cooling", url: "/parts/cooling" },
-                { title: "Graphic Cards", url: "/parts/graphic-cards" },
-                { title: "Storage", url: "/parts/storage" },
-                { title: "Power Supplies", url: "/parts/power-supplies" },
-                { title: "Cases", url: "/parts/cases" },
+                {title: "Processors", url: "/parts/processors"},
+                {title: "Motherboards", url: "/parts/motherboards"},
+                {title: "Memory", url: "/parts/memory"},
+                {title: "Cooling", url: "/parts/cooling"},
+                {title: "Graphic Cards", url: "/parts/graphic-cards"},
+                {title: "Storage", url: "/parts/storage"},
+                {title: "Power Supplies", url: "/parts/power-supplies"},
+                {title: "Cases", url: "/parts/cases"},
             ],
         },
         {
-            title: "Getting Started",
+            title: "Documentation",
             url: "#",
-            icon: BookOpen,
+            icon: Book,
             items: [
-                { title: "About", url: "/about" },
-                { title: "Tutorial", url: "/tutorial" },
-                { title: "Source Code", url: "https://github.com/JentoP/pc-builder-app" },
+                {title: "About", url: "/about"},
+                {title: "Tutorial", url: "/tutorial"},
+                {title: "Source Code", url: "https://github.com/JentoP/pc-builder-app"},
             ],
         },
     ]
 
     const projects = [
         {
+            name: "Home",
+            url: "/",
+            icon: House,
+        }, {
+            name: "Dashboard",
+            url: "/dashboard",
+            icon: LayoutDashboard,
+        }, {
             name: "PC Builder",
             url: "/builder",
             icon: LaptopMinimalCheck,
@@ -65,14 +71,14 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 
     return (
         <Sidebar collapsible="icon" {...props}>
-            <SidebarContent>
-                <NavProjects projects={projects} />
-                <NavMain items={navMain} />
+            <SidebarContent >
+                <NavProjects projects={projects}/>
+                <NavMain items={navMain}/>
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={user} />
+                <NavUser user={user}/>
             </SidebarFooter>
-            <SidebarRail />
+            <SidebarRail/>
         </Sidebar>
     )
 }

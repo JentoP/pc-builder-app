@@ -1,15 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
 
 export default function About() {
   return (
-    <div className="container mx-auto py-12">
-      <h1 className="text-4xl font-bold text-center mb-12">About PC Builder App</h1>
-      
-      <Card className="max-w-4xl mx-auto">
+      <div className="p-4 max-w-10xl mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-10 animate-fade-right animate-ease-in">About</h1>
+      <Card className="max-w-4xl mx-auto bg-sidebar">
         <CardHeader>
           <CardTitle className="text-2xl">Project Overview</CardTitle>
         </CardHeader>
@@ -18,27 +15,8 @@ export default function About() {
             <p className="text-lg">
               Welcome to PC Builder App, a dynamic web application developed as a school project for Thomas More College. This platform helps users build their own custom PCs by selecting compatible components.
             </p>
-            
-            {/*<div className="flex flex-col md:flex-row gap-4 justify-center">*/}
-            {/*  <Button asChild>*/}
-            {/*    <Link href="https://jentopieters.be" className="flex items-center gap-2">*/}
-            {/*      <span>Website</span>*/}
-            {/*    </Link>*/}
-            {/*  </Button>*/}
-            {/*  <Button asChild variant="secondary">*/}
-            {/*    <Link href="https://github.com/JentoP/pc-builder-app" target="_blank" className="flex items-center gap-2">*/}
-            {/*      <span>Github</span>*/}
-            {/*    </Link>*/}
-            {/*  </Button>*/}
-            {/*  <Button asChild variant="outline">*/}
-            {/*    <Link href="https://www.linkedin.com/in/jpieters" target="_blank" className="flex items-center gap-2">*/}
-            {/*      <span>LinkedIn</span>*/}
-            {/*    </Link>*/}
-            {/*  </Button>*/}
-            {/*</div>*/}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 ">
-              <Card className="bg-sidebar">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+              <Card className="">
                 <CardHeader>
                   <CardTitle>Project Details</CardTitle>
                 </CardHeader>
@@ -60,7 +38,7 @@ export default function About() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-sidebar">
+              <Card className="">
                 <CardHeader>
                   <CardTitle>Technical Stack</CardTitle>
                 </CardHeader>

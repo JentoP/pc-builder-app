@@ -28,56 +28,56 @@ export default function CoolerDetail({ cooler }: { cooler: Cooler }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={cooler.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {cooler.manufacturer} {cooler.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Type</span>
-                            <span>{cooler.type}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Socket Compatibility</span>
-                            <span>{cooler.socket_compatibility}</span>
-                        </div>
-                        {cooler.radiator_size && (
-                            <div className="flex justify-between">
-                                <span className="font-medium">Radiator Size</span>
-                                <span>{cooler.radiator_size}</span>
-                            </div>
-                        )}
-                        {cooler.noise_level && (
-                            <div className="flex justify-between">
-                                <span className="font-medium">Noise Level</span>
-                                <span>{cooler.noise_level}</span>
-                            </div>
-                        )}
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {cooler.price.toFixed(2)}</span>
-                        </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {cooler.manufacturer} {cooler.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Type</span>
+                    <span>{cooler.type}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Socket Compatibility</span>
+                    <span>{cooler.socket_compatibility}</span>
+                </div>
+                {cooler.radiator_size && (
+                    <div className="flex justify-between">
+                        <span className="font-medium">Radiator Size</span>
+                        <span>{cooler.radiator_size}</span>
                     </div>
+                )}
+                {cooler.noise_level && (
+                    <div className="flex justify-between">
+                        <span className="font-medium">Noise Level</span>
+                        <span>{cooler.noise_level}</span>
+                    </div>
+                )}
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {cooler.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
-                <Button onClick={() => updateBuild('cooling', cooler)}
-                        variant="outline"
-                        size="sm"
-                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
+                <Button 
+                    onClick={() => updateBuild('cooling', cooler)}
+                    variant="outline" 
+                    size="sm"
+                    className="mt-3 px-4 py-1 rounded border-purple-800 hover:bg-purple-800 hover:text-white text-primary bg-sidebar min-w-24">
                     Add to Build
                 </Button>
-                <Button
-                    variant="outline"
+                <Button 
+                    asChild 
+                    variant="outline" 
                     size="sm"
-                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
+                    className="mt-3 px-4 py-1 rounded border-blue-800 hover:bg-blue-800 hover:text-white text-primary bg-sidebar min-w-24">
                     <a href={`https://www.google.com/search?q=${cooler.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

@@ -20,7 +20,6 @@ export function resolveConflicts(build: Build, conflicts: Conflict[]): Build {
             updated[type] = null;
         }
     }
-
     return updated;
 }
 
@@ -72,14 +71,15 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             });
         }
 
-        const newRamType = part?.chipset || null;
+        // Check RAM compatibility with motherboard
+        const motherboardRamType = part?.memory_type;
         for (const ram of current.memory || []) {
-            if (ram.type !== newRamType) {
+            if (ram.type && motherboardRamType && ram.type !== motherboardRamType) {
                 conflicts.push({
                     partType: 'memory',
-                    reason: 'RAM type is incompatible with the selected motherboard.',
+                    partId: ram.id,
+                    reason: `RAM type (${ram.type}) is not compatible with the selected motherboard (supports ${motherboardRamType}).`,
                 });
-                break;
             }
         }
 
@@ -131,6 +131,17 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             return conflicts;
         }
 
+        // Check RAM type compatibility with motherboard
+        const motherboardRamType = motherboard.memory_type;
+        const newRamType = part?.type;
+        
+        if (motherboardRamType && newRamType && newRamType !== motherboardRamType) {
+            conflicts.push({
+                partType: 'memory',
+                reason: `RAM type (${newRamType}) is not compatible with the selected motherboard (supports ${motherboardRamType}).`,
+            });
+        }
+
         const maxModules = motherboard.memory_slots || 4;
         const currentMemory = current.memory || [];
         if (currentMemory.length + 1 > maxModules) {
@@ -138,17 +149,6 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
                 partType: 'memory',
                 reason: `Cannot add more memory modules. Maximum ${maxModules} modules allowed.`,
             });
-        }
-
-        const newRamType = part?.type || '';
-        for (const ram of currentMemory) {
-            if (ram.type !== newRamType) {
-                conflicts.push({
-                    partType: 'memory',
-                    reason: 'RAM type is incompatible with the selected motherboard.',
-                });
-                break;
-            }
         }
 
         // Combine current memory

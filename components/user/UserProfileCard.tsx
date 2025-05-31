@@ -25,7 +25,6 @@ export function UserProfileCard({ avatarUrl, firstName, lastName, bio }: UserPro
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // If props are provided, use them directly and skip fetching
         if (avatarUrl || firstName || lastName || bio) {
             setProfile({
                 avatarUrl,
@@ -71,7 +70,7 @@ export function UserProfileCard({ avatarUrl, firstName, lastName, bio }: UserPro
 
     if (loading) {
         return (
-            <div className="rounded-lg border p-4">
+            <div className="rounded-lg border p-4 shadow-lg">
                 <div className="flex items-center gap-4">
                     <Skeleton className="h-40 w-40 rounded-full" />
                     <div className="space-y-2">

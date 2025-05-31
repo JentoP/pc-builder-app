@@ -61,7 +61,7 @@ export default function MotherboardsPage() {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-6">Motherboards</h1>
+            <h1 className="text-3xl font-bold text-center mb-4">Motherboards</h1>
 
             {/* Filter */}
             <div className="mb-6">

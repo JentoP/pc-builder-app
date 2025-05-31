@@ -62,7 +62,7 @@ export default function CoolerCard({ cooler, onAddToBuild }: CoolerCardProps) {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="mt-3 px-4 py-1 text-purple-600 border-purple-600 hover:text-primary"
+                            className="mt-3 px-4 py-1 rounded border-purple-800 hover:bg-purple-800 hover:text-white text-primary bg-sidebar"
                             onClick={() => onAddToBuild(cooler)}
                         >
                             Add to Build
@@ -70,7 +70,7 @@ export default function CoolerCard({ cooler, onAddToBuild }: CoolerCardProps) {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="mt-3 px-4 py-1 rounded text-blue-600 border-blue-600 hover:text-primary"
+                            className="mt-3 px-4 py-1 rounded border-blue-800 hover:bg-blue-800 hover:text-white text-primary bg-sidebar"
                         >
                             <Link href={`/parts/coolers/${cooler.id}`}>View Details</Link>
                         </Button>

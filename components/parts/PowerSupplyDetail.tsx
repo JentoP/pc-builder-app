@@ -28,52 +28,50 @@ export default function PowerSupplyDetail({ psu }: { psu: PowerSupply }) {
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6 mb-6">
                 <img
                     src={imageSrc}
                     alt={psu.name}
-                    className="w-24 h-24 object-contain"
+                    className="w-32 h-32 object-contain"
                     onError={() => setImageError(true)}
                 />
-                <div className="p-4 rounded-lg w-full">
-                    <h1 className="text-2xl font-bold my-4">
-                        {psu.manufacturer} {psu.name}
-                    </h1>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className="font-medium">Wattage</span>
-                            <span>{psu.wattage} W</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Form Factor</span>
-                            <span>{psu.form_factor}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Efficiency Rating</span>
-                            <span>{psu.efficiency_rating}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="font-medium">Modularity</span>
-                            <span>{psu.modularity}</span>
-                        </div>
-                        <div className="flex justify-between pt-3 text-xl font-semibold">
-                            <span>Price</span>
-                            <span>€ {psu.price.toFixed(2)}</span>
-                        </div>
-                    </div>
+                <h1 className="text-2xl font-bold pt-2">
+                    {psu.manufacturer} {psu.name}
+                </h1>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <span className="font-medium">Wattage</span>
+                    <span>{psu.wattage} W</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Form Factor</span>
+                    <span>{psu.form_factor}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Efficiency Rating</span>
+                    <span>{psu.efficiency_rating}</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Modularity</span>
+                    <span>{psu.modularity}</span>
+                </div>
+                <div className="flex justify-between pt-3 text-xl font-semibold">
+                    <span>Price</span>
+                    <span>€ {psu.price.toFixed(2)}</span>
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
                 <Button onClick={() => updateBuild('psu', psu)}
                         variant="outline"
                         size="sm"
-                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
+                        className="mt-3 px-4 py-1 rounded border-purple-800 hover:bg-purple-800 hover:text-white text-primary bg-sidebar min-w-24">
                     Add to Build
                 </Button>
                 <Button
                     variant="outline"
                     size="sm"
-                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
+                    className="mt-3 px-4 py-1 rounded border-blue-800 hover:bg-blue-800 hover:text-white text-primary bg-sidebar min-w-24">
                     <a href={`https://www.google.com/search?q=${psu.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

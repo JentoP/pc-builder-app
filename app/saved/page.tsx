@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useBuild } from '@/hooks/useBuild'
 
-export default function SavedBuildsPage() {
+export default function Saved() {
     const router = useRouter()
     const supabase = createClient()
     const [savedBuilds, setSavedBuilds] = useState<any[]>([])
@@ -51,28 +51,25 @@ export default function SavedBuildsPage() {
             // Reset the current build first
             resetBuild();
             
-            // Get the build data from Supabase
+            // Gets the build data from Supabase
             const { data: { user }, error: userError } = await supabase.auth.getUser();
             if (userError || !user) {
                 throw new Error('User not authenticated');
             }
 
-            // Update the build state with the loaded data
+            // Gets the stored build data and ensure proper initialization
             const buildData = build.build_data;
             
-            // Update each component of the build
-            if (buildData.processor) updatePart('processor', buildData.processor);
-            if (buildData.motherboard) updatePart('motherboard', buildData.motherboard);
-            if (buildData.memory?.length > 0) {
-                updatePart('memory', buildData.memory);
-            }
-            if (buildData.gpu) updatePart('gpu', buildData.gpu);
-            if (buildData.storage?.length > 0) {
-                updatePart('storage', buildData.storage);
-            }
-            if (buildData.psu) updatePart('psu', buildData.psu);
-            if (buildData.case) updatePart('case', buildData.case);
-            if (buildData.cooling) updatePart('cooling', buildData.cooling);
+            // Uses a single updateBuild with the entire build data
+            const initializedBuild = {
+                ...buildData,
+                name: buildData.name || "My PC Build",
+                memory: Array.isArray(buildData.memory) ? buildData.memory : [],
+                storage: Array.isArray(buildData.storage) ? buildData.storage : [],
+            };
+            
+            // Saves all build data at once to localStorage
+            localStorage.setItem('build', JSON.stringify(initializedBuild));
             
             // Redirect
             router.push('/builder');

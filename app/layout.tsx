@@ -12,11 +12,8 @@ import {
 } from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
 import * as React from "react";
-import {hasEnvVars} from "@/utils/supabase/check-env-vars";
-import {EnvVarWarning} from "@/components/nextjs/env-var-warning";
 import HeaderAuth from "@/components/nextjs/header-auth";
 import {Toaster} from 'sonner';
-import BuildDrawer from "@/components/BuildDrawer";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`

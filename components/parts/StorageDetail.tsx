@@ -57,16 +57,20 @@ export default function StorageDetail({ storage }: { storage: Storage }) {
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
-                <Button onClick={() => updateBuild('storage', storage)}
-                        variant="outline"
-                        size="sm"
-                        className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 min-w-24">
+                <Button 
+                    onClick={() => updateBuild('storage', storage )}
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 hover:bg-purple-600 hover:text-white min-w-24"
+                >
                     Add to Build
                 </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-3 px-4 py-1 border-blue-600 text-blue-600">
+                <Button 
+                    asChild 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-3 px-4 py-1 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                >
                     <a href={`https://www.google.com/search?q=${storage.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>

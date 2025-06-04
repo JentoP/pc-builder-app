@@ -11,6 +11,7 @@ import {useRouter} from 'next/navigation'
 import {getNextPartType} from '@/utils/compatibility'
 import {Blocks} from "lucide-react";
 import {Input} from "@/components/ui/input";
+import { useProfile } from "@/hooks/fetch-user"
 
 const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
@@ -41,39 +42,31 @@ const displayNames: Record<string, string> = {
 export default function BuildDisplay() {
     const {build, clearPart, resetBuild, updatePart} = useBuild();
     const router = useRouter();
-    const [userId, setUserId] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { profile, loading } = useProfile();
     const [buildName, setBuildName] = useState(build.name);
     const supabase = createClient();
 
     useEffect(() => {
-        const getUser = async () => {
-            const {data: {user}, error} = await supabase.auth.getUser();
-            if (error) {
-                toast.error("Failed to load user.");
-            }
-            setUserId(user?.id || null);
-            setLoading(false);
-        };
-        getUser();
         setBuildName(build.name || "My PC Build");
-    }, []);
+    }, [build.name]);
 
-    if (loading || !userId) {
-        return (
-            <SignInWarning/>
-        )
+    if (loading) {
+        return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div></div>;
+    }
+
+    if (!profile?.email) {
+        return <SignInWarning/>;
     }
 
     const saveBuild = async () => {
-        if (!userId) {
+        if (!profile?.email) {
             toast.warning("You must be logged in to save a build.");
             return;
         }
 
         const {error} = await supabase.from('builds').insert([
             {
-                user_id: userId,
+                user_id: profile.id,
                 build_data: {
                     ...build,
                     name: buildName
@@ -117,6 +110,14 @@ export default function BuildDisplay() {
         updatePart('storage', updated);
     }
 
+    const handleSelectClick = (e: React.MouseEvent, route: string) => {
+        e.preventDefault();
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        setTimeout(() => {
+            window.location.href = `/${route}`;
+        }, 100);
+    };
+
     const renderPart = (key: string) => {
         const part = build[key as keyof typeof build];
         const route = partRoutes[key];
@@ -144,7 +145,7 @@ export default function BuildDisplay() {
                     {part ? (
                         <>
                             <Link href={`/${route}`}>
-                                <Button variant="outline" size="sm"
+                                <Button variant="outline" size="sm" onClick={(e) => handleSelectClick(e, route)}
                                         className="min-w-20 hover:border-purple-600">Select</Button>
                             </Link>
                             <Link href={`/${route}/${part.id}`}>
@@ -156,7 +157,7 @@ export default function BuildDisplay() {
                         </>
                     ) : (
                         <Link href={`/${route}`}>
-                            <Button variant="outline" size="sm"
+                            <Button variant="outline" size="sm" onClick={(e) => handleSelectClick(e, route)}
                                     className="min-w-20 hover:border-purple-600">Select</Button>
                         </Link>
                     )}

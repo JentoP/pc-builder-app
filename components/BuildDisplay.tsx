@@ -258,7 +258,7 @@ export default function BuildDisplay() {
                     href={`/${route}`}
                     onClick={(e) => handleNextPartClick(e, route)}
                 >
-                    <Button variant="outline" className="w-full max-w-md">
+                    <Button variant="outline" className="w-full max-w-md hover:border-purple-700">
                         <p>{displayName}</p>
                         <Blocks size={40} />
                     </Button>

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/drawer'
 import BuildDisplay from '@/components/BuildDisplay'
 import Link from 'next/link'
-import { Computer } from 'lucide-react'
+import {CircleX, Computer} from 'lucide-react'
 
 export default function BuildDrawer() {
     return (
@@ -23,12 +23,14 @@ export default function BuildDrawer() {
                     <DrawerHeader>
                         <div className="flex justify-between items-center">
                             <DrawerTitle>Current Build</DrawerTitle>
-                            <DrawerClose className="px-4 py-1 rounded text-sm shadow text-primary">Close</DrawerClose>
+                            <DrawerClose className="px-2 rounded text-sm shadow text-primary hover:text-red-700">
+                                <CircleX />
+                            </DrawerClose>
                         </div>
                         <DrawerDescription>
                             <span>This is your current build. </span>
-                            <Link href="/builder" className="underline"> Click here </Link>
-                            <span> to go to the build page.</span>
+                            <Link href="/builder" className="underline ml-2">Click here</Link>
+                            <span>  to go to the build page.</span>
                         </DrawerDescription>
                     </DrawerHeader>
                     <div className="w-full h-full p-4">

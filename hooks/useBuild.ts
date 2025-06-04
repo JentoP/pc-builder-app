@@ -85,7 +85,7 @@ export function useBuild() {
         }
         saveBuild(tentativeBuild);
         console.log('Build successfully updated:', tentativeBuild);
-        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} added with conflicts resolved`);};
+        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} successfully added`);};
 
     const updatePart = (type: keyof Build, value: any) => {
         const updated = { ...build, [type]: value };

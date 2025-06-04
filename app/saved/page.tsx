@@ -7,6 +7,8 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useBuild } from '@/hooks/useBuild'
 import { useProfile } from '@/hooks/fetch-user'
+import { Share2, ArrowUpRight } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export default function Saved() {
     const router = useRouter()
@@ -80,6 +82,36 @@ export default function Saved() {
         }
     }
 
+    const shareBuild = async (build: any) => {
+        try {
+            const response = await fetch('/api/share-build', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    buildData: build.build_data,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to share build');
+            }
+
+            const { url } = await response.json();
+            
+            // Copy to clipboard
+            await navigator.clipboard.writeText(url);
+            toast.success('Shareable link copied to clipboard!');
+            
+            // Open the shared build in a new tab
+            window.open(url, '_blank');
+        } catch (error) {
+            console.error('Error sharing build:', error);
+            toast.error('Failed to share build');
+        }
+    };
+
     if (profileLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
@@ -121,13 +153,24 @@ export default function Saved() {
                                         {new Date(build.created_at).toLocaleDateString()}
                                     </p>
                                 </div>
-                                <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => loadBuild(build)}
-                                >
-                                    Load Build
-                                </Button>
+                                <div className="flex gap-2">
+                                    <Button 
+                                        variant="outline" 
+                                        size="sm"
+                                        onClick={() => shareBuild(build)}
+                                        className="gap-1"
+                                    >
+                                        <Share2 className="h-4 w-4" />
+                                        Share
+                                    </Button>
+                                    <Button 
+                                        variant="default" 
+                                        size="sm"
+                                        onClick={() => loadBuild(build)}
+                                    >
+                                        Load Build
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     ))}

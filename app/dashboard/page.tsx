@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { UserProfileCard } from "@/components/user/UserProfileCard"
 import { useBuild } from "@/hooks/useBuild"
-import { Computer, LibraryBig, User, RotateCcw, Save, Code } from "lucide-react"
+import {Computer, LibraryBig, User, RotateCcw, Save, Code, Share} from "lucide-react"
 import SignInWarning from "@/components/SignInWarning"
 import { useProfile } from "@/hooks/fetch-user"
 import { DashboardCard } from "@/components/dashboard/DashboardCard"
@@ -62,7 +62,15 @@ export default function DashboardPage() {
                             buttonVariant="purple"
                             animationDelay="3500ms"
                         />
-
+                        <DashboardCard
+                            icon={Share}
+                            title="Shared Builds"
+                            description="View and manage shared builds"
+                            buttonText="View Builds"
+                            href="/shared"
+                            buttonVariant="purple"
+                            animationDelay="4000ms"
+                        />
                         <DashboardCard
                             icon={LibraryBig}
                             title="Documentation"
@@ -80,18 +88,7 @@ export default function DashboardPage() {
                             href="/settings"
                             animationDelay="4500ms"
                         />
-
-                        <DashboardCard
-                            icon={Code}
-                            title="Developer Updates"
-                            description="View updates and changes"
-                            buttonText="View Updates"
-                            href="https://github.com/JentoP/pc-builder-app/wiki"
-                            external
-                            animationDelay="5000ms"
-                        />
                     </div>
-
                     <ComingSoon />
                 </>
             ) : (

@@ -48,10 +48,10 @@ export default function SharedBuildPage() {
     const fetchSharedBuild = async () => {
       try {
         const { data, error } = await supabase
-          .from('shared_builds')
-          .select('*')
-          .eq('id', id)
-          .single();
+            .from('shared_builds')
+            .select('*')
+            .eq('id', id)
+            .single();
 
         if (error) throw error;
         if (!data) {
@@ -59,15 +59,15 @@ export default function SharedBuildPage() {
           return;
         }
 
-        // Increment view count
         await supabase
-          .from('shared_builds')
-          .update({ views: (data.views || 0) + 1 })
-          .eq('id', id);
+            .from('shared_builds')
+            .update({ views: (data.views || 0) + 1 })
+            .eq('id', id);
 
         setBuild({
           ...data.build_data,
-          id: data.id
+          id: data.id,
+          name: data.name // Make sure name is included
         });
         setShareUrl(`${window.location.origin}/shared/${data.id}`);
       } catch (err) {
@@ -89,7 +89,7 @@ export default function SharedBuildPage() {
     toast.success('Link copied to clipboard!');
   };
 
-  const renderPart = (part: any, partType: string) => {
+  const renderPart = (part: any, partType: string, index: number = 0) => {
     if (!part) return null;
 
     const imageKey = partType === 'gpu' ? 'graphic-card' : partType;
@@ -106,7 +106,7 @@ export default function SharedBuildPage() {
     }[partType];
 
     return (
-      <div key={partType} className="bg-sidebar shadow rounded-lg p-6 border mb-4">
+        <div key={`${partType}-${index}`} className="bg-sidebar shadow rounded-lg p-6 border mb-4">
         <div className="flex items-start gap-4">
           <img 
             src={imageUrl} 
@@ -117,8 +117,9 @@ export default function SharedBuildPage() {
             }}
           />
           <div className="flex-1 p-4 rounded-lg w-full">
-            <h3 className="text-lg font-semibold mb-2">{displayName}</h3>
-            <p className="font-medium">{part.manufacturer} {part.name}</p>
+            <h3 className="text-lg font-semibold mb-2">
+              {displayName} {Array.isArray(part) && part.length > 1 ? `#${index + 1}` : ''}
+            </h3>            <p className="font-medium">{part.manufacturer} {part.name}</p>
             
             {/* Display up to 3 key specifications */}
             <div className="mt-3 space-y-1">
@@ -215,9 +216,11 @@ export default function SharedBuildPage() {
         {partDisplayOrder.map(partType => {
           const part = build[partType as keyof BuildData];
           if (Array.isArray(part)) {
-            return part.map((p, index) => renderPart(p, `${partType}[${index}]`));
+            return part.map((p, index) => renderPart(p, partType, index));
+          } else if (part) {
+            return renderPart(part, partType);
           }
-          return renderPart(part, partType);
+          return null;
         })}
       </div>
 

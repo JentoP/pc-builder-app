@@ -1,32 +1,9 @@
+import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-// Create client without service role key
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    }
-);
-
-type BuildData = {
-  name: string;
-  processor?: any;
-  motherboard?: any;
-  memory?: any[];
-  storage?: any[];
-  cooling?: any;
-  psu?: any;
-  case?: any;
-  gpu?: any;
-};
 
 export async function POST(request: Request) {
   try {
+    const supabase = await createClient();
     const { build } = await request.json();
 
     if (!build) {
@@ -41,6 +18,16 @@ export async function POST(request: Request) {
       return NextResponse.json(
           { error: 'Build name is required' },
           { status: 400 }
+      );
+    }
+
+    // Get the current user's session
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError || !session?.user) {
+      return NextResponse.json(
+          { error: 'User not authenticated' },
+          { status: 401 }
       );
     }
 
@@ -59,23 +46,25 @@ export async function POST(request: Request) {
 
     // Insert build into shared_builds table
     const { data, error } = await supabase
-      .from('shared_builds')
-      .insert([{
-        name: build.name,
-        build_data: {
-          processor: build.processor,
-          motherboard: build.motherboard,
-          memory: build.memory,
-          storage: build.storage,
-          cooling: build.cooling,
-          psu: build.psu,
-          case: build.case,
-          gpu: build.gpu
-        },
-        created_at: new Date().toISOString()
-      }])
-      .select()
-      .single();
+        .from('shared_builds')
+        .insert([{
+          name: build.name,
+          build_data: {
+            processor: build.processor,
+            motherboard: build.motherboard,
+            memory: build.memory,
+            storage: build.storage,
+            cooling: build.cooling,
+            psu: build.psu,
+            case: build.case,
+            gpu: build.gpu
+          },
+          user_id: session.user.id,
+          created_at: new Date().toISOString(),
+          views: 0
+        }])
+        .select()
+        .single();
 
     if (error) {
       console.error('Error inserting build:', error);
@@ -85,13 +74,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/shared/${data.id}`;
+    const shareUrl = `/shared/${data.id}`;
 
     return NextResponse.json({
       url: shareUrl,
       id: data.id,
       share_url: shareUrl
     });
+
   } catch (error) {
     console.error('Error sharing build:', error);
     return NextResponse.json(

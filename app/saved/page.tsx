@@ -7,8 +7,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useBuild } from '@/hooks/useBuild'
 import { useProfile } from '@/hooks/fetch-user'
-import { Share2, ArrowUpRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Share2 } from 'lucide-react';
 
 export default function Saved() {
     const router = useRouter()

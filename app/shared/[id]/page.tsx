@@ -106,12 +106,12 @@ export default function SharedBuildPage() {
     }[partType];
 
     return (
-        <div key={`${partType}-${index}`} className="bg-sidebar shadow rounded-lg p-6 border mb-4">
+        <div key={`${partType}-${index}`} className="bg-sidebar shadow rounded-lg p-4 border mb-4">
         <div className="flex items-start gap-4">
           <img 
             src={imageUrl} 
             alt={part.name} 
-            className="w-24 h-24 object-contain bg-white p-2 rounded"
+            className="w-24 h-24 object-contain p-2 rounded"
             onError={(e) => {
               (e.target as HTMLImageElement).src = `/images/icons/gradient/${imageKey}.png`;
             }}

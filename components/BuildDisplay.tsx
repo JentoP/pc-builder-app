@@ -120,7 +120,7 @@ export default function BuildDisplay() {
             toast.success("Build shared successfully!");
         } catch (error) {
             console.error('Error sharing build:', error);
-            toast.error(error.message || 'Failed to share build');
+            toast.error('Failed to share build');
         } finally {
             setIsSharing(false);
         }

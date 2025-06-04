@@ -50,6 +50,7 @@ export async function POST(request: Request) {
         .insert([{
           name: build.name,
           build_data: {
+            name: build.name,
             processor: build.processor,
             motherboard: build.motherboard,
             memory: build.memory,

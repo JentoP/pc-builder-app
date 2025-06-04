@@ -41,18 +41,6 @@ export default function DashboardPage() {
                             buttonVariant="purple"
                             animationDelay="2500ms"
                         />
-
-                        <DashboardCard
-                            icon={RotateCcw}
-                            title="Start New Build"
-                            description="Reset and begin a fresh setup"
-                            buttonText="Start Fresh"
-                            href="/builder"
-                            onClick={resetBuild}
-                            buttonVariant="purple"
-                            animationDelay="3000ms"
-                        />
-
                         <DashboardCard
                             icon={Save}
                             title="Saved Builds"
@@ -70,6 +58,16 @@ export default function DashboardPage() {
                             href="/shared"
                             buttonVariant="purple"
                             animationDelay="4000ms"
+                        />
+                        <DashboardCard
+                            icon={RotateCcw}
+                            title="Start New Build"
+                            description="Reset and begin a fresh setup"
+                            buttonText="Start Fresh"
+                            href="/builder"
+                            onClick={resetBuild}
+                            buttonVariant="default"
+                            animationDelay="3000ms"
                         />
                         <DashboardCard
                             icon={LibraryBig}

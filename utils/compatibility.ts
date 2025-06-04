@@ -245,23 +245,37 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
     }
 
     if (type === 'storage') {
-        const mb = current.motherboard;
-        if (mb) {
-            const nvmeCount = (current.storage || []).filter((s: any) => s.interface === 'NVMe').length;
-            const sataCount = (current.storage || []).filter((s: any) => s.interface === 'SATA').length;
+        const motherboard = current.motherboard;
+        if (!motherboard) {
+            conflicts.push({
+                partType: 'motherboard',
+                reason: 'Cannot add storage without a motherboard.',
+            });
+            return conflicts;
+        }
 
-            if (part.interface === 'NVMe' && nvmeCount + 1 > (mb.nvme_ports || 0)) {
-                conflicts.push({
-                    partType: 'storage',
-                    reason: `Motherboard supports only ${mb.nvme_ports || 0} NVMe device(s).`,
-                });
-            }
-            if (part.interface === 'SATA' && sataCount + 1 > (mb.sata_ports || 0)) {
-                conflicts.push({
-                    partType: 'storage',
-                    reason: `Motherboard supports only ${mb.sata_ports || 0} SATA device(s).`,
-                });
-            }
+        const newStorageInterface = part?.interface?.toUpperCase();
+        const currentStorages = current.storage || [];
+        
+        // Count current storage devices by interface
+        const nvmeCount = currentStorages.filter(s => s.interface?.toUpperCase() === 'NVME').length;
+        const sataCount = currentStorages.filter(s => s.interface?.toUpperCase() === 'SATA').length;
+        
+        // Get slot limits from motherboard
+        const maxNvmeSlots = motherboard.nvme_slots || 0;
+        const maxSataSlots = motherboard.sata_slots || 0;
+
+        // Check if adding this storage would exceed slot limits
+        if (newStorageInterface === 'NVME' && nvmeCount >= maxNvmeSlots) {
+            conflicts.push({
+                partType: 'storage',
+                reason: `Motherboard only has ${maxNvmeSlots} NVMe slot(s).`,
+            });
+        } else if (newStorageInterface === 'SATA' && sataCount >= maxSataSlots) {
+            conflicts.push({
+                partType: 'storage',
+                reason: `Motherboard only has ${maxSataSlots} SATA port(s).`,
+            });
         }
     }
 

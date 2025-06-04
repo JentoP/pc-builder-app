@@ -7,6 +7,7 @@ export function useProfile() {
     const supabase = createClient();
 
     const [profile, setProfile] = useState({
+        id: "",
         firstName: "",
         lastName: "",
         bio: "",
@@ -42,6 +43,7 @@ export function useProfile() {
             setError(profileError.message);
         } else if (data) {
             setProfile({
+                id: userData.user.id,
                 firstName: data.first_name || "",
                 lastName: data.last_name || "",
                 bio: data.bio || "",

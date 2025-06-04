@@ -18,7 +18,7 @@ export default async function AuthButton() {
         return (
             <div className="flex gap-4 items-center animate-pulse duration-[3000ms] ease-in-out">
                 <Badge variant="default" className="font-normal pointer-events-none">
-                    Please update .env.local file with anon key and url
+                    <span className="text-xs">Missing environment variables</span>
                 </Badge>
                 <div className="row gap-2">
                     <Button asChild size="sm" variant="outline" disabled>
@@ -33,7 +33,6 @@ export default async function AuthButton() {
     }
 
     if (user) {
-        // Fetch user profile from 'profiles' table
         const {data: profile} = await supabase
             .from("profiles")
             .select("first_name, last_name")
@@ -41,7 +40,6 @@ export default async function AuthButton() {
             .maybeSingle()
 
         const name = profile ? `${profile.first_name} ${profile.last_name}`.trim() : user.email
-
         return (
             <BuildDrawer/>
         )
@@ -49,10 +47,10 @@ export default async function AuthButton() {
 
     return (
         <div className="flex gap-2">
-            <Button asChild size="sm" variant="outline" className="bg-sidebar shadow">
+            <Button asChild size="sm" className="border rounded border-blue-700 hover:bg-blue-700 text-primary bg-sidebar shadow">
                 <Link href="/sign-in">Sign in</Link>
             </Button>
-            <Button asChild size="sm" variant="default" className="bg-blue-700 hover:bg-purple-600 text-white">
+            <Button asChild size="sm" className="border rounded border-purple-700 hover:bg-purple-700 text-primary bg-sidebar shadow">
                 <Link href="/sign-up">Sign up</Link>
             </Button>
         </div>

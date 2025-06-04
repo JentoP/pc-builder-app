@@ -16,7 +16,6 @@ const ThemeSwitcher = () => {
     const [mounted, setMounted] = useState(false);
     const {theme, setTheme} = useTheme();
 
-    //updated theme to use dark mode by default
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme) {
@@ -32,7 +31,7 @@ const ThemeSwitcher = () => {
         return null;
     }
 
-    const ICON_SIZE = 24;
+    const ICON_SIZE = 20;
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -43,19 +42,19 @@ const ThemeSwitcher = () => {
                         <Sun
                             key="light"
                             size={ICON_SIZE}
-                            className={"text-muted-foreground"}
+                            className={"text-primary"}
                         />
                     ) : theme === "dark" ? (
                         <Moon
                             key="dark"
                             size={ICON_SIZE}
-                            className={"text-muted-foreground"}
+                            className={"text-primary"}
                         />
                     ) : (
                         <Laptop
                             key="system"
                             size={ICON_SIZE}
-                            className={"text-muted-foreground"}
+                            className={"text-primary"}
                         />
                     )}
                 </Button>

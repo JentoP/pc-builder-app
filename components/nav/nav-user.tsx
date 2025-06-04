@@ -2,12 +2,12 @@
 
 import {
     BadgeCheck,
-    Bell,
     ChevronsUpDown,
-    CreditCard,
     LogOut,
-    Sparkles,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useProfile } from "@/hooks/fetch-user"
+import { createClient } from "@/utils/supabase/client"
 
 import {
     Avatar,
@@ -29,17 +29,37 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar"
-import Link from "next/link";
-import {Skeleton} from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton"
 
-export function NavUser({user}: {
-    user: {
-        name: string
-        email: string
-        avatar: string
+export function NavUser() {
+    const { profile, loading } = useProfile()
+    const { isMobile } = useSidebar()
+    const router = useRouter()
+    const supabase = createClient()
+
+    const handleLogout = async () => {
+        try {
+            await supabase.auth.signOut()
+            window.location.href = '/'
+        } catch (error) {
+            console.error('Error signing out:', error)
+        }
     }
-}) {
-    const {isMobile} = useSidebar()
+
+    if (loading) {
+        return (
+            <div className="flex items-center gap-2 p-2">
+                <Skeleton className="h-8 w-8 rounded-lg" />
+                <div className="space-y-1">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-3 w-32" />
+                </div>
+            </div>
+        )
+    }
+
+    const fullName = `${profile.firstName} ${profile.lastName}`.trim()
+    const initials = (profile.firstName?.[0] || '') + (profile.lastName?.[0] || '')
 
     return (
         <SidebarMenu>
@@ -51,14 +71,20 @@ export function NavUser({user}: {
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage src={user.avatar} alt={user.name}/>
-                                <AvatarFallback className="rounded-lg">PC</AvatarFallback>
+                                {profile.avatarUrl && (
+                                    <AvatarImage src={profile.avatarUrl} alt={fullName} />
+                                )}
+                                <AvatarFallback className="rounded-lg">
+                                    {initials || 'U'}
+                                </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-semibold">{user.name}</span>
-                                <span className="truncate text-xs">{user.email}</span>
+                                <span className="truncate font-semibold">
+                                    {fullName || 'User'}
+                                </span>
+                                <span className="truncate text-xs">{profile.email}</span>
                             </div>
-                            <ChevronsUpDown className="ml-auto size-4"/>
+                            <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -69,40 +95,38 @@ export function NavUser({user}: {
                     >
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                <Avatar className="h-8 w-8 rounded-lg">
-                                    {user.avatar ? (
-                                        <AvatarImage src={user.avatar} alt={user.name}/>
-                                    ) : (
-                                        <Skeleton className="h-8 w-8 rounded-lg"/>
+                                <Avatar className="h-16 w-16 rounded-lg">
+                                    {profile.avatarUrl && (
+                                        <AvatarImage src={profile.avatarUrl} alt={fullName} />
                                     )}
-                                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                    <AvatarFallback className="rounded-lg">
+                                        {initials || 'U'}
+                                    </AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                     <span className="truncate font-semibold">
-                                    {user.name ? user.name : <Skeleton className="h-4 w-24"/>}
-                                     </span>
-                                    <span className="truncate text-xs">
-                                     {user.email ? user.email : <Skeleton className="h-4 w-32"/>}
+                                    <span className="truncate font-semibold">
+                                        {fullName || 'User'}
                                     </span>
+                                    <span className="truncate text-xs">{profile.email}</span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
 
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuGroup>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator/>
+                        <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <a href="/settings">
                                 <DropdownMenuItem>
-                                    <BadgeCheck/>
+                                    <BadgeCheck className="mr-2 h-4 w-4" />
                                     Account
                                 </DropdownMenuItem>
                             </a>
                         </DropdownMenuGroup>
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuItem>
-                            <LogOut/>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem 
+                            onClick={handleLogout} 
+                            className="cursor-pointer text-primary hover:bg-red-50 hover:text-purple-700"
+                        >
+                            <LogOut className="mr-2 h-4 w-4" />
                             Log out
                         </DropdownMenuItem>
                     </DropdownMenuContent>

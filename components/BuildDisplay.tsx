@@ -380,14 +380,17 @@ export default function BuildDisplay() {
             <div className="font-semibold text-xl text-center border-t-2 mt-8 p-4">
                 Total: € {totalPrice.toFixed(2)}
             </div>
-            <div className="mt-4 flex flex-row sm:flex-row gap-2 m-2 justify-center">
+            <div className="mt-4 flex flex-col sm:flex-row gap-2 m-2 justify-center">
                 <Button
                     onClick={resetConfirm}
-                    className="w-full md:w-auto text-white bg-purple-900 hover:bg-purple-950 min-w-24">Reset</Button>
-                <Button onClick={saveBuild}
-                        className="w-full md:w-auto text-white bg-purple-600 hover:bg-purple-700 min-w-40">Save</Button>
-                <Button
-                    className="w-full md:w-auto text-white bg-blue-600 hover:bg-blue-700 min-w-24">Share</Button>
+                    className="w-full sm:w-24 text-white bg-purple-900 hover:bg-purple-950">
+                    Reset
+                </Button>
+                <Button 
+                    onClick={saveBuild}
+                    className="w-full sm:w-40 text-white bg-purple-600 hover:bg-purple-700">
+                    Save Build
+                </Button>
             </div>
         </div>
     );

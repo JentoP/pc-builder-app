@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+// Create client without service role key
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       auth: {
         autoRefreshToken: false,
@@ -56,20 +57,30 @@ export async function POST(request: Request) {
       );
     }
 
-    // Insert into shared_builds table
+    // Insert build into shared_builds table
     const { data, error } = await supabase
-        .from('shared_builds')
-        .insert([{
-          build_data: build,
-          views: 0
-        }])
-        .select('id, created_at')
-        .single();
+      .from('shared_builds')
+      .insert([{
+        name: build.name,
+        build_data: {
+          processor: build.processor,
+          motherboard: build.motherboard,
+          memory: build.memory,
+          storage: build.storage,
+          cooling: build.cooling,
+          psu: build.psu,
+          case: build.case,
+          gpu: build.gpu
+        },
+        created_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
 
     if (error) {
-      console.error('Database error:', error);
+      console.error('Error inserting build:', error);
       return NextResponse.json(
-          { error: 'Failed to share build', details: error.message },
+          { error: 'Failed to create shared build' },
           { status: 500 }
       );
     }

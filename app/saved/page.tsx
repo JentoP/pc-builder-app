@@ -90,7 +90,17 @@ export default function Saved() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    buildData: build.build_data,
+                    build: {
+                        name: build.name,
+                        processor: build.build_data.processor,
+                        motherboard: build.build_data.motherboard,
+                        memory: build.build_data.memory,
+                        storage: build.build_data.storage,
+                        cooling: build.build_data.cooling,
+                        psu: build.build_data.psu,
+                        case: build.build_data.case,
+                        gpu: build.build_data.gpu
+                    }
                 }),
             });
 
@@ -98,14 +108,14 @@ export default function Saved() {
                 throw new Error('Failed to share build');
             }
 
-            const { url } = await response.json();
+            const data = await response.json();
             
             // Copy to clipboard
-            await navigator.clipboard.writeText(url);
+            await navigator.clipboard.writeText(data.url);
             toast.success('Shareable link copied to clipboard!');
             
             // Open the shared build in a new tab
-            window.open(url, '_blank');
+            window.open(data.url, '_blank');
         } catch (error) {
             console.error('Error sharing build:', error);
             toast.error('Failed to share build');

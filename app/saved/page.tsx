@@ -6,19 +6,22 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useBuild } from '@/hooks/useBuild'
+import { useProfile } from '@/hooks/fetch-user'
 
 export default function Saved() {
     const router = useRouter()
     const supabase = createClient()
     const [savedBuilds, setSavedBuilds] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
-    const { resetBuild, updatePart } = useBuild()
+    const { resetBuild } = useBuild()
+    const { profile, loading: profileLoading } = useProfile()
 
     useEffect(() => {
         const loadSavedBuilds = async () => {
+            if (profileLoading) return
+            
             try {
-                const { data: { user }, error: userError } = await supabase.auth.getUser()
-                if (userError || !user) {
+                if (!profile?.id) {
                     toast.error('You must be logged in to view saved builds')
                     router.push('/sign-in')
                     return
@@ -27,14 +30,11 @@ export default function Saved() {
                 const { data, error } = await supabase
                     .from('builds')
                     .select('*')
-                    .eq('user_id', user.id)
+                    .eq('user_id', profile.id)
                     .order('created_at', { ascending: false })
 
-                if (error) {
-                    throw error
-                }
-
-                setSavedBuilds(data)
+                if (error) throw error
+                setSavedBuilds(data || [])
             } catch (error) {
                 console.error('Error loading saved builds:', error)
                 toast.error('Failed to load saved builds')
@@ -43,22 +43,22 @@ export default function Saved() {
             }
         }
 
+
         loadSavedBuilds()
-    }, [router])
+    }, [profile?.id, profileLoading, router])
 
     const loadBuild = async (build: any) => {
         try {
-            // Reset the current build first
-            resetBuild();
-            
-            // Gets the build data from Supabase
-            const { data: { user }, error: userError } = await supabase.auth.getUser();
-            if (userError || !user) {
-                throw new Error('User not authenticated');
+            if (!profile?.id) {
+                toast.error('You must be logged in to load builds')
+                return
             }
 
+            // Reset the current build first
+            resetBuild()
+            
             // Gets the stored build data and ensure proper initialization
-            const buildData = build.build_data;
+            const buildData = build.build_data
             
             // Uses a single updateBuild with the entire build data
             const initializedBuild = {
@@ -66,30 +66,41 @@ export default function Saved() {
                 name: buildData.name || "My PC Build",
                 memory: Array.isArray(buildData.memory) ? buildData.memory : [],
                 storage: Array.isArray(buildData.storage) ? buildData.storage : [],
-            };
+            }
             
             // Saves all build data at once to localStorage
-            localStorage.setItem('build', JSON.stringify(initializedBuild));
+            localStorage.setItem('build', JSON.stringify(initializedBuild))
             
             // Redirect
-            router.push('/builder');
-            toast.success('Build loaded successfully');
+            router.push('/builder')
+            toast.success('Build loaded successfully')
         } catch (error) {
-            console.error('Error loading build:', error);
-            toast.error('Failed to load build');
+            console.error('Error loading build:', error)
+            toast.error('Failed to load build')
         }
-    };
+    }
 
-    if (loading) {
+    if (profileLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
-                <p className="text-lg">Loading saved builds...</p>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+            </div>
+        )
+    }
+
+    if (!profile?.email) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen p-4">
+                <p className="text-lg mb-4">Please sign in to view saved builds</p>
+                <Button onClick={() => router.push('/sign-in')}>
+                    Sign In
+                </Button>
             </div>
         )
     }
 
     return (
-        <div className="p-6">
+        <div className="p-6 max-w-7xl mx-auto">
             <h1 className="text-2xl font-bold mb-6">Saved Builds</h1>
 
             {savedBuilds.length === 0 ? (
@@ -100,22 +111,20 @@ export default function Saved() {
                     </Button>
                 </div>
             ) : (
-                <div className="space-y-4">
-                    {savedBuilds.map((build, index) => (
-                        <div key={index} className="bg-sidebar p-4 rounded-lg shadow-sm">
-                            <div className="flex justify-between items-start gap-4">
+                <div className="grid gap-4">
+                    {savedBuilds.map((build) => (
+                        <div key={build.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+                            <div className="flex justify-between items-start">
                                 <div>
-                                    <p className="font-medium">{build.build_data.name || `Build ${index + 1}`}</p>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <p className="text-sm text-muted-foreground">
-                                            Saved on {new Date(build.created_at).toLocaleDateString()}
-                                        </p>
-                                    </div>
+                                    <h3 className="font-semibold">{build.build_data.name || 'Unnamed Build'}</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {new Date(build.created_at).toLocaleDateString()}
+                                    </p>
                                 </div>
-                                <Button
-                                    variant="outline"
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
                                     onClick={() => loadBuild(build)}
-                                    className="hover:border-purple-700 hover:text-purple-700"
                                 >
                                     Load Build
                                 </Button>

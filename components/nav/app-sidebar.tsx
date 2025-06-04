@@ -13,16 +13,8 @@ import {
     SidebarRail
 } from "@/components/ui/sidebar"
 import {NavUser} from "@/components/nav/nav-user"
-import {useProfile} from "@/hooks/fetch-user"
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
-    const {profile, loading} = useProfile()
-
-    const user = {
-        name: profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}`.trim() : "",
-        email: profile.email || "",
-        avatar: profile.avatarUrl || "",
-    }
 
     const navMain = [
         {
@@ -76,7 +68,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
                 <NavMain items={navMain}/>
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={user}/>
+                <NavUser/>
             </SidebarFooter>
             <SidebarRail/>
         </Sidebar>

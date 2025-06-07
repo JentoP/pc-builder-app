@@ -7,12 +7,14 @@ import CoolerDetail from '@/components/parts/CoolerDetail'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { ArrowLeft } from "lucide-react";
 
 export default function CoolerDetailPage() {
     const { id } = useParams()
     const supabase = createClient()
     const [cooler, setCooler] = useState(null)
     const [loading, setLoading] = useState(true)
+    const router = useRouter();
 
     useEffect(() => {
         if (!id) return
@@ -30,7 +32,7 @@ export default function CoolerDetailPage() {
     }, [id, supabase])
 
     if (loading) {
-        return <Skeleton className="h-60 w-full rounded-lg" />
+        return <Skeleton className="h-60 w-full rounded-lg"/>
     }
 
     if (!cooler) {
@@ -38,12 +40,23 @@ export default function CoolerDetailPage() {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto space-y-6">
-            <CoolerDetail cooler={cooler} />
+        <div className="p-4 max-w-6xl mx-auto space-y-6">
+            <div className="flex items-center justify-between mb-6">
+                <Button variant="outline" size="icon" asChild>
+                    <Link href="/parts/cooling">
+                        <ArrowLeft className="h-4 w-4"/>
+                    </Link>
+                </Button>
+                <h1 className="text-3xl font-bold flex-1 text-center">
+                    Cooler Details
+                </h1>
+            </div>
+            <CoolerDetail cooler={cooler}/>
             <div className="flex justify-center">
                 <Link href="/parts/cooling" className="w-auto mt-3 px-4 py-1 rounded">
-                    <Button variant="outline" size="sm" className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white">
-                        Back to Cooling
+                    <Button variant="outline" size="sm"
+                            className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white">
+                        View All Cooling
                     </Button>
                 </Link>
             </div>

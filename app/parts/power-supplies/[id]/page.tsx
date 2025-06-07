@@ -7,12 +7,14 @@ import PowerSupplyDetail from '@/components/parts/PowerSupplyDetail'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { ArrowLeft } from "lucide-react";
 
 export default function PowerSupplyDetailPage() {
     const { id } = useParams()
     const supabase = createClient()
     const [powerSupply, setPowerSupply] = useState(null)
     const [loading, setLoading] = useState(true)
+    const router = useRouter();
 
     useEffect(() => {
         if (!id) return
@@ -30,20 +32,31 @@ export default function PowerSupplyDetailPage() {
     }, [id, supabase])
 
     if (loading) {
-        return <Skeleton className="h-60 w-full rounded-lg" />
+        return <Skeleton className="h-60 w-full rounded-lg"/>
     }
 
     if (!powerSupply) {
-        return <p className="text-center text-red-600">Power Supply not found.</p>
+        return <p className="text-center text-red-600">Power supply not found.</p>
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto space-y-6">
-            <PowerSupplyDetail psu={powerSupply} />
+        <div className="p-4 max-w-6xl mx-auto space-y-6">
+            <div className="flex items-center justify-between mb-6">
+                <Button variant="outline" size="icon" asChild>
+                    <Link href="/parts/power-supplies">
+                        <ArrowLeft className="h-4 w-4"/>
+                    </Link>
+                </Button>
+                <h1 className="text-3xl font-bold flex-1 text-center">
+                    Power Supply Details
+                </h1>
+            </div>
+            <PowerSupplyDetail psu={powerSupply}/>
             <div className="flex justify-center">
                 <Link href="/parts/power-supplies" className="w-auto mt-3 px-4 py-1 rounded">
-                    <Button variant="outline" size="sm" className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white">
-                        Back to Power Supplies
+                    <Button variant="outline" size="sm"
+                            className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white">
+                        View All Power Supplies
                     </Button>
                 </Link>
             </div>

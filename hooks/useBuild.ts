@@ -37,8 +37,25 @@ const toggleShareBuild = async (buildId: string, is_shared: boolean) => {
     return res.json();
 };
 
+const fetchSharedBuild = async (id: string) => {
+    try {
+        const res = await fetch(`/api/builds/${id}`);
+        if (!res.ok) {
+            const error = await res.json().catch(() => ({}));
+            throw new Error(error.error || 'Failed to fetch shared build');
+        }
+        const data = await res.json();
+        return data.build;
+    } catch (error) {
+        console.error('Error fetching shared build:', error);
+        throw error;
+    }
+};
+
 export function useBuild() {
     const [build, setBuild] = useState<Build>(defaultBuild);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const stored = localStorage.getItem('build');
@@ -145,13 +162,39 @@ export function useBuild() {
         toast.success('Build reset successfully');
     };
 
+    const loadSharedBuild = async (id: string) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const sharedBuild = await fetchSharedBuild(id);
+            const updatedBuild = {
+                ...defaultBuild,
+                ...sharedBuild,
+                id: null, // Reset ID to prevent overwriting the shared build
+            };
+            saveBuild(updatedBuild);
+            toast.success('Shared build loaded successfully');
+            return updatedBuild;
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load shared build';
+            setError(errorMessage);
+            toast.error(errorMessage);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         build,
+        loading,
+        error,
         updateBuild,
         clearPart,
         resetBuild,
         updatePart,
         markAsPrimaryStorage,
         toggleShareBuild,
+        loadSharedBuild,
     };
 }

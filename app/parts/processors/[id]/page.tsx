@@ -8,7 +8,6 @@ import {Skeleton} from '@/components/ui/skeleton'
 import {Button} from '@/components/ui/button'
 import Link from 'next/link'
 import {ArrowLeft} from "lucide-react";
-import {router} from "next/client";
 
 export default function ProcessorDetailPage() {
     const {id} = useParams() // get id from route params
@@ -43,10 +42,10 @@ export default function ProcessorDetailPage() {
     return (
         <div className="p-4 max-w-6xl mx-auto space-y-6">
             <div className="flex items-center justify-between mb-6">
-                <Button variant="outline" size="icon" asChild>
-                    <Link href="/saved">
-                        <ArrowLeft className="h-4 w-4"/>
-                    </Link>
+                <Button
+                    onClick={() => router.back()}
+                    variant="outline" size="icon" asChild>
+                    <ArrowLeft className="h-4 w-4"/>
                 </Button>
                 <h1 className="text-3xl font-bold flex-1 text-center">
                     Processor Details

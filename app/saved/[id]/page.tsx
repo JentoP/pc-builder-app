@@ -342,7 +342,7 @@ export default function BuildDetailPage() {
         try {
             localStorage.setItem('currentBuild', JSON.stringify(build.build_data));
             toast.success(`Build "${build.build_data.name || 'Unnamed Build'}" loaded into builder!`);
-            router.push('/');
+            router.push('/builder');
         } catch (e) {
             console.error("Error loading build to localStorage:", e);
             toast.error("Failed to load build into builder.");

@@ -46,21 +46,13 @@ export default function DashboardPage() {
                             buttonVariant="purple"
                         />
                         <DashboardCard
-                            icon={Share}
-                            title="Shared Builds"
-                            description="View and manage shared builds"
-                            buttonText="View Builds"
-                            href="/shared"
-                            buttonVariant="purple"
-                        />
-                        <DashboardCard
                             icon={RotateCcw}
                             title="Start New Build"
                             description="Reset and begin a fresh setup"
                             buttonText="Start Fresh"
                             href="/builder"
                             onClick={resetBuild}
-                            buttonVariant="default"
+                            buttonVariant="purple"
                         />
                         <DashboardCard
                             icon={LibraryBig}
@@ -75,6 +67,13 @@ export default function DashboardPage() {
                             description="Update your account details"
                             buttonText="Edit Profile"
                             href="/settings"
+                        />
+                        <DashboardCard
+                            icon={Code}
+                            title="Code Repository"
+                            description="View source code"
+                            buttonText="Source Code"
+                            href="https://github.com/JentoP/pc-builder-app"
                         />
                     </div>
                     <ComingSoon />

@@ -1,92 +1,69 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+// Define an interface for the expected request body
+interface ShareBuildRequestBody {
+  buildId: string;
+}
+
+// Define an expected type for the RPC response (assuming it's boolean)
+type ToggleBuildSharingResponse = boolean;
+
+export async function PATCH(req: Request) {
   try {
     const supabase = await createClient();
-    const { build } = await request.json();
 
-    if (!build) {
+    // Verify user is authenticated
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
       return NextResponse.json(
-          { error: 'Build data is required' },
-          { status: 400 }
-      );
-    }
-
-    // Validate required build data
-    if (!build.name || typeof build.name !== 'string') {
-      return NextResponse.json(
-          { error: 'Build name is required' },
-          { status: 400 }
-      );
-    }
-
-    // Get the current user's session
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-    if (sessionError || !session?.user) {
-      return NextResponse.json(
-          { error: 'User not authenticated' },
+          { error: 'Not authenticated' },
           { status: 401 }
       );
     }
 
-    // Check if build has at least one component
-    const hasComponents = [
-      'processor', 'motherboard', 'memory', 'storage',
-      'cooling', 'psu', 'case', 'gpu'
-    ].some(part => build[part] && (Array.isArray(build[part]) ? build[part].length > 0 : true));
+    // Type the request body
+    const { buildId } = (await req.json()) as ShareBuildRequestBody;
 
-    if (!hasComponents) {
+    if (!buildId) {
       return NextResponse.json(
-          { error: 'Build must contain at least one component' },
+          { error: 'buildId is required' },
           { status: 400 }
       );
     }
 
-    // Insert build into shared_builds table
+    // Call the RPC function and type its response
     const { data, error } = await supabase
-        .from('shared_builds')
-        .insert([{
-          name: build.name,
-          build_data: {
-            name: build.name,
-            processor: build.processor,
-            motherboard: build.motherboard,
-            memory: build.memory,
-            storage: build.storage,
-            cooling: build.cooling,
-            psu: build.psu,
-            case: build.case,
-            gpu: build.gpu
-          },
-          user_id: session.user.id,
-          created_at: new Date().toISOString(),
-          views: 0
-        }])
-        .select()
-        .single();
+        .rpc('toggle_build_sharing', {
+          id: buildId
+        })
+        .single<ToggleBuildSharingResponse>();
 
     if (error) {
-      console.error('Error inserting build:', error);
+      // Include buildId in the server log for easier debugging
+      console.error(`Database error for buildId ${buildId}:`, error.message);
       return NextResponse.json(
-          { error: 'Failed to create shared build' },
-          { status: 500 }
+          { error: error.message || 'Failed to update share status' },
+          { status: 403 } // Assuming 403 is appropriate for RPC errors like permissions
       );
     }
 
-    const shareUrl = `/shared/${data.id}`;
-
     return NextResponse.json({
-      url: shareUrl,
-      id: data.id,
-      share_url: shareUrl
+      success: true,
+      is_shared: data // data is now typed as boolean | null
     });
 
   } catch (error) {
-    console.error('Error sharing build:', error);
+    let errorMessage = 'An unexpected error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    // Log the actual error object for more details on the server
+    console.error('Error in PATCH /api/share-build:', error);
     return NextResponse.json(
-        { error: 'An unexpected error occurred while sharing the build' },
+        {
+          error: errorMessage,
+        },
         { status: 500 }
     );
   }

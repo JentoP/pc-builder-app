@@ -3,16 +3,17 @@ import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: any } }
+    context: { params: { id: string } }
 ) {
     try {
+        const { id } = context.params;
         const supabase = await createClient();
-        
+
         // Get the build
         const { data: build, error: fetchError } = await supabase
             .from('builds')
             .select('*')
-            .eq('id', params.id)
+            .eq('id', id)
             .single();
 
         if (fetchError || !build) {
@@ -23,7 +24,6 @@ export async function GET(
             );
         }
 
-        // Only check if the build is shared
         if (!build.is_shared) {
             return NextResponse.json(
                 { error: 'This build is private' },

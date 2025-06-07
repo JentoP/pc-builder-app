@@ -4,22 +4,19 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { UserProfileCard } from "@/components/user/UserProfileCard"
 import { useBuild } from "@/hooks/useBuild"
-import {Computer, LibraryBig, User, RotateCcw, Save, Code, Share} from "lucide-react"
+import { Computer, LibraryBig, User, RotateCcw, Save, Code, Share } from "lucide-react"
 import SignInWarning from "@/components/SignInWarning"
 import { useProfile } from "@/hooks/fetch-user"
 import { DashboardCard } from "@/components/dashboard/DashboardCard"
 import { ComingSoon } from "@/components/dashboard/ComingSoon"
+import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton"
 
 export default function DashboardPage() {
     const { profile, loading } = useProfile()
     const resetBuild = useBuild().resetBuild
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-            </div>
-        )
+        return <DashboardSkeleton />
     }
 
     return (
@@ -31,7 +28,7 @@ export default function DashboardPage() {
                         <UserProfileCard />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-right animate-ease-in-out animate-delay-[1000ms] animate-duration-[2000ms]">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <DashboardCard
                             icon={Computer}
                             title="Current Build"
@@ -39,7 +36,6 @@ export default function DashboardPage() {
                             buttonText="Go to Build"
                             href="/builder"
                             buttonVariant="purple"
-                            animationDelay="2500ms"
                         />
                         <DashboardCard
                             icon={Save}
@@ -48,7 +44,6 @@ export default function DashboardPage() {
                             buttonText="View Builds"
                             href="/saved"
                             buttonVariant="purple"
-                            animationDelay="3500ms"
                         />
                         <DashboardCard
                             icon={Share}
@@ -57,7 +52,6 @@ export default function DashboardPage() {
                             buttonText="View Builds"
                             href="/shared"
                             buttonVariant="purple"
-                            animationDelay="4000ms"
                         />
                         <DashboardCard
                             icon={RotateCcw}
@@ -67,7 +61,6 @@ export default function DashboardPage() {
                             href="/builder"
                             onClick={resetBuild}
                             buttonVariant="default"
-                            animationDelay="3000ms"
                         />
                         <DashboardCard
                             icon={LibraryBig}
@@ -75,16 +68,13 @@ export default function DashboardPage() {
                             description="Read usage tips and guides"
                             buttonText="Read Docs"
                             href="/tutorial"
-                            animationDelay="4000ms"
                         />
-
                         <DashboardCard
                             icon={User}
                             title="Edit Profile"
                             description="Update your account details"
                             buttonText="Edit Profile"
                             href="/settings"
-                            animationDelay="4500ms"
                         />
                     </div>
                     <ComingSoon />

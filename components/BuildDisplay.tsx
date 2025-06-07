@@ -12,7 +12,7 @@ import {getNextPartType} from '@/utils/compatibility'
 import {Blocks} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import { useProfile } from "@/hooks/fetch-user"
-import { Share2 } from 'lucide-react';
+// Removed unused import of Share2
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 

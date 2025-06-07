@@ -11,7 +11,7 @@ import {useRouter} from 'next/navigation'
 import {getNextPartType} from '@/utils/compatibility'
 import {Blocks} from "lucide-react";
 import {Input} from "@/components/ui/input";
-import { useProfile } from "@/hooks/fetch-user"
+import { useProfile } from "@/hooks/fetchUser"
 // Removed unused import of Share2
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -20,6 +20,9 @@ const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
 ];
 
+/**
+ * Maps part types to their corresponding route paths
+ */
 const partRoutes: Record<string, string> = {
     processor: 'parts/processors',
     motherboard: 'parts/motherboards',
@@ -31,6 +34,9 @@ const partRoutes: Record<string, string> = {
     gpu: 'parts/graphic-cards',
 }
 
+/**
+ * Maps part types to their display names
+ */
 const displayNames: Record<string, string> = {
     processor: 'Processor',
     motherboard: 'Motherboard',
@@ -42,19 +48,48 @@ const displayNames: Record<string, string> = {
     gpu: 'Graphic Card',
 }
 
+/**
+ * BuildDisplay Component
+ * 
+ * A component that displays and manages the PC build configuration.
+ * Allows users to view, add, remove, and configure PC parts in their build.
+ * Handles saving builds, calculating total price, and managing part selection.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered BuildDisplay component
+ */
 export default function BuildDisplay() {
-    const {build, clearPart, resetBuild, updatePart} = useBuild();
+    // State and hooks initialization
+    const {build, updatePart, clearPart, resetBuild} = useBuild();
     const router = useRouter();
-    const { profile, loading } = useProfile();
-    const [buildName, setBuildName] = useState(build.name);
+    const {profile, loading: profileLoading} = useProfile();
+    const [buildName, setBuildName] = useState(build.name || 'My PC Build');
+    const [isLoading, setIsLoading] = useState(true);
     const supabase = createClient();
     const [localIsSharedPreference, setLocalIsSharedPreference] = useState<boolean>(false);
 
     useEffect(() => {
-        setBuildName(build.name || "My PC Build");
-    }, [build.name]);
+        console.log('Current build state:', build);
+        // Update build name when build changes
+        if (build.name && build.name !== buildName) {
+            setBuildName(build.name);
+        }
+    }, [build]);
 
-    if (loading) {
+    useEffect(() => {
+        // Set loading state based on profile loading and initial build load
+        setIsLoading(profileLoading || !build);
+    }, [profileLoading, build]);
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center p-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div>
+            </div>
+        );
+    }
+
+    if (profileLoading) {
         return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div></div>;
     }
 
@@ -87,11 +122,16 @@ export default function BuildDisplay() {
         }
     }
 
+    /**
+     * Handles build name changes
+     * @param {React.ChangeEvent<HTMLInputElement>} e - The change event
+     */
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBuildName(e.target.value);
         updatePart('name', e.target.value);
     }
 
+    // Calculate total price of all components in the build
     const totalPrice =
         (Array.isArray(build.memory)
             ? build.memory.reduce((sum, m) => sum + (m?.price || 0), 0)
@@ -106,6 +146,10 @@ export default function BuildDisplay() {
             return sum + (part?.price || 0);
         }, 0);
 
+    /**
+     * Sets the primary storage device
+     * @param {number} index - The index of the storage device to set as primary
+     */
     const setPrimaryStorage = (index: number) => {
         if (!Array.isArray(build.storage)) return;
         const updated = [...build.storage];
@@ -114,14 +158,26 @@ export default function BuildDisplay() {
         updatePart('storage', updated);
     }
 
+    /**
+     * Handles part selection click
+     * @param {React.MouseEvent} e - The click event
+     * @param {string} route - The route to navigate to
+     */
     const handleSelectClick = (e: React.MouseEvent, route: string) => {
         e.preventDefault();
+        // Close any open dialogs
         document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        // Navigate after a short delay to ensure dialogs are closed
         setTimeout(() => {
             window.location.href = `/${route}`;
         }, 100);
     };
 
+    /**
+     * Renders a part component
+     * @param {string} key - The part type key
+     * @returns {JSX.Element} The rendered part component
+     */
     const renderPart = (key: string) => {
         const part = build[key as keyof typeof build];
         const route = partRoutes[key];
@@ -170,6 +226,10 @@ export default function BuildDisplay() {
         );
     };
 
+    /**
+     * Renders the memory components
+     * @returns {JSX.Element[]} The rendered memory components
+     */
     const renderMemory = () => {
         if (Array.isArray(build.memory) && build.memory.length > 0) {
             return build.memory.map((ram, index) => (

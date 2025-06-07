@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { UserProfileCard } from "@/components/user/UserProfileCard"
 import { useBuild } from "@/hooks/useBuild"
-import { Computer, LibraryBig, User, RotateCcw, Save, Code, Share } from "lucide-react"
+import { Computer, LibraryBig, User, RotateCcw, Save, Code } from "lucide-react"
 import SignInWarning from "@/components/SignInWarning"
 import { useProfile } from "@/hooks/fetch-user"
 import { DashboardCard } from "@/components/dashboard/DashboardCard"

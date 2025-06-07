@@ -18,7 +18,7 @@ import {
     HardDrive
 } from 'lucide-react';
 import {toast} from 'sonner';
-import {useProfile} from '@/hooks/fetch-user';
+import {useProfile} from '@/hooks/fetchUser';
 import {Switch} from '@/components/ui/switch';
 import {Label} from '@/components/ui/label';
 import Link from "next/link";
@@ -289,6 +289,30 @@ export default function BuildDetailPage() {
 
     const totalPrice = calculateTotalPrice();
 
+    const handleLoadBuild = () => {
+        if (!build || !build.build_data) {
+            toast.error("Build data is not available to load.");
+            return;
+        }
+        try {
+            // Transform the build data to match the expected structure in useBuild
+            const buildToSave = {
+                ...build.build_data,
+                name: build.build_data.name || 'My PC Build',
+                // Ensure memory and storage are arrays
+                memory: Array.isArray(build.build_data.memory) ? build.build_data.memory : [],
+                storage: Array.isArray(build.build_data.storage) ? build.build_data.storage : [],
+            };
+            
+            localStorage.setItem('build', JSON.stringify(buildToSave));
+            toast.success(`Build "${build.build_data.name || 'Unnamed Build'}" loaded into builder!`);
+            router.push('/builder');
+        } catch (e) {
+            console.error("Error loading build to localStorage:", e);
+            toast.error("Failed to load build into builder.");
+        }
+    };
+
     if (loading && !build) {
         return (
             <div className="container mx-auto p-4 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
@@ -334,21 +358,6 @@ export default function BuildDetailPage() {
 
     const isOwner = profile && profile.id === build.user_id;
 
-    const handleLoadBuild = () => {
-        if (!build || !build.build_data) {
-            toast.error("Build data is not available to load.");
-            return;
-        }
-        try {
-            localStorage.setItem('currentBuild', JSON.stringify(build.build_data));
-            toast.success(`Build "${build.build_data.name || 'Unnamed Build'}" loaded into builder!`);
-            router.push('/builder');
-        } catch (e) {
-            console.error("Error loading build to localStorage:", e);
-            toast.error("Failed to load build into builder.");
-        }
-    };
-
     return (
         <div className="container mx-auto p-4 max-w-6xl">
             <div className="flex items-center justify-between mb-6">
@@ -363,11 +372,21 @@ export default function BuildDetailPage() {
             </div>
 
 
-            {/* Owner actions section */}
             <h2 className="text-xl font-semibold mt-8 mb-2 text-primary flex items-center justify-center">
-                <Settings2 className="h-5 w-5 mr-2"/>
-                Actions
+                <Computer className="h-5 w-5 mr-2"/>
+                Summary
             </h2>
+
+            {/* Public Build Notice */}
+            {!isOwner && build.is_shared && (
+                <div
+                    className="mt-8 text-center bg-blue-100 dark:bg-blue-900/30 border-l-4 border-blue-500 text-blue-700 dark:text-blue-300 p-4 rounded">
+                    <p className="font-bold">Public Build</p>
+                    <p>You are viewing a shared build. You can inspect its components.</p>
+                </div>
+            )}
+
+            {/* Owner actions section */}
             <div className="shadow rounded-lg p-4 border mb-6 bg-sidebar">
                 <div className="flex flex-wrap justify-center gap-2">
                     {/* Publicly Shared Toggle */}
@@ -425,23 +444,9 @@ export default function BuildDetailPage() {
                 </div>
             </div>
 
-
-            {/* Public Build Notice */}
-            {!isOwner && build.is_shared && (
-                <div
-                    className="mt-8 text-center bg-blue-100 dark:bg-blue-900/30 border-l-4 border-blue-500 text-blue-700 dark:text-blue-300 p-4 rounded">
-                    <p className="font-bold">Public Build</p>
-                    <p>You are viewing a shared build. You can inspect its components.</p>
-                </div>
-            )}
-
-
             {totalPrice > 0 && (
                 <>
-                    <h2 className="text-xl font-semibold mt-8 mb-2 text-primary flex items-center justify-center">
-                        <Computer className="h-5 w-5 mr-2"/>
-                        Summary
-                    </h2>
+
                     <div className="shadow rounded-lg p-4 border mb-6 bg-sidebar">
                         <div className="flex flex-col gap-2 text-sm text-muted-foreground mb-4">
                             <div className="flex justify-between items-center">

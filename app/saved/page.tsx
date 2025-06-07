@@ -7,7 +7,7 @@ import {Switch} from '@/components/ui/switch'; // ✅ Import the Switch
 import Link from 'next/link';
 import {ArrowLeft, Clock, Trash2, Loader2, Save, Eye} from 'lucide-react';
 import {toast} from 'sonner';
-import {useProfile} from '@/hooks/fetch-user';
+import {useProfile} from '@/hooks/fetchUser';
 
 type SavedBuild = {
     id: string;

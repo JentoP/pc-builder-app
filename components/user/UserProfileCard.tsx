@@ -1,6 +1,6 @@
 "use client";
 
-import { useProfile } from "@/hooks/fetch-user";
+import { useProfile } from "@/hooks/fetchUser";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 

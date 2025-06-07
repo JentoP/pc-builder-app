@@ -13,8 +13,8 @@ import {Blocks} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import { useProfile } from "@/hooks/fetch-user"
 import { Share2 } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { Copy } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
@@ -48,9 +48,7 @@ export default function BuildDisplay() {
     const { profile, loading } = useProfile();
     const [buildName, setBuildName] = useState(build.name);
     const supabase = createClient();
-    const [isSharing, setIsSharing] = useState(false);
-    const [shareUrl, setShareUrl] = useState('');
-    const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+    const [localIsSharedPreference, setLocalIsSharedPreference] = useState<boolean>(false);
 
     useEffect(() => {
         setBuildName(build.name || "My PC Build");
@@ -77,6 +75,7 @@ export default function BuildDisplay() {
                     ...build,
                     name: buildName
                 },
+                is_shared: localIsSharedPreference,
             },
         ]);
 
@@ -87,50 +86,6 @@ export default function BuildDisplay() {
             router.push('/saved');
         }
     }
-
-    const handleShareBuild = async () => {
-        if (!profile?.email) {
-            toast.warning("You must be logged in to share a build.");
-            return;
-        }
-
-        setIsSharing(true);
-        try {
-            const response = await fetch('/api/share-build', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    build: {
-                        ...build,
-                        name: buildName
-                    } 
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to share build');
-            }
-
-            const data = await response.json();
-            setShareUrl(data.share_url);
-            setIsShareDialogOpen(true);
-            toast.success("Build shared successfully!");
-        } catch (error) {
-            console.error('Error sharing build:', error);
-            toast.error('Failed to share build');
-        } finally {
-            setIsSharing(false);
-        }
-    };
-
-    const copyToClipboard = () => {
-        if (!shareUrl) return;
-        navigator.clipboard.writeText(shareUrl);
-        toast.success('Link copied to clipboard!');
-    };
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBuildName(e.target.value);
@@ -290,7 +245,7 @@ export default function BuildDisplay() {
 
     const renderNextPartButton = () => {
         const nextPart = getNextPartType(build);
-        
+
         if (!nextPart) {
             return (
                 <div className="text-blue-600">
@@ -421,73 +376,36 @@ export default function BuildDisplay() {
                     </div>
                 </div>
             )}
-            {/*<div className="mt-4">*/}
-            {/*    <h3 className="text-lg font-semibold px-2">Extras</h3>*/}
-            {/*    <div className="flex flex-col gap-2 px-2">*/}
-            {/*    </div>*/}
-            {/*</div>*/}
             <div className="font-semibold text-xl text-center border-t-2 mt-8 p-4">
                 Total: € {totalPrice.toFixed(2)}
             </div>
-            <div className="mt-4 flex flex-col sm:flex-row gap-2 m-2 justify-center">
-                <Button 
+
+            <div className="mt-4 flex flex-col sm:flex-row gap-4 m-2 justify-center">
+                <div className="flex items-center justify-center space-x-2">
+                    <Label htmlFor="share-preference-toggle" className="font-medium">
+                        Make public
+                    </Label>
+                    <Switch
+                        id="share-preference-toggle"
+                        checked={localIsSharedPreference}
+                        onCheckedChange={setLocalIsSharedPreference}
+                        disabled={!profile?.email}
+                        aria-label="Toggle build sharing preference"
+                    />
+                </div>
+                <Button
                     onClick={resetConfirm}
                     className="w-full sm:w-24 text-white bg-purple-900 hover:bg-purple-950">
                     Reset
                 </Button>
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <Button 
+                    <Button
                         onClick={saveBuild}
                         className="w-full sm:w-24 text-white bg-purple-600 hover:bg-purple-700">
                         Save
                     </Button>
-                    <Button 
-                        onClick={handleShareBuild}
-                        disabled={isSharing}
-                        className="w-full sm:w-24 text-white bg-blue-600 hover:bg-blue-700 gap-2">
-                        {isSharing ? (
-                            <svg className="animate-spin -ml-1 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        ) : (
-                            <Share2 size={16} />
-                        )}
-                        Share
-                    </Button>
                 </div>
             </div>
-
-            <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
-                <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                        <DialogTitle>Share Your Build</DialogTitle>
-                        <DialogDescription>
-                            Share this link with others to show them your build!
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex items-center space-x-2">
-                        <div className="grid flex-1 gap-2">
-                            <Input
-                                value={shareUrl}
-                                readOnly
-                                className="font-mono text-sm"
-                            />
-                        </div>
-                        <Button type="submit" size="sm" className="px-3" onClick={copyToClipboard}>
-                            <span className="sr-only">Copy</span>
-                            <Copy className="h-4 w-4" />
-                        </Button>
-                    </div>
-                    <DialogFooter className="sm:justify-start">
-                        <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                                Close
-                            </Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
         </div>
     );
 }

@@ -37,44 +37,39 @@ const toggleShareBuild = async (buildId: string, is_shared: boolean) => {
     return res.json();
 };
 
-const fetchSharedBuild = async (id: string) => {
-    try {
-        const res = await fetch(`/api/builds/${id}`);
-        if (!res.ok) {
-            const error = await res.json().catch(() => ({}));
-            throw new Error(error.error || 'Failed to fetch shared build');
-        }
-        const data = await res.json();
-        return data.build;
-    } catch (error) {
-        console.error('Error fetching shared build:', error);
-        throw error;
-    }
-};
-
 export function useBuild() {
     const [build, setBuild] = useState<Build>(defaultBuild);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const stored = localStorage.getItem('build');
-        if (stored) {
+        const loadBuild = () => {
             try {
-                const parsed = JSON.parse(stored);
-                const initializedBuild = {
-                    ...defaultBuild,
-                    ...parsed,
-                    memory: Array.isArray(parsed.memory) ? parsed.memory : [],
-                    storage: Array.isArray(parsed.storage) ? parsed.storage : [],
-                };
-                console.log('Loading build from localStorage:', initializedBuild);
-                setBuild(initializedBuild);
+                const stored = localStorage.getItem('build');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    const initializedBuild = {
+                        ...defaultBuild,
+                        ...parsed,
+                        memory: Array.isArray(parsed.memory) ? parsed.memory : [],
+                        storage: Array.isArray(parsed.storage) ? parsed.storage : [],
+                    };
+                    setBuild(initializedBuild);
+                }
             } catch (error) {
-                console.error('Error parsing stored build:', error);
+                console.error("Error loading build from localStorage:", error);
                 localStorage.removeItem('build');
             }
-        }
+        };
+
+        loadBuild();
+
+        const handleStorageChange = (e: StorageEvent) => {
+            if (e.key === 'build') {
+                loadBuild();
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
     }, []);
 
     const saveBuild = (updated: Build) => {
@@ -117,8 +112,16 @@ export function useBuild() {
     };
 
     const updatePart = (type: keyof Build, value: any) => {
-        const updated = { ...build, [type]: value };
-        saveBuild(updated);
+        setBuild(prevBuild => {
+            const updated = { 
+                ...prevBuild, 
+                [type]: value,
+                memory: Array.isArray(prevBuild.memory) ? prevBuild.memory : [],
+                storage: Array.isArray(prevBuild.storage) ? prevBuild.storage : []
+            };
+            localStorage.setItem('build', JSON.stringify(updated));
+            return updated;
+        });
     };
 
     const clearPart = (type: string, id?: number | string) => {
@@ -162,39 +165,13 @@ export function useBuild() {
         toast.success('Build reset successfully');
     };
 
-    const loadSharedBuild = async (id: string) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const sharedBuild = await fetchSharedBuild(id);
-            const updatedBuild = {
-                ...defaultBuild,
-                ...sharedBuild,
-                id: null, // Reset ID to prevent overwriting the shared build
-            };
-            saveBuild(updatedBuild);
-            toast.success('Shared build loaded successfully');
-            return updatedBuild;
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Failed to load shared build';
-            setError(errorMessage);
-            toast.error(errorMessage);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return {
         build,
-        loading,
-        error,
         updateBuild,
         clearPart,
         resetBuild,
         updatePart,
         markAsPrimaryStorage,
         toggleShareBuild,
-        loadSharedBuild,
     };
 }

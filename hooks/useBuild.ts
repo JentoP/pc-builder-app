@@ -1,8 +1,9 @@
-import {useState, useEffect} from 'react';
-import {toast} from 'sonner';
-import {addPartToBuild, getCompatibilityConflicts, resolveConflicts} from '@/utils/compatibility';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { addPartToBuild, getCompatibilityConflicts, resolveConflicts } from '@/utils/compatibility';
 
 export type Build = {
+    id: any;
     name?: string;
     processor?: any;
     motherboard?: any;
@@ -15,6 +16,7 @@ export type Build = {
 };
 
 const defaultBuild: Build = {
+    id: null,
     name: "My PC Build",
     processor: null,
     motherboard: null,
@@ -26,18 +28,43 @@ const defaultBuild: Build = {
     cooling: null,
 };
 
+const toggleShareBuild = async (buildId: string, is_shared: boolean) => {
+    const res = await fetch('/api/share-build', {
+        method: 'PATCH',
+        body: JSON.stringify({ buildId, is_shared }),
+        headers: { 'Content-Type': 'application/json' },
+    });
+    return res.json();
+};
+
+const fetchSharedBuild = async (id: string) => {
+    try {
+        const res = await fetch(`/api/builds/${id}`);
+        if (!res.ok) {
+            const error = await res.json().catch(() => ({}));
+            throw new Error(error.error || 'Failed to fetch shared build');
+        }
+        const data = await res.json();
+        return data.build;
+    } catch (error) {
+        console.error('Error fetching shared build:', error);
+        throw error;
+    }
+};
+
 export function useBuild() {
     const [build, setBuild] = useState<Build>(defaultBuild);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const stored = localStorage.getItem('build');
         if (stored) {
             try {
                 const parsed = JSON.parse(stored);
-                // Ensure all part arrays are properly initialized
                 const initializedBuild = {
-                    ...defaultBuild,  // Start with default values
-                    ...parsed,        // Override with stored values
+                    ...defaultBuild,
+                    ...parsed,
                     memory: Array.isArray(parsed.memory) ? parsed.memory : [],
                     storage: Array.isArray(parsed.storage) ? parsed.storage : [],
                 };
@@ -45,7 +72,7 @@ export function useBuild() {
                 setBuild(initializedBuild);
             } catch (error) {
                 console.error('Error parsing stored build:', error);
-                localStorage.removeItem('build'); // Clear invalid build data
+                localStorage.removeItem('build');
             }
         }
     }, []);
@@ -59,7 +86,7 @@ export function useBuild() {
     const updateBuild = (type: keyof Build, part: any, force = false) => {
         console.log('Attempting to add:', { type, part });
         console.log('Current build state:', build);
-        
+
         const tentativeBuild = addPartToBuild(build, type, part);
         console.log('Tentative build state:', tentativeBuild);
 
@@ -73,19 +100,21 @@ export function useBuild() {
                     label: 'Add anyway',
                     onClick: () => {
                         const buildWithoutConflicts = resolveConflicts(build, conflicts);
-                        const finalBuild = type === 'memory' 
-                            ? buildWithoutConflicts 
+                        const finalBuild = type === 'memory'
+                            ? buildWithoutConflicts
                             : addPartToBuild(buildWithoutConflicts, type, part);
                         console.log('Final build after force add:', finalBuild);
                         saveBuild(finalBuild);
-                        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} added with conflicts resolved`);                    },
+                        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} added with conflicts resolved`);
+                    },
                 },
             });
             return;
         }
         saveBuild(tentativeBuild);
         console.log('Build successfully updated:', tentativeBuild);
-        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} successfully added`);};
+        toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} successfully added`);
+    };
 
     const updatePart = (type: keyof Build, value: any) => {
         const updated = { ...build, [type]: value };
@@ -97,13 +126,10 @@ export function useBuild() {
 
         if (type === 'storage') {
             if (typeof id === 'number') {
-                // Handle array index removal
                 updated.storage = (updated.storage || []).filter((_: any, i: number) => i !== id);
             } else {
-                // Handle _uid removal
                 updated.storage = (updated.storage || []).filter(s => s._uid !== id);
             }
-            // If removing primary storage, update the array structure
             if (updated.storage?.length > 0) {
                 const [primary, ...additional] = updated.storage;
                 updated.storage = [primary, ...additional];
@@ -136,12 +162,39 @@ export function useBuild() {
         toast.success('Build reset successfully');
     };
 
+    const loadSharedBuild = async (id: string) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const sharedBuild = await fetchSharedBuild(id);
+            const updatedBuild = {
+                ...defaultBuild,
+                ...sharedBuild,
+                id: null, // Reset ID to prevent overwriting the shared build
+            };
+            saveBuild(updatedBuild);
+            toast.success('Shared build loaded successfully');
+            return updatedBuild;
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load shared build';
+            setError(errorMessage);
+            toast.error(errorMessage);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         build,
+        loading,
+        error,
         updateBuild,
         clearPart,
         resetBuild,
         updatePart,
         markAsPrimaryStorage,
+        toggleShareBuild,
+        loadSharedBuild,
     };
 }

@@ -7,12 +7,14 @@ import MemoryDetail from '@/components/parts/MemoryDetail'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { ArrowLeft } from "lucide-react";
 
 export default function MemoryDetailPage() {
     const { id } = useParams()
     const supabase = createClient()
     const [memory, setMemory] = useState(null)
     const [loading, setLoading] = useState(true)
+    const router = useRouter();
 
     useEffect(() => {
         if (!id) return
@@ -30,7 +32,7 @@ export default function MemoryDetailPage() {
     }, [id, supabase])
 
     if (loading) {
-        return <Skeleton className="h-60 w-full rounded-lg" />
+        return <Skeleton className="h-60 w-full rounded-lg"/>
     }
 
     if (!memory) {
@@ -38,12 +40,23 @@ export default function MemoryDetailPage() {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto space-y-6">
-            <MemoryDetail ram={memory} />
+        <div className="p-4 max-w-6xl mx-auto space-y-6">
+            <div className="flex items-center justify-between mb-6">
+                <Button
+                    onClick={() => router.back()}
+                    variant="outline" size="icon" asChild>
+                    <ArrowLeft className="h-4 w-4"/>
+                </Button>
+                <h1 className="text-3xl font-bold flex-1 text-center">
+                    Memory Details
+                </h1>
+            </div>
+            <MemoryDetail memory={memory}/>
             <div className="flex justify-center">
-                <Link href="/parts/memory" className="w-auto mt-3 px-4 py-1 rounded text-blue-600 hover:border-blue-700 hover:text-blue-700">
-                    <Button variant="outline" size="sm">
-                        Back to Memory
+                <Link href="/parts/memory" className="w-auto mt-3 px-4 py-1 rounded">
+                    <Button variant="outline" size="sm"
+                            className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white">
+                        View All Memory
                     </Button>
                 </Link>
             </div>

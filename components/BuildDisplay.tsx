@@ -12,6 +12,9 @@ import {getNextPartType} from '@/utils/compatibility'
 import {Blocks} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import { useProfile } from "@/hooks/fetch-user"
+// Removed unused import of Share2
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
@@ -45,6 +48,7 @@ export default function BuildDisplay() {
     const { profile, loading } = useProfile();
     const [buildName, setBuildName] = useState(build.name);
     const supabase = createClient();
+    const [localIsSharedPreference, setLocalIsSharedPreference] = useState<boolean>(false);
 
     useEffect(() => {
         setBuildName(build.name || "My PC Build");
@@ -71,13 +75,13 @@ export default function BuildDisplay() {
                     ...build,
                     name: buildName
                 },
+                is_shared: localIsSharedPreference,
             },
         ]);
 
         if (error) {
             toast.error("Failed to save build.");
         } else {
-            resetBuild();
             toast.success("Build saved successfully!");
             router.push('/saved');
         }
@@ -241,7 +245,7 @@ export default function BuildDisplay() {
 
     const renderNextPartButton = () => {
         const nextPart = getNextPartType(build);
-        
+
         if (!nextPart) {
             return (
                 <div className="text-blue-600">
@@ -372,25 +376,35 @@ export default function BuildDisplay() {
                     </div>
                 </div>
             )}
-            {/*<div className="mt-4">*/}
-            {/*    <h3 className="text-lg font-semibold px-2">Extras</h3>*/}
-            {/*    <div className="flex flex-col gap-2 px-2">*/}
-            {/*    </div>*/}
-            {/*</div>*/}
             <div className="font-semibold text-xl text-center border-t-2 mt-8 p-4">
                 Total: € {totalPrice.toFixed(2)}
             </div>
-            <div className="mt-4 flex flex-col sm:flex-row gap-2 m-2 justify-center">
+
+            <div className="mt-4 flex flex-col sm:flex-row gap-4 m-2 justify-center">
+                <div className="flex items-center justify-center space-x-2">
+                    <Label htmlFor="share-preference-toggle" className="font-medium">
+                        Make public
+                    </Label>
+                    <Switch
+                        id="share-preference-toggle"
+                        checked={localIsSharedPreference}
+                        onCheckedChange={setLocalIsSharedPreference}
+                        disabled={!profile?.email}
+                        aria-label="Toggle build sharing preference"
+                    />
+                </div>
                 <Button
                     onClick={resetConfirm}
                     className="w-full sm:w-24 text-white bg-purple-900 hover:bg-purple-950">
                     Reset
                 </Button>
-                <Button 
-                    onClick={saveBuild}
-                    className="w-full sm:w-40 text-white bg-purple-600 hover:bg-purple-700">
-                    Save Build
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Button
+                        onClick={saveBuild}
+                        className="w-full sm:w-24 text-white bg-purple-600 hover:bg-purple-700">
+                        Save
+                    </Button>
+                </div>
             </div>
         </div>
     );

@@ -11,10 +11,10 @@ type Cooler = {
     id: string
     name: string
     manufacturer: string
-    type: string        // e.g., Air, Liquid, AIO
+    type: string
     socket_compatibility: string
-    fan_rpm?: number    // optional
-    noise_level?: number // optional, in dB
+    fan_rpm?: number
+    noise_level?: number
     price: number
     image_url?: string | null
 }

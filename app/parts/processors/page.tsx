@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import ProcessorCard from '@/components/parts/ProcessorCard'
 import { useBuild } from '@/hooks/useBuild'
-import {toast} from "sonner";
+import { ArrowBigDownDash } from 'lucide-react'
 
 type Processor = {
     id: string
@@ -25,6 +25,7 @@ export default function ProcessorsPage() {
     const [filtered, setFiltered] = useState<Processor[]>([])
     const [loading, setLoading] = useState(true)
     const [socketFilter, setSocketFilter] = useState('All')
+    const [itemsToShow, setItemsToShow] = useState(9)
     const supabase = createClient()
     const { updateBuild } = useBuild();
 
@@ -46,6 +47,7 @@ export default function ProcessorsPage() {
 
     const handleFilterChange = (socket: string) => {
         setSocketFilter(socket)
+        setItemsToShow(8)
         if (socket === 'All') {
             setFiltered(processors)
         } else {
@@ -86,11 +88,22 @@ export default function ProcessorsPage() {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filtered.map(cpu => (
-                        <ProcessorCard key={cpu.id} cpu={cpu} onAddToBuild={handleAddToBuild} />
-                    ))}
-                </div>
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+                        {filtered.slice(0, itemsToShow).map(cpu => (
+                            <ProcessorCard key={cpu.id} cpu={cpu} onAddToBuild={handleAddToBuild} />
+                        ))}
+                    </div>
+                    {itemsToShow < filtered.length && (
+                        <div className="flex justify-center mt-6">
+                            <button
+                                onClick={() => setItemsToShow(prev => prev + 9)}
+                                className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white px-6 py-2 rounded-md transition-colors">
+                                <ArrowBigDownDash />
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     )

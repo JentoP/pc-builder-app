@@ -1,44 +1,61 @@
 import { Build } from '@/hooks/useBuild';
 import {toast} from "sonner";
 
+// Type definition for compatibility conflicts
 export type Conflict = {
-    partType: keyof Build;
-    partId?: number | string;
-    reason: string;
+    partType: keyof Build;  // The type of PC part causing the conflict
+    partId?: number | string;  // Optional ID of the specific part
+    reason: string;  // Human-readable explanation of the conflict
 };
 
+/**
+ * Resolves conflicts by removing incompatible parts from the build
+ * @param build - Current build state
+ * @param conflicts - Array of conflict objects to resolve
+ * @returns Updated build with conflicts resolved
+ */
 export function resolveConflicts(build: Build, conflicts: Conflict[]): Build {
     const updated: Build = { ...build };
 
     for (const conflict of conflicts) {
         const type = conflict.partType;
         if (type === 'storage') {
+            // Remove specific storage device by ID
             updated.storage = (updated.storage || []).filter(s => s.id !== conflict.partId);
         } else if (type === 'memory') {
+            // Clear all memory modules
             updated.memory = [];
         } else {
+            // Clear the incompatible part
             updated[type] = null;
         }
     }
     return updated;
 }
 
+/**
+ * Adds a part to the build, handling special cases for storage and memory
+ * @param build - Current build state
+ * @param type - Type of part to add
+ * @param part - Part data to add
+ * @returns Updated build with the new part
+ */
 export function addPartToBuild(build: Build, type: keyof Build, part: any): Build {
     const updated = { ...build };
 
     if (type === 'storage') {
+        // Add storage with unique ID
         updated.storage = [...(updated.storage || []), { ...part, _uid: crypto.randomUUID() }];
     } else if (type === 'memory') {
         const currentMemory = updated.memory || [];
         const motherboard = build.motherboard;
-        const maxModules = motherboard?.memory_slots || 4;
+        const maxModules = motherboard?.memory_ports || 4;
 
-        // Check if we would exceed max modules
+        // Validate memory module count
         if (currentMemory.length + 1 > maxModules) {
             toast.error(`Cannot add more memory modules. Maximum ${maxModules} modules allowed.`);
         }
 
-        // Add the new memory module
         updated.memory = [...currentMemory, part];
     } else {
         updated[type] = part;
@@ -47,9 +64,17 @@ export function addPartToBuild(build: Build, type: keyof Build, part: any): Buil
     return updated;
 }
 
+/**
+ * Checks for compatibility issues when adding a new part to the build
+ * @param type - Type of part being added
+ * @param part - Part data being added
+ * @param current - Current build state
+ * @returns Array of conflict objects if any incompatibilities found
+ */
 export function getCompatibilityConflicts(type: keyof Build, part: any, current: Build): Conflict[] {
     const conflicts: Conflict[] = [];
 
+    // Check CPU-Motherboard socket compatibility
     if (type === 'processor') {
         const newSocket = part?.socket || null;
         const mbSocket = current.motherboard?.socket || null;
@@ -61,7 +86,9 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
     }
 
+    // Check motherboard-related compatibilities
     if (type === 'motherboard') {
+        // Socket compatibility with CPU
         const newSocket = part?.socket || null;
         const cpuSocket = current.processor?.socket || null;
         if (cpuSocket && newSocket !== cpuSocket) {
@@ -71,18 +98,35 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             });
         }
 
-        // Check RAM compatibility with motherboard
-        const motherboardRamType = part?.memory_type;
+        // RAM type compatibility
+        const motherboardRamTypes = (part?.memory_type || '').split(',').map((t: string) => t.trim().toUpperCase());
         for (const ram of current.memory || []) {
-            if (ram.type && motherboardRamType && ram.type !== motherboardRamType) {
-                conflicts.push({
-                    partType: 'memory',
-                    partId: ram.id,
-                    reason: `RAM type (${ram.type}) is not compatible with the selected motherboard (supports ${motherboardRamType}).`,
-                });
+            if (ram.type) {
+                const ramType = ram.type.trim().toUpperCase();
+                if (motherboardRamTypes.length > 0 && !motherboardRamTypes.includes(ramType)) {
+                    conflicts.push({
+                        partType: 'memory',
+                        partId: ram.id,
+                        reason: `RAM type (${ram.type}) is not compatible with the selected motherboard (supports ${part.memory_type}).`,
+                    });
+                }
+            }
+            
+            // RAM speed compatibility
+            if (ram.speed && part.memory_speed) {
+                const ramSpeed = parseInt(ram.speed);
+                const maxSpeed = parseInt(part.memory_speed);
+                if (ramSpeed > maxSpeed) {
+                    conflicts.push({
+                        partType: 'memory',
+                        partId: ram.id,
+                        reason: `RAM speed (${ram.speed}MHz) exceeds motherboard's maximum supported speed (${part.memory_speed}MHz).`,
+                    });
+                }
             }
         }
 
+        // Case form factor compatibility
         const newFormFactor = part?.form_factor?.trim().toUpperCase();
         const caseFormFactors = current.case?.mobo_form_factor?.split(',').map((f: string) => f.trim().toUpperCase()) || [];
         if (current.case && !caseFormFactors.includes(newFormFactor)) {
@@ -92,11 +136,13 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             });
         }
 
+        // Storage port limits
         const nvmeLimit = part?.nvme_ports || 0;
         const sataLimit = part?.sata_ports || 0;
         const testStorage = [...(current.storage || [])];
         const nvmeCount = testStorage.filter((s: any) => s.interface === 'NVMe').length;
         const sataCount = testStorage.filter((s: any) => s.interface === 'SATA').length;
+        
         if (nvmeCount > nvmeLimit) {
             conflicts.push({
                 partType: 'storage',
@@ -110,8 +156,8 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             });
         }
 
-        // Add memory module count validation
-        const maxModules = part?.memory_slots || 4;
+        // Memory module count validation
+        const maxModules = part?.memory_ports || 4;
         const currentMemory = current.memory || [];
         if (currentMemory.length > maxModules) {
             conflicts.push({
@@ -121,6 +167,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
     }
 
+    // Memory-specific compatibility checks
     if (type === 'memory') {
         const motherboard = current.motherboard;
         if (!motherboard) {
@@ -131,59 +178,74 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             return conflicts;
         }
 
-        // Check RAM type compatibility with motherboard
-        const motherboardRamType = motherboard.memory_type;
-        const newRamType = part?.type;
+        // RAM type compatibility
+        const motherboardRamTypes = (motherboard.memory_type || '').split(',').map((t: string) => t.trim().toUpperCase());
+        const newRamType = (part.type || '').trim().toUpperCase();
         
-        if (motherboardRamType && newRamType && newRamType !== motherboardRamType) {
+        if (motherboardRamTypes.length > 0 && !motherboardRamTypes.includes(newRamType)) {
             conflicts.push({
                 partType: 'memory',
-                reason: `RAM type (${newRamType}) is not compatible with the selected motherboard (supports ${motherboardRamType}).`,
+                reason: `RAM type (${part.type}) is not compatible with the selected motherboard (supports ${motherboard.memory_type}).`,
             });
         }
 
-        const maxModules = motherboard.memory_slots || 4;
+        // RAM speed compatibility
+        if (part.speed && motherboard.memory_speed) {
+            const ramSpeed = parseInt(part.speed);
+            const maxSpeed = parseInt(motherboard.memory_speed);
+            if (ramSpeed > maxSpeed) {
+                conflicts.push({
+                    partType: 'memory',
+                    reason: `RAM speed (${part.speed}MHz) exceeds motherboard's maximum supported speed (${motherboard.memory_speed}MHz).`,
+                });
+            }
+        }
+
+        // Check for available NVMe ports if the memory is NVMe
+        if (part.interface.startsWith('NVMe') || part.interface === 'M.2') {
+            const nvmeLimit = motherboard.nvme_ports || 0;
+            const currentNvmeCount = (current.storage || []).filter((s: any) => s.interface === 'NVMe').length;
+            
+            if (currentNvmeCount >= nvmeLimit) {
+                conflicts.push({
+                    partType: 'storage',
+                    reason: `Cannot add NVMe memory. Motherboard only has ${nvmeLimit} NVMe port(s), and all are already in use.`,
+                });
+            }
+        }
+
+        // Memory module count validation
         const currentMemory = current.memory || [];
-        if (currentMemory.length + 1 > maxModules) {
+        const memoryports = currentMemory.reduce((sum, m: any) => sum + (m.modules || 1), 0);
+        const maxports = motherboard.memory_ports || 4;
+        
+        if (memoryports + (part.modules || 1) > maxports) {
             conflicts.push({
                 partType: 'memory',
-                reason: `Cannot add more memory modules. Maximum ${maxModules} modules allowed.`,
+                reason: `Adding this RAM would exceed the motherboard's maximum of ${maxports} memory ports.`,
             });
         }
 
-        // Combine current memory
-        const memory = [...(current.memory || []), part];
-
-        // Ensures all kits are identical
-        const uniqueIds = new Set(memory.map((m: any) => m.id));
-        if (uniqueIds.size > 1) {
-            conflicts.push({
-                partType: 'memory',
-                reason: 'All RAM kits must be of the same model (matched memory).',
-            });
-        }
-
-        // Total capacity
-        const totalRam = memory.reduce((sum, m: any) => sum + (m.size || 0), 0);
-        const maxRam = motherboard?.max_memory || 0;
-        if (maxRam && totalRam > maxRam) {
-            conflicts.push({
-                partType: 'memory',
-                reason: `Total RAM (${totalRam}GB) exceeds motherboard's maximum of ${maxRam}GB.`,
-            });
-        }
-
-        // Slot usage
-        const totalModulesUsed = memory.reduce((sum, m: any) => sum + (m.modules || 1), 0);
-        const maxSlots = motherboard?.memory_slots || 4;
-        if (totalModulesUsed > maxSlots) {
-            conflicts.push({
-                partType: 'memory',
-                reason: `Total memory modules (${totalModulesUsed}) exceed motherboard's ${maxSlots} slots.`,
-            });
+        // Check for mixed memory configurations
+        if (currentMemory.length > 0) {
+            const firstRam = currentMemory[0];
+            if (firstRam.speed !== part.speed) {
+                conflicts.push({
+                    partType: 'memory',
+                    reason: 'Mismatched RAM speeds. For best performance, use identical RAM modules.',
+                });
+            }
+            
+            if (firstRam.cas_latency !== part.cas_latency) {
+                conflicts.push({
+                    partType: 'memory',
+                    reason: 'Mismatched CAS latencies. For best performance, use identical RAM modules.',
+                });
+            }
         }
     }
 
+    // GPU compatibility checks
     if (type === 'gpu') {
         const newLength = part?.length_mm || 0;
         const caseMaxLength = current.case?.max_gpu_length_mm || 0;
@@ -204,6 +266,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
     }
 
+    // PSU compatibility checks
     if (type === 'psu') {
         const newPower = part?.wattage || 0;
         const gpuPower = current.gpu?.tdp || 0;
@@ -224,6 +287,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
     }
 
+    // Case compatibility checks
     if (type === 'case') {
         const supportedFF = part?.mobo_form_factor?.split(',').map((f: string) => f.trim().toUpperCase()) || [];
         const mbFormFactor = current.motherboard?.form_factor?.trim().toUpperCase();
@@ -244,6 +308,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
     }
 
+    // Storage compatibility checks
     if (type === 'storage') {
         const motherboard = current.motherboard;
         if (!motherboard) {
@@ -262,19 +327,19 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         const sataCount = currentStorages.filter(s => s.interface?.toUpperCase() === 'SATA').length;
         
         // Get slot limits from motherboard
-        const maxNvmeSlots = motherboard.nvme_slots || 0;
-        const maxSataSlots = motherboard.sata_slots || 0;
+        const maxNvmePorts = motherboard.nvme_ports || 0;
+        const maxSataPorts = motherboard.sata_ports || 0;
 
         // Check if adding this storage would exceed slot limits
-        if (newStorageInterface === 'NVME' && nvmeCount >= maxNvmeSlots) {
+        if (newStorageInterface === 'NVME' && nvmeCount >= maxNvmePorts) {
             conflicts.push({
                 partType: 'storage',
-                reason: `Motherboard only has ${maxNvmeSlots} NVMe slot(s).`,
+                reason: `Motherboard only has ${maxNvmePorts} NVMe slot(s).`,
             });
-        } else if (newStorageInterface === 'SATA' && sataCount >= maxSataSlots) {
+        } else if (newStorageInterface === 'SATA' && sataCount >= maxSataPorts) {
             conflicts.push({
                 partType: 'storage',
-                reason: `Motherboard only has ${maxSataSlots} SATA port(s).`,
+                reason: `Motherboard only has ${maxSataPorts} SATA port(s).`,
             });
         }
     }
@@ -282,6 +347,11 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
     return conflicts;
 }
 
+/**
+ * Determines the next recommended part type to add to the build
+ * @param build - Current build state
+ * @returns The type of the next recommended part, or null if build is complete
+ */
 export function getNextPartType(build: Build): string | null {
     const requiredParts: (keyof Build)[] = [
         'processor',

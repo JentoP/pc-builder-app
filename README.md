@@ -1,25 +1,27 @@
 # PC Builder Application
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FJentoP%2Fpc-builder-app&project-name=pc-builder&repository-name=pc-builder-app)
+
 The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize their ideal PC setup.
 
-## Features in development
-### 1. Authentication and User Management (MVP)
+## Features
+
+### 1. Authentication and User Management
 - Login and registration via Supabase Auth
 - Profile page with saved builds
 
-### 2. Component Library (MVP)
-- Components retrieved via a manually imported database
-- Pages for components like: CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling,...
-- Filters for brand, price, etc.
-- Sort by option
-- Image fetching through API as a fallback (nice to have).
+### 2. Component Library
+- Browse components like CPU, GPU, Motherboard, RAM, SSD, PSU, Case, Cooling
+- Filter by brand, price, and other specifications
+- Sort by various attributes
 
-### 3. PC Builder Interface (MVP)
-- Selection for each component
+### 3. PC Builder Interface
+- Intuitive selection for each component
 - Live price calculation
-- Dynamic preview of the build
+- Dynamic preview of your build
 
-### 4. Compatibility Check (MVP)
-- Logic integrated to check if components are compatible
+### 4. Compatibility Check
+- Automatic compatibility checking between components
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
 
 | Component   | Depends on              | Check                                              |
@@ -50,16 +52,38 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 
 
 ## Tech Stack
-- [Next.js](https://nextjs.org)
-- Database using [Supabase](https://supabase.com/). Includes package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
 
-## Demo
-### Deployed to Vercel
-You can view a fully working demo at [this link](https://pc-builder-app-tau.vercel.app/).
+- **Framework**: [Next.js](https://nextjs.org/) 13+ (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with [Shadcn/ui](https://ui.shadcn.com/)
+- **Database & Auth**: [Supabase](https://supabase.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
 
 
-### Feedback and issues
+
+
+## Contributing
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+### Deployment
+
+
+### Documentation
+For detailed developer documentation, including project structure, component architecture, and styling guidelines, see the [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md).
+
+
+The application is deployed on [Vercel](https://vercel.com/). You can view a live demo at [https://pc-builder-app-tau.vercel.app/](https://pc-builder-app-tau.vercel.app/).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Feedback and Issues
+
 Please file feedback and issues over on the [GitHub issue page](https://github.com/JentoP/pc-builder-app/issues).

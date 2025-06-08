@@ -1,36 +1,54 @@
+/**
+ * SavedBuildsPage Component
+ * 
+ * Displays a list of user's saved PC builds with options to manage them.
+ * Handles loading states, error states, and provides actions like sharing and deletion.
+ * 
+ * Features:
+ * - Fetches and displays user's saved builds
+ * - Toggle build sharing (public/private)
+ * - Delete builds
+ * - Copy shareable links
+ * - Responsive grid layout
+ */
 'use client';
 
-import {useEffect, useState} from 'react';
-import {createClient} from '@/utils/supabase/client';
-import {Button} from '@/components/ui/button';
-import {Switch} from '@/components/ui/switch'; // ✅ Import the Switch
-import Link from 'next/link';
-import {ArrowLeft, Clock, Trash2, Loader2, Save, Eye} from 'lucide-react';
-import {toast} from 'sonner';
-import {useProfile} from '@/hooks/fetch-user';
+// Import necessary hooks and components
+import {useEffect, useState} from 'react';  // React hooks for state and side effects
+import {createClient} from '@/utils/supabase/client';  // Supabase client
+import {Button} from '@/components/ui/button';  // Reusable button component
+import {Switch} from '@/components/ui/switch';  // Toggle switch component
+import Link from 'next/link';  // Client-side navigation
+import {ArrowLeft, Clock, Trash2, Loader2, Save, Eye} from 'lucide-react';  // Icons
+import {toast} from 'sonner';  // Toast notifications
+import {useProfile} from '@/hooks/fetchUser';  // Hook to fetch user profile
 
+// Type definition for a saved build
+// Represents the structure of build data stored in the database
 type SavedBuild = {
-    id: string;
-    created_at: string;
-    name: string;
-    is_shared: boolean;
-    build_data: {
-        name: string;
-        totalPrice?: number;
-        processor?: any;
-        memory?: any[];
-        storage?: any[];
+    id: string;  // Unique identifier for the build
+    created_at: string;  // ISO timestamp of when the build was created
+    name: string;  // User-defined name for the build
+    is_shared: boolean;  // Whether the build is publicly accessible
+    build_data: {  // The actual build configuration
+        name: string;  // Duplicate of build name (for backward compatibility)
+        totalPrice?: number;  // Calculated total price of all components
+        processor?: any;  // Processor component details
+        memory?: any[];  // Array of memory components
+        storage?: any[];  // Array of storage components
     };
 };
 
 export default function SavedBuildsPage() {
-    const [savedBuilds, setSavedBuilds] = useState<SavedBuild[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
-    const {profile} = useProfile();
-    const supabase = createClient();
+    // Component state
+    const [savedBuilds, setSavedBuilds] = useState<SavedBuild[]>([]);  // List of user's saved builds
+    const [loading, setLoading] = useState(true);  // Loading state
+    const [error, setError] = useState<string | null>(null);  // Error message
+    const [deletingId, setDeletingId] = useState<string | null>(null);  // ID of build being deleted
+    const {profile} = useProfile();  // Current user's profile
+    const supabase = createClient();  // Supabase client instance
 
+    // Fetch user's saved builds on component mount or when profile changes
     useEffect(() => {
         const fetchSavedBuilds = async () => {
             if (!profile?.id) {
@@ -39,6 +57,7 @@ export default function SavedBuildsPage() {
             }
 
             try {
+                // Query builds from Supabase, ordered by creation date (newest first)
                 const {data, error} = await supabase
                     .from('builds')
                     .select('*')
@@ -58,6 +77,11 @@ export default function SavedBuildsPage() {
         fetchSavedBuilds();
     }, [profile?.id]);
 
+    /**
+     * Formats a date string into a more readable format
+     * @param {string} dateString - ISO date string
+     * @returns {string} Formatted date (e.g., 'Jan 1, 2023')
+     */
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -66,8 +90,13 @@ export default function SavedBuildsPage() {
         });
     };
 
+    /**
+     * Toggles the sharing status of a build
+     * @param {SavedBuild} build - The build to update
+     */
     const toggleShare = async (build: SavedBuild) => {
         try {
+            // Call API to update sharing status
             const response = await fetch('/api/share-build', {
                 method: 'PATCH',
                 headers: {
@@ -83,18 +112,21 @@ export default function SavedBuildsPage() {
                 throw new Error(result.error || 'Failed to update share status');
             }
 
+            // Update local state with new sharing status
             setSavedBuilds(prev =>
                 prev.map(b =>
                     b.id === build.id ? {...b, is_shared: result.is_shared} : b
                 )
             );
 
+            // Show success message
             toast.success(
                 result.is_shared
                     ? 'Build is now shared'
                     : 'Build is now private'
             );
 
+            // If shared, copy the shareable link to clipboard
             if (result.is_shared) {
                 const url = `${window.location.origin}/saved/${build.id}`;
                 await navigator.clipboard.writeText(url);
@@ -106,6 +138,11 @@ export default function SavedBuildsPage() {
         }
     };
 
+    /**
+     * Deletes a build after confirmation
+     * @param {string} buildId - ID of the build to delete
+     * @param {string} buildName - Name of the build (for confirmation dialog)
+     */
     const deleteBuild = async (buildId: string, buildName: string) => {
         if (!confirm(`Are you sure you want to delete "${buildName}"?`)) {
             return;
@@ -113,6 +150,7 @@ export default function SavedBuildsPage() {
 
         setDeletingId(buildId);
         try {
+            // Delete build from Supabase
             const {error} = await supabase
                 .from('builds')
                 .delete()
@@ -121,6 +159,7 @@ export default function SavedBuildsPage() {
 
             if (error) throw error;
 
+            // Remove build from local state
             setSavedBuilds(prev => prev.filter(build => build.id !== buildId));
             toast.success('Build deleted successfully');
         } catch (err) {
@@ -180,7 +219,7 @@ export default function SavedBuildsPage() {
     return (
         <div className="container mx-auto p-4 max-w-6xl">
             <div className="flex items-center justify-between mb-8">
-                <Button variant="outline" size="icon" asChild>
+                <Button variant="secondary" size="icon" className="size-8 mr-2">
                     <Link href="/dashboard">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>

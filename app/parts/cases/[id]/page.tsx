@@ -41,11 +41,14 @@ export default function CaseDetailPage() {
 
     return (
         <div className="p-6 max-w-4xl mx-auto space-y-6">
-            <Button
-                onClick={() => router.back()}
-                variant="outline" size="icon" asChild>
-                <ArrowLeft className="h-4 w-4"/>
-            </Button>
+            <div className="flex items-center justify-between mb-6">
+                <Button variant="secondary" size="icon" className="size-8 mr-2" onClick={() => router.back()}>
+                    <ArrowLeft />
+                </Button>
+                <h1 className="text-3xl font-bold flex-1 text-center">
+                    Case Details
+                </h1>
+            </div>
             <CaseDetail pcCase={caseData}/>
             <div className="flex justify-center">
                 <Link href="/parts/cases" className="w-auto mt-3 px-4 py-1 rounded">

@@ -6,7 +6,7 @@ import {
     LogOut,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useProfile } from "@/hooks/fetch-user"
+import { useProfile } from "@/hooks/fetchUser"
 import { createClient } from "@/utils/supabase/client"
 
 import {

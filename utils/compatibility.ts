@@ -202,7 +202,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
 
         // Check for available NVMe ports if the memory is NVMe
-        if (part.interface.startsWith('NVMe') || part.interface === 'M.2') {
+        if ((part.interface && part.interface.startsWith('NVMe')) || part.interface === 'M.2') {
             const nvmeLimit = motherboard.nvme_ports || 0;
             const currentNvmeCount = (current.storage || []).filter((s: any) => s.interface === 'NVMe').length;
             

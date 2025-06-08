@@ -27,6 +27,7 @@ export default function MotherboardsPage() {
     const [filtered, setFiltered] = useState<Motherboard[]>([])
     const [loading, setLoading] = useState(true)
     const [socketFilter, setSocketFilter] = useState('All')
+    const [itemsToShow, setItemsToShow] = useState(9)
     const supabase = createClient()
     const { updateBuild } = useBuild()
 
@@ -48,6 +49,7 @@ export default function MotherboardsPage() {
 
     const handleFilterChange = (socket: string) => {
         setSocketFilter(socket)
+        setItemsToShow(9)
         if (socket === 'All') {
             setFiltered(motherboards)
         } else {
@@ -83,17 +85,29 @@ export default function MotherboardsPage() {
 
             {/* Cards */}
             {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[...Array(6)].map((_, i) => (
                         <Skeleton key={i} className="h-60 w-full rounded-lg" />
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filtered.map(mobo => (
-                        <MotherboardCard key={mobo.id} motherboard={mobo} onAddToBuild={handleAddToBuild} />
-                    ))}
-                </div>
+                <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filtered.slice(0, itemsToShow).map(mobo => (
+                            <MotherboardCard key={mobo.id} motherboard={mobo} onAddToBuild={handleAddToBuild} />
+                        ))}
+                    </div>
+                    {itemsToShow < filtered.length && (
+                        <div className="flex justify-center mt-6">
+                            <button
+                                onClick={() => setItemsToShow(prev => prev + 9)}
+                                className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white px-6 py-2 rounded-md transition-colors"
+                            >
+                                Load More
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     )

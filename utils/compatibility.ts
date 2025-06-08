@@ -99,7 +99,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
 
         // RAM type compatibility
-        const motherboardRamTypes = (part?.memory_type || '').split(',').map(t => t.trim().toUpperCase());
+        const motherboardRamTypes = (part?.memory_type || '').split(',').map((t: string) => t.trim().toUpperCase());
         for (const ram of current.memory || []) {
             if (ram.type) {
                 const ramType = ram.type.trim().toUpperCase();
@@ -179,7 +179,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
 
         // RAM type compatibility
-        const motherboardRamTypes = (motherboard.memory_type || '').split(',').map(t => t.trim().toUpperCase());
+        const motherboardRamTypes = (motherboard.memory_type || '').split(',').map((t: string) => t.trim().toUpperCase());
         const newRamType = (part.type || '').trim().toUpperCase();
         
         if (motherboardRamTypes.length > 0 && !motherboardRamTypes.includes(newRamType)) {

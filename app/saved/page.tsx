@@ -1,9 +1,9 @@
 /**
  * SavedBuildsPage Component
- * 
+ *
  * Displays a list of user's saved PC builds with options to manage them.
  * Handles loading states, error states, and provides actions like sharing and deletion.
- * 
+ *
  * Features:
  * - Fetches and displays user's saved builds
  * - Toggle build sharing (public/private)
@@ -17,11 +17,11 @@
 import {useEffect, useState} from 'react';  // React hooks for state and side effects
 import {createClient} from '@/utils/supabase/client';  // Supabase client
 import {Button} from '@/components/ui/button';  // Reusable button component
-import {Switch} from '@/components/ui/switch';  // Toggle switch component
 import Link from 'next/link';  // Client-side navigation
-import {ArrowLeft, Clock, Trash2, Loader2, Save, Eye} from 'lucide-react';  // Icons
+import {Clock, Save, Eye, RefreshCw} from 'lucide-react';  // Icons
 import {toast} from 'sonner';  // Toast notifications
 import {useProfile} from '@/hooks/fetchUser';  // Hook to fetch user profile
+import BackButton from '@/components/ui/BackButton';
 
 // Type definition for a saved build
 // Represents the structure of build data stored in the database
@@ -170,65 +170,33 @@ export default function SavedBuildsPage() {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="container mx-auto p-4 max-w-6xl">
-                <div className="flex items-center justify-between mb-8">
-                    <Button variant="outline" size="icon" asChild>
-                        <Link href="/dashboard">
-                            <ArrowLeft className="h-4 w-4"/>
-                        </Link>
-                    </Button>
-                    <h1 className="text-3xl font-bold flex-1 text-center">Saved Builds</h1>
-                    <div className="w-10"></div>
-                </div>
+    return (
+        <div className="container mx-auto p-4 max-w-6xl">
+            <div className="flex items-center justify-between mb-8">
+                <BackButton href="/dashboard" />
+                <h1 className="text-3xl font-bold flex-1 text-center">Saved Builds</h1>
+                <div className="w-40" />
+            </div>
+
+            {loading ? (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className="bg-sidebar rounded-lg border p-6 h-48 animate-pulse"></div>
                     ))}
                 </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="container mx-auto p-4 max-w-6xl">
-                <div className="flex items-center justify-between mb-8">
-                    <Button variant="outline" size="icon" asChild>
-                        <Link href="/dashboard">
-                            <ArrowLeft className="h-4 w-4"/>
-                        </Link>
-                    </Button>
-                    <h1 className="text-3xl font-bold flex-1 text-center">Saved Builds</h1>
-                    <div className="w-10"></div>
-                </div>
+            ) : error ? (
                 <div className="text-center py-16 bg-sidebar rounded-lg border">
                     <p className="text-red-500 mb-4">{error}</p>
                     <Button
+                        variant="outline"
                         onClick={() => window.location.reload()}
-                        className="w-fit border rounded hover:text-white text-primary bg-sidebar min-w-24 border-blue-800 hover:bg-blue-800"
+                        className="flex items-center gap-2"
                     >
+                        <RefreshCw className="h-4 w-4" />
                         Try Again
                     </Button>
                 </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="container mx-auto p-4 max-w-6xl">
-            <div className="flex items-center justify-between mb-8">
-                <Button variant="secondary" size="icon" className="size-8 mr-2">
-                    <Link href="/dashboard">
-                        <ArrowLeft className="h-4 w-4"/>
-                    </Link>
-                </Button>
-                <h1 className="text-3xl font-bold flex-1 text-center">Saved Builds</h1>
-                <div className="w-10"></div>
-            </div>
-
-            {savedBuilds.length === 0 ? (
+            ) : savedBuilds.length === 0 ? (
                 <div className="text-center py-16 bg-sidebar rounded-lg border">
                     <Save className="mx-auto h-12 w-12 text-muted-foreground mb-4"/>
                     <h3 className="text-lg font-medium">No saved builds yet</h3>

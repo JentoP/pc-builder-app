@@ -1,9 +1,9 @@
 /**
  * BuildDetailPage Component
- * 
+ *
  * Displays the details of a specific saved build with options to manage it.
  * Handles viewing, sharing, and deleting individual builds.
- * 
+ *
  * Features:
  * - Displays detailed build information including all components
  * - Toggle build sharing (public/private)
@@ -23,7 +23,6 @@ import {
     Copy,
     Trash2,
     Loader2,
-    ArrowLeft,
     UploadCloud,
     Computer,
     Clock,
@@ -33,7 +32,8 @@ import {toast} from 'sonner';  // Toast notifications
 import {useProfile} from '@/hooks/fetchUser';  // User profile hook
 import {Switch} from '@/components/ui/switch';  // Toggle switch component
 import {Label} from '@/components/ui/label';  // Form label component
-import Link from "next/link";  // Client-side navigation
+import Link from "next/link";
+import BackButton from "@/components/ui/BackButton";  // Client-side navigation
 
 // Type definitions for build data structure
 type BuildData = {
@@ -245,7 +245,7 @@ export default function BuildDetailPage() {
 
         // Determine the correct image path based on part type
         const imageKey = partType === 'gpu' ? 'graphic-cards' : partType;
-        
+
         // Map part types to their URL paths
         const partTypeToUrlPath = {
             processor: 'processors',
@@ -309,7 +309,8 @@ export default function BuildDetailPage() {
         // Return a link if the part has an ID, otherwise return a plain div
         if (isLink) {
             return (
-                <Link key={`${partType}-${index}`} href={partDetailUrl} className="block bg-sidebar shadow rounded-lg border mb-4 hover:shadow-md hover:border-blue-500 transition-all duration-150">
+                <Link key={`${partType}-${index}`} href={partDetailUrl}
+                      className="block bg-sidebar shadow rounded-lg border mb-4 hover:shadow-md hover:border-blue-500 transition-all duration-150">
                     {cardContent}
                 </Link>
             );
@@ -357,7 +358,7 @@ export default function BuildDetailPage() {
                 memory: Array.isArray(build.build_data.memory) ? build.build_data.memory : [],
                 storage: Array.isArray(build.build_data.storage) ? build.build_data.storage : [],
             };
-            
+
             localStorage.setItem('build', JSON.stringify(buildToSave));
             toast.success(`Build "${build.build_data.name || 'Unnamed Build'}" loaded into builder!`);
             router.push('/builder');
@@ -379,11 +380,7 @@ export default function BuildDetailPage() {
     if (error) {
         return (
             <div className="container mx-auto p-4 max-w-4xl">
-                <Button variant="secondary" size="icon" className="size-8 mr-2">
-                    <Link href="/saved">
-                        <ArrowLeft className="h-4 w-4"/>
-                    </Link>
-                </Button>
+                <BackButton href="/saved" />
                 <div className="text-center py-16 bg-card border rounded-lg">
                     <p className="text-destructive mb-4 text-lg">{error}</p>
                     <Button
@@ -401,11 +398,7 @@ export default function BuildDetailPage() {
         return (
             <div className="container mx-auto p-4 text-center">
                 <p>Build not found or could not be loaded.</p>
-                <Button variant="secondary" size="icon" className="size-8 mr-2">
-                    <Link href="/dashboard">
-                        <ArrowLeft className="h-4 w-4"/>
-                    </Link>
-                </Button>
+                <BackButton href="/saved" />
             </div>
         );
     }
@@ -414,12 +407,8 @@ export default function BuildDetailPage() {
 
     return (
         <div className="container mx-auto p-4 max-w-6xl">
-            <div className="flex items-center justify-between mb-6">
-                <Button variant="secondary" size="icon" className="size-8 mr-2">
-                    <Link href="/saved">
-                        <ArrowLeft className="h-4 w-4"/>
-                    </Link>
-                </Button>
+            <div className="flex items-center justify-between mb-2">
+                <BackButton href="/saved" />
                 <h1 className="text-3xl font-bold flex-1 text-center">
                     {build.build_data.name || 'Untitled Build'}
                 </h1>
@@ -440,17 +429,17 @@ export default function BuildDetailPage() {
                 <div className="flex flex-wrap justify-center gap-2">
                     {/* Publicly Shared Toggle */}
                     <div
-                        className="flex items-center px-3 py-1 sm:px-6 text-sm justify-between border rounded-md border-neutral-600 text-primary hover:text-white  hover:bg-neutral-600 transition-colors bg-background">
+                        className="flex items-center px-3 py-1 sm:px-3 justify-between border rounded-md border-neutral-600 text-primary hover:text-white  hover:bg-neutral-600 transition-colors bg-background">
                         <Label htmlFor="share-toggle" className="flex items-center cursor-pointer">
-                            <Share2 className="h-3 w-3 mr-1 text-neutral-500"/>
-                            Shared
+                            <Share2 className="h-3 w-3 mx-1 text-neutral-500"/>
                         </Label>
                         <Switch
                             id="share-toggle"
                             checked={build.is_shared}
                             onCheckedChange={toggleShare}
                             disabled={loading || isDeleting}
-                            className="ml-2 scale-90"
+                            className="mx-2"
+                            title={build.is_shared ? 'Make Private' : 'Make Public'}
                         />
                     </div>
 
@@ -460,9 +449,9 @@ export default function BuildDetailPage() {
                         onClick={copyShareLink}
                         disabled={!build.is_shared || loading || isDeleting}
                         className="px-3 py-1 text-sm border-blue-700 hover:text-white hover:bg-blue-700"
+                        title="Copy Shared Link"
                     >
-                        <Copy className="h-3 w-3 mr-1 text-blue-300"/>
-                        Copy Link
+                        <Copy className="h-3 w-3 mx-4 text-blue-300 hover:text-white"/>
                     </Button>
 
                     {/* Load Build */}
@@ -470,10 +459,10 @@ export default function BuildDetailPage() {
                         variant="outline"
                         onClick={handleLoadBuild}
                         disabled={loading || isDeleting}
-                        className="px-3 py-1 text-sm border-purple-700 hover:text-white hover:bg-purple-700"
+                        className="px-3 py-1 text-sm border-purple-700 hover:bg-purple-700"
+                        title="Load into PC Builder"
                     >
-                        <UploadCloud className="h-3 w-3 mr-1 text-purple-300"/>
-                        Load Build
+                        <UploadCloud className="h-3 w-3 mx-4 text-purple-300"/>
                     </Button>
 
                     {/* Delete */}
@@ -481,14 +470,14 @@ export default function BuildDetailPage() {
                         variant="outline"
                         onClick={deleteBuild}
                         disabled={isDeleting || loading}
-                        className="px-3 py-1 text-sm border-red-700 hover:text-white hover:bg-red-700"
+                        className="px-3 py-1 text-sm border-red-700 hover:bg-red-700"
+                        title="Delete Build"
                     >
                         {isDeleting ? (
-                            <Loader2 className="h-3 w-3 mr-1 animate-spin"/>
+                            <Loader2 className="h-3 w-3 mx-4 animate-spin"/>
                         ) : (
-                            <Trash2 className="h-3 w-3 mr-1 text-red-300"/>
+                            <Trash2 className="h-3 w-3 mx-4 text-red-300"/>
                         )}
-                        Delete
                     </Button>
                 </div>
             </div>
@@ -500,7 +489,7 @@ export default function BuildDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div className="bg-sidebar shadow border p-4 rounded-lg">
                     <div className="flex items-center gap-2 text-muted-foreground">
-                        <Computer className="h-4 w-4" />
+                        <Computer className="h-4 w-4"/>
                         <span className="text-sm">Components</span>
                     </div>
                     <p className="text-sm mt-1">
@@ -510,7 +499,7 @@ export default function BuildDetailPage() {
 
                 <div className="bg-sidebar shadow border p-4 rounded-lg">
                     <div className="flex items-center gap-2 text-muted-foreground">
-                        <Clock className="h-4 w-4" />
+                        <Clock className="h-4 w-4"/>
                         <span className="text-sm">Created</span>
                     </div>
                     <p className="text-sm mt-1">
@@ -520,11 +509,11 @@ export default function BuildDetailPage() {
 
                 <div className="bg-sidebar shadow border p-4 rounded-lg">
                     <div className="flex items-center gap-2 text-muted-foreground">
-                        <HardDrive className="h-4 w-4" />
+                        <HardDrive className="h-4 w-4"/>
                         <span className="text-sm">Status</span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                        <div className={`h-2 w-2 rounded-full ${build.is_shared ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                        <div className={`h-2 w-2 rounded-full ${build.is_shared ? 'bg-green-500' : 'bg-yellow-500'}`}/>
                         <span className="text-sm">
                             {build.is_shared ? 'Public' : 'Private'}
                         </span>
@@ -534,12 +523,12 @@ export default function BuildDetailPage() {
 
             {/*Total Price*/}
             {totalPrice > 0 && (
-                    <div className="shadow rounded-lg p-4 border mb-6 bg-sidebar">
-                        <div className="flex justify-between items-center p-4">
-                            <span className="text-xl">Total Price:</span>
-                            <span className="text-xl font-semibold">€{totalPrice.toFixed(2)}</span>
-                        </div>
+                <div className="shadow rounded-lg p-4 border mb-6 bg-sidebar">
+                    <div className="flex justify-between items-center p-4">
+                        <span className="text-xl">Total Price:</span>
+                        <span className="text-xl font-semibold">€{totalPrice.toFixed(2)}</span>
                     </div>
+                </div>
             )}
 
             {/* Components section */}

@@ -9,7 +9,7 @@ import {useEffect, useState} from 'react'
 import SignInWarning from "@/components/SignInWarning";
 import {useRouter} from 'next/navigation'
 import {getNextPartType} from '@/utils/compatibility'
-import {Blocks, Save, MousePointerClick, Trash, Eye, RotateCcw, ListStart} from "lucide-react";
+import {Save, MousePointerClick, Trash, Eye, RotateCcw, ListStart} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {useProfile} from "@/hooks/fetchUser"
 import {Switch} from '@/components/ui/switch';
@@ -348,8 +348,8 @@ export default function BuildDisplay() {
                 onClick={(e) => handleNextPartClick(e, route)}
             >
                 <Button variant="outline" className="w-full max-w-md hover:border-purple-700">
+                    <MousePointerClick/>
                     <p>{displayName}</p>
-                    <Blocks size={40}/>
                 </Button>
             </Link>
         );

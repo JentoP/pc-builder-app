@@ -63,7 +63,7 @@ export default function ProcessorsPage() {
             <h1 className="text-3xl font-bold text-center mb-4">Processors</h1>
 
             {/* Filter */}
-            <div className="my-6 mr-8">
+            <div className="mb-6">
                 <label htmlFor="socketFilter" className="block text-sm font-medium mb-2">
                     Filter by Socket
                 </label>

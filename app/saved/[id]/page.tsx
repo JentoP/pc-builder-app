@@ -503,7 +503,7 @@ export default function BuildDetailPage() {
                         <Computer className="h-4 w-4" />
                         <span className="text-sm">Components</span>
                     </div>
-                    <p className="text-xl font-semibold mt-1">
+                    <p className="text-sm mt-1">
                         {Object.values(build.build_data).filter(Boolean).length - 1} parts
                     </p>
                 </div>

@@ -18,12 +18,9 @@ type Storage = {
 export default function StorageDetail({ storage }: { storage: Storage }) {
     const [imageError, setImageError] = useState(false);
     const { updateBuild } = useBuild();
+    const imageSrc = !imageError && storage.image_url ? storage.image_url : '/images/icons/gradient/storage.png';
 
-    const imageSrc = !imageError && storage.image_url
-        ? storage.image_url
-        : '/images/icons/gradient/storage.png';
-
-    const isAdmin = true; // Replace with your admin check logic
+    const isAdmin = true;
 
     return (
         <div className="bg-sidebar shadow rounded-lg p-6 border">
@@ -44,12 +41,12 @@ export default function StorageDetail({ storage }: { storage: Storage }) {
                     <span>{storage.type}</span>
                 </div>
                 <div className="flex justify-between">
-                    <span className="font-medium">Interface</span>
-                    <span>{storage.interface}</span>
-                </div>
-                <div className="flex justify-between">
                     <span className="font-medium">Capacity</span>
                     <span>{storage.capacity} GB</span>
+                </div>
+                <div className="flex justify-between">
+                    <span className="font-medium">Interface</span>
+                    <span>{storage.interface}</span>
                 </div>
                 <div className="flex justify-between pt-3 text-xl font-semibold">
                     <span>Price</span>
@@ -57,33 +54,24 @@ export default function StorageDetail({ storage }: { storage: Storage }) {
                 </div>
             </div>
             <div className="flex justify-between pt-4 border-t">
-                <Button 
-                    onClick={() => updateBuild('storage', storage )}
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-3 px-4 py-1 border text-purple-600 border-purple-600 hover:bg-purple-600 hover:text-white min-w-24"
+                <Button
+                    onClick={() => updateBuild('storage', storage)}
+                    variant="outline"
+                    size="sm"
+                    className="mt-3 px-4 py-1 rounded border-purple-800 hover:bg-purple-800 hover:text-white text-primary bg-sidebar min-w-24"
                 >
                     Add to Build
                 </Button>
-                <Button 
-                    asChild 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-3 px-4 py-1 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-3 px-4 py-1 rounded border-blue-800 hover:bg-blue-800 hover:text-white text-primary bg-sidebar min-w-24"
                 >
                     <a href={`https://www.google.com/search?q=${storage.name}`} target="_blank" rel="noopener noreferrer">
                         Search
                     </a>
                 </Button>
             </div>
-            {/* {isAdmin && (
-                <div className="mt-6 border-t pt-4">
-                    <h2 className="text-lg font-semibold mb-2">Admin Controls</h2>
-                    <Button variant="secondary">
-                        Edit Storage
-                    </Button>
-                </div>
-            )} */}
         </div>
     );
 }

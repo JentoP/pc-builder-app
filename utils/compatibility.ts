@@ -49,7 +49,7 @@ export function addPartToBuild(build: Build, type: keyof Build, part: any): Buil
     } else if (type === 'memory') {
         const currentMemory = updated.memory || [];
         const motherboard = build.motherboard;
-        const maxModules = motherboard?.memory_slots || 4;
+        const maxModules = motherboard?.memory_ports || 4;
 
         // Validate memory module count
         if (currentMemory.length + 1 > maxModules) {
@@ -157,7 +157,7 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         }
 
         // Memory module count validation
-        const maxModules = part?.memory_slots || 4;
+        const maxModules = part?.memory_ports || 4;
         const currentMemory = current.memory || [];
         if (currentMemory.length > maxModules) {
             conflicts.push({
@@ -201,15 +201,28 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
             }
         }
 
+        // Check for available NVMe ports if the memory is NVMe
+        if (part.interface.startsWith('NVMe') || part.interface === 'M.2') {
+            const nvmeLimit = motherboard.nvme_ports || 0;
+            const currentNvmeCount = (current.storage || []).filter((s: any) => s.interface === 'NVMe').length;
+            
+            if (currentNvmeCount >= nvmeLimit) {
+                conflicts.push({
+                    partType: 'storage',
+                    reason: `Cannot add NVMe memory. Motherboard only has ${nvmeLimit} NVMe port(s), and all are already in use.`,
+                });
+            }
+        }
+
         // Memory module count validation
         const currentMemory = current.memory || [];
-        const memorySlots = currentMemory.reduce((sum, m: any) => sum + (m.modules || 1), 0);
-        const maxSlots = motherboard.memory_slots || 4;
+        const memoryports = currentMemory.reduce((sum, m: any) => sum + (m.modules || 1), 0);
+        const maxports = motherboard.memory_ports || 4;
         
-        if (memorySlots + (part.modules || 1) > maxSlots) {
+        if (memoryports + (part.modules || 1) > maxports) {
             conflicts.push({
                 partType: 'memory',
-                reason: `Adding this RAM would exceed the motherboard's maximum of ${maxSlots} memory slots.`,
+                reason: `Adding this RAM would exceed the motherboard's maximum of ${maxports} memory ports.`,
             });
         }
 
@@ -314,19 +327,19 @@ export function getCompatibilityConflicts(type: keyof Build, part: any, current:
         const sataCount = currentStorages.filter(s => s.interface?.toUpperCase() === 'SATA').length;
         
         // Get slot limits from motherboard
-        const maxNvmeSlots = motherboard.nvme_slots || 0;
-        const maxSataSlots = motherboard.sata_slots || 0;
+        const maxNvmePorts = motherboard.nvme_ports || 0;
+        const maxSataPorts = motherboard.sata_ports || 0;
 
         // Check if adding this storage would exceed slot limits
-        if (newStorageInterface === 'NVME' && nvmeCount >= maxNvmeSlots) {
+        if (newStorageInterface === 'NVME' && nvmeCount >= maxNvmePorts) {
             conflicts.push({
                 partType: 'storage',
-                reason: `Motherboard only has ${maxNvmeSlots} NVMe slot(s).`,
+                reason: `Motherboard only has ${maxNvmePorts} NVMe slot(s).`,
             });
-        } else if (newStorageInterface === 'SATA' && sataCount >= maxSataSlots) {
+        } else if (newStorageInterface === 'SATA' && sataCount >= maxSataPorts) {
             conflicts.push({
                 partType: 'storage',
-                reason: `Motherboard only has ${maxSataSlots} SATA port(s).`,
+                reason: `Motherboard only has ${maxSataPorts} SATA port(s).`,
             });
         }
     }

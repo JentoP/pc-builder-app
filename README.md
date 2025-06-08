@@ -70,8 +70,6 @@ Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTIN
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-### Deployment
-
 
 ### Documentation
 For detailed developer documentation, including project structure, component architecture, and styling guidelines, see the [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md).

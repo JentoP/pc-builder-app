@@ -9,12 +9,12 @@ import {useEffect, useState} from 'react'
 import SignInWarning from "@/components/SignInWarning";
 import {useRouter} from 'next/navigation'
 import {getNextPartType} from '@/utils/compatibility'
-import {Blocks} from "lucide-react";
+import {Blocks, Save, MousePointerClick, Trash, Eye, RotateCcw, ListStart} from "lucide-react";
 import {Input} from "@/components/ui/input";
-import { useProfile } from "@/hooks/fetchUser"
-// Removed unused import of Share2
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import {useProfile} from "@/hooks/fetchUser"
+import {Switch} from '@/components/ui/switch';
+import {Label} from '@/components/ui/label';
+
 
 const partKeys: string[] = [
     'processor', 'motherboard', 'cooling', 'gpu', 'psu', 'case',
@@ -50,11 +50,11 @@ const displayNames: Record<string, string> = {
 
 /**
  * BuildDisplay Component
- * 
+ *
  * A component that displays and manages the PC build configuration.
  * Allows users to view, add, remove, and configure PC parts in their build.
  * Handles saving builds, calculating total price, and managing part selection.
- * 
+ *
  * @component
  * @returns {JSX.Element} The rendered BuildDisplay component
  */
@@ -90,7 +90,9 @@ export default function BuildDisplay() {
     }
 
     if (profileLoading) {
-        return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div></div>;
+        return <div className="flex justify-center p-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div>
+        </div>;
     }
 
     if (!profile?.email) {
@@ -166,7 +168,7 @@ export default function BuildDisplay() {
     const handleSelectClick = (e: React.MouseEvent, route: string) => {
         e.preventDefault();
         // Close any open dialogs
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
         // Navigate after a short delay to ensure dialogs are closed
         setTimeout(() => {
             window.location.href = `/${route}`;
@@ -206,19 +208,29 @@ export default function BuildDisplay() {
                         <>
                             <Link href={`/${route}`}>
                                 <Button variant="outline" size="sm" onClick={(e) => handleSelectClick(e, route)}
-                                        className="min-w-20 hover:border-purple-600">Select</Button>
-                            </Link>
+                                        className="min-w-20 hover:border-purple-600 hover:text-purple-600"
+                                title={`Select ${displayName}`}>
+                                    <MousePointerClick/>
+                                </Button> </Link>
                             <Link href={`/${route}/${part.id}`}>
                                 <Button variant="outline" size="sm"
-                                        className="min-w-20 hover:border-blue-600">View</Button>
+                                        className="min-w-20 hover:border-blue-600 hover:text-blue-600"
+                                title={`View ${displayName}`}>
+                                    <Eye/>
+                                </Button>
                             </Link>
                             <Button variant="outline" size="sm" onClick={() => clearPart(key)}
-                                    className="min-w-20 hover:border-red-600">Remove</Button>
+                                    className="min-w-20 hover:border-red-600 hover:text-red-600">
+                                <Trash/>
+                            </Button>
                         </>
                     ) : (
                         <Link href={`/${route}`}>
                             <Button variant="outline" size="sm" onClick={(e) => handleSelectClick(e, route)}
-                                    className="min-w-20 hover:border-purple-600">Select</Button>
+                                    className="min-w-20 size-5 hover:border-purple-600 hover:text-purple-600"
+                            title={`Select ${displayName}`}>
+                                <MousePointerClick/>
+                            </Button>
                         </Link>
                     )}
                 </div>
@@ -244,19 +256,29 @@ export default function BuildDisplay() {
                     </div>
                     <div className="flex flex-col gap-1">
                         <Link href={`/parts/memory`}>
-                            <Button variant="outline" size="sm"
-                                    className="min-w-20 hover:border-purple-600">Select</Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                title="Select memory module"
+                                className="min-w-20 hover:border-purple-600 hover:text-purple-600">
+                                <MousePointerClick/>
+                            </Button>
                         </Link>
                         <Link href={`/parts/memory/${ram.id}`}>
-                            <Button variant="outline" size="sm" className="min-w-20 hover:border-blue-600">View</Button>
+                            <Button
+                                variant="outline" size="sm"
+                                title="View this memory module"
+                                className="min-w-20 hover:border-blue-600 hover:text-blue-600 ">
+                                <Eye/>
+                            </Button>
                         </Link>
                         <Button
                             variant="outline"
                             size="sm"
                             onClick={() => clearPart('memory', index)}
-                            className="min-w-20 hover:border-red-600"
-                        >
-                            Remove
+                            title="Remove this memory module"
+                            className="min-w-20 hover:border-red-600 hover:text-red-600">
+                            <Trash/>
                         </Button>
                     </div>
                 </div>
@@ -275,7 +297,10 @@ export default function BuildDisplay() {
 
                         <Link href={`/parts/memory`}>
                             <Button variant="outline" size="sm"
-                                    className="min-w-20 hover:border-purple-600">Select</Button>
+                                    title="Select memory"
+                                    className="min-w-20 hover:border-purple-600 hover:text-purple-600">
+                                <MousePointerClick/>
+                            </Button>
                         </Link>
                     </div>
                 </div>
@@ -297,7 +322,7 @@ export default function BuildDisplay() {
 
     const handleNextPartClick = (e: React.MouseEvent, route: string) => {
         e.preventDefault();
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
         setTimeout(() => {
             window.location.href = `/${route}`;
         }, 100);
@@ -318,21 +343,22 @@ export default function BuildDisplay() {
         const displayName = displayNames[nextPart] || nextPart;
 
         return (
-                <Link
-                    href={`/${route}`}
-                    onClick={(e) => handleNextPartClick(e, route)}
-                >
-                    <Button variant="outline" className="w-full max-w-md hover:border-purple-700">
-                        <p>{displayName}</p>
-                        <Blocks size={40} />
-                    </Button>
-                </Link>
+            <Link
+                href={`/${route}`}
+                onClick={(e) => handleNextPartClick(e, route)}
+            >
+                <Button variant="outline" className="w-full max-w-md hover:border-purple-700">
+                    <p>{displayName}</p>
+                    <Blocks size={40}/>
+                </Button>
+            </Link>
         );
     };
 
     return (
         <div className="flex flex-col h-full">
-            <div className="flex flex-wrap items-center gap-2 border rounded my-4 py-4 px-6 m-1 shadow-border shadow bg-sidebar justify-between">
+            <div
+                className="flex flex-wrap items-center gap-2 border rounded my-4 py-4 px-6 m-1 shadow-border shadow bg-sidebar justify-between">
                 <div className="flex flex-row items-center">
                     <p className="min-w-24">Build Name: </p>
                     <Input
@@ -380,20 +406,36 @@ export default function BuildDisplay() {
                         {primary ? (
                             <>
                                 <Link href={`/parts/storage`}>
-                                    <Button variant="outline" size="sm"
-                                            className="min-w-20 hover:border-purple-600">Select</Button>
+                                    <Button
+                                        variant="outline"
+                                        className="min-w-20 hover:border-purple-600 hover:text-purple-600">
+                                        <MousePointerClick/>
+                                    </Button>
                                 </Link>
                                 <Link href={`/parts/storage/${primary.id}`}>
-                                    <Button variant="outline" size="sm"
-                                            className="min-w-20 hover:border-blue-600">View</Button>
+                                    <Button
+                                        variant="outline"
+                                        title="View primary storage"
+                                        className="min-w-20 hover:border-blue-600 hover:text-blue-600 ">
+                                        <Eye/>
+                                    </Button>
                                 </Link>
-                                <Button variant="outline" size="sm" onClick={() => clearPart('storage', 0)}
-                                        className="min-w-20 hover:border-red-600">Remove</Button>
+                                <Button
+                                    variant="outline"
+                                    onClick={() => clearPart('storage', 0)}
+                                    title="Remove primary storage"
+                                    className="min-w-20 hover:border-red-600 hover:text-red-600">
+                                    <Trash/>
+                                </Button>
                             </>
                         ) : (
                             <Link href={`/parts/storage`}>
-                                <Button variant="outline" size="sm"
-                                        className="min-w-20 hover:border-purple-600">Select</Button>
+                                <Button
+                                    variant="outline"
+                                    title="Select primary storage"
+                                    className="min-w-20 hover:border-purple-600 hover:text-purple-600">
+                                    <MousePointerClick/>
+                                </Button>
                             </Link>
                         )}
                     </div>
@@ -418,18 +460,27 @@ export default function BuildDisplay() {
                                 <div className="flex flex-col gap-1">
                                     <Link href={`/parts/storage/${drive.id}`}>
                                         <Button variant="outline" size="sm"
-                                                className="min-w-20 hover:border-blue-600">View</Button>
+                                                title="View this storage"
+                                                className="min-w-20 hover:border-blue-600 hover:text-blue-600 ">
+                                            <Eye/>
+                                        </Button>
                                     </Link>
                                     <Button
                                         variant="outline"
                                         size="sm"
                                         onClick={() => clearPart('storage', drive._uid)}
-                                        className="min-w-20 hover:border-red-600"
-                                    >
-                                        Remove
+                                        title="Remove this storage"
+                                        className="min-w-20 hover:border-red-600 hover:text-red-600">
+                                        <Trash/>
                                     </Button>
-                                    <Button variant="ghost" size="sm" onClick={() => setPrimaryStorage(index + 1)}
-                                            className="text-xs">Mark as Primary</Button>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setPrimaryStorage(index + 1)}
+                                        title="Set as primary storage"
+                                        className="min-w-20 hover:border-neutral-600 hover:text-neutral-600">
+                                        <ListStart/>
+                                    </Button>
                                 </div>
                             </div>
                         ))}
@@ -440,28 +491,38 @@ export default function BuildDisplay() {
                 Total: € {totalPrice.toFixed(2)}
             </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-4 m-2 justify-center">
+            <div className="mt-4 flex flex-col gap-4 m-2 justify-center">
                 <div className="flex items-center justify-center space-x-2">
-                    <Label htmlFor="share-preference-toggle" className="font-medium">
-                        Make public
-                    </Label>
-                    <Switch
-                        id="share-preference-toggle"
-                        checked={localIsSharedPreference}
-                        onCheckedChange={setLocalIsSharedPreference}
-                        disabled={!profile?.email}
-                        aria-label="Toggle build sharing preference"
-                    />
+                    <div className="flex flex-wrap mx-8 w-auto bg-none ">
+                        <Button
+                            variant="outline"
+                            onClick={resetConfirm}
+                            className="w-full sm:min-w-32 rounded hover:text-white border-purple-700 hover:bg-purple-900">
+                            <RotateCcw/>
+                            Reset
+                        </Button>
+                    </div>
+                    <div
+                        className="flex flex-wrap mx-8 w-auto items-center bg-none rounded text-primary hover:text-white border-blue-700 hover:bg-blue-90 ">
+                        <Label
+                            htmlFor="share-preference-toggle"
+                            className="flex mr-4 cursor-pointer">
+                            Make public
+                        </Label>
+                        <Switch
+                            id="share-preference-toggle"
+                            checked={localIsSharedPreference}
+                            onCheckedChange={setLocalIsSharedPreference}
+                            disabled={!profile?.email}
+                            aria-label="Toggle build sharing preference">
+                        </Switch>
+                    </div>
                 </div>
-                <Button
-                    onClick={resetConfirm}
-                    className="w-full sm:w-24 text-white bg-purple-900 hover:bg-purple-950">
-                    Reset
-                </Button>
-                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                <div className="flex items-center justify-center space-x-2">
                     <Button
                         onClick={saveBuild}
-                        className="w-full sm:w-24 text-white bg-purple-600 hover:bg-purple-700">
+                        className="w-full sm:max-w-lg min-h-16 text-white bg-purple-600 hover:bg-purple-700 text-xl">
+                        <Save className="mr-2 h-8 w-8"/>
                         Save
                     </Button>
                 </div>

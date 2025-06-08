@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import { addPartToBuild, getCompatibilityConflicts, resolveConflicts } from '@/utils/compatibility';
+import {useState, useEffect} from 'react';
+import {toast} from 'sonner';
+import {addPartToBuild, getCompatibilityConflicts, resolveConflicts} from '@/utils/compatibility';
 
 /**
  * Represents a PC build with all its components
@@ -51,8 +51,8 @@ const defaultBuild: Build = {
 const toggleShareBuild = async (buildId: string, is_shared: boolean) => {
     const res = await fetch('/api/share-build', {
         method: 'PATCH',
-        body: JSON.stringify({ buildId, is_shared }),
-        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({buildId, is_shared}),
+        headers: {'Content-Type': 'application/json'},
     });
     return res.json();
 };
@@ -103,7 +103,7 @@ export function useBuild() {
      * @param {boolean} [force=false] - Whether to force add the part despite compatibility issues
      */
     const updateBuild = (type: keyof Build, part: any, force = false) => {
-        console.log('Attempting to add:', { type, part });
+        console.log('Attempting to add:', {type, part});
         console.log('Current build state:', build);
 
         const tentativeBuild = addPartToBuild(build, type, part);
@@ -141,7 +141,7 @@ export function useBuild() {
      * @param {any} value - The new value for the part
      */
     const updatePart = (type: keyof Build, value: any) => {
-        const updated = { ...build, [type]: value };
+        const updated = {...build, [type]: value};
         saveBuild(updated);
     };
 
@@ -151,7 +151,7 @@ export function useBuild() {
      * @param {number | string} [id] - Optional ID of the specific part to remove (for storage/memory)
      */
     const clearPart = (type: string, id?: number | string) => {
-        const updated = { ...build };
+        const updated = {...build};
 
         if (type === 'storage') {
             if (typeof id === 'number') {
@@ -186,7 +186,7 @@ export function useBuild() {
         if (index === -1) return;
         const [primary] = storage.splice(index, 1);
         storage.unshift(primary);
-        saveBuild({ ...build, storage });
+        saveBuild({...build, storage});
     };
 
     /**
@@ -196,7 +196,9 @@ export function useBuild() {
         localStorage.removeItem('build');
         console.log('Resetting build to default:', defaultBuild);
         toast.info('Resetting build to default configuration');
-        setBuild({ ...defaultBuild });
+        setBuild({...defaultBuild});
+        // hard refresh the page to ensure all components are reset
+        window.location.reload();
         toast.success('Build reset successfully');
     };
 

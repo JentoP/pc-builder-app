@@ -18,8 +18,12 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Intuitive selection for each component
 - Live price calculation
 - Dynamic preview of your build
-
-### 4. Compatibility Check
+- 
+### 4. Save and Share Builds
+- Users can save builds in their profile
+- Share via a unique link
+- 
+### 5. Compatibility Check
 - Automatic compatibility checking between components
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
 
@@ -33,14 +37,9 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 | PSU         | GPU, Case               | Wattage capacity, PSU form factor                  |
 | Case        | Motherboard, GPU, PSU   | Motherboard form factor, GPU length, PSU size      |
 
-### 5. Admin Environment (nice to have)
+### 6. Admin Environment (nice to have)
 - Admin can manage or edit components in the Supabase database
 - Logs for builds and user activity
-
-### 6. Save and Share Builds (nice to have)
-- Users can save builds in their profile
-- Share via a unique link
-- Option to copy and modify builds
   
 ### 7. Wishlist and Comparison (nice to have)
 - Option to compare components
@@ -60,9 +59,7 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - **Icons**: [Lucide React](https://lucide.dev/)
 
 
-
-
-## Contributing
+# Contributing
 Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.
 
 1. Fork the repository
@@ -71,16 +68,15 @@ Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTIN
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-### Documentation
+## Documentation
 For detailed developer documentation, including project structure, component architecture, and styling guidelines, see the [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md).
-
 
 The application is deployed on [Vercel](https://vercel.com/). You can view a live demo at [https://pc-builder-app-tau.vercel.app/](https://pc-builder-app-tau.vercel.app/).
 
-## License
+### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Feedback and Issues
+### Feedback and Issues
 
 Please file feedback and issues over on the [GitHub issue page](https://github.com/JentoP/pc-builder-app/issues).

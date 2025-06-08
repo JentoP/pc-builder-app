@@ -207,7 +207,7 @@ export default function BuildDisplay() {
                     {part ? (
                         <>
                             <Link href={`/${route}`}>
-                                <Button variant="outline" size="sm" onClick={(e) => handleSelectClick(e, route)}
+                                <Button variant="outline" onClick={(e) => handleSelectClick(e, route)}
                                         className="min-w-20 hover:border-purple-600 hover:text-purple-600"
                                 title={`Select ${displayName}`}>
                                     <MousePointerClick/>
@@ -227,7 +227,7 @@ export default function BuildDisplay() {
                     ) : (
                         <Link href={`/${route}`}>
                             <Button variant="outline" size="sm" onClick={(e) => handleSelectClick(e, route)}
-                                    className="min-w-20 size-5 hover:border-purple-600 hover:text-purple-600"
+                                    className="min-w-20 hover:border-purple-600 hover:text-purple-600"
                             title={`Select ${displayName}`}>
                                 <MousePointerClick/>
                             </Button>

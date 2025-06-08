@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowLeft } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function CoolerDetailPage() {
     const { id } = useParams()
@@ -42,9 +43,7 @@ export default function CoolerDetailPage() {
     return (
         <div className="p-4 max-w-6xl mx-auto space-y-6">
             <div className="flex items-center justify-between mb-6">
-                <Button variant="secondary" size="icon" className="size-8 mr-2" onClick={() => router.back()}>
-                    <ArrowLeft />
-                </Button>
+                <BackButton/>
                 <h1 className="text-3xl font-bold flex-1 text-center">
                     Cooler Details
                 </h1>

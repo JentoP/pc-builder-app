@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowLeft } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function MemoryDetailPage() {
     const { id } = useParams()
@@ -42,9 +43,7 @@ export default function MemoryDetailPage() {
     return (
         <div className="p-4 max-w-6xl mx-auto space-y-6">
             <div className="flex items-center justify-between mb-6">
-                <Button variant="secondary" size="icon" className="size-8 mr-2" onClick={() => router.back()}>
-                    <ArrowLeft />
-                </Button>
+                <BackButton/>
                 <h1 className="text-3xl font-bold flex-1 text-center">
                     Memory Details
                 </h1>
@@ -54,7 +53,7 @@ export default function MemoryDetailPage() {
                 <Link href="/parts/memory" className="w-auto mt-3 px-4 py-1 rounded">
                     <Button variant="outline" size="sm"
                             className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white">
-                        View All Memory
+                        View All Memory Kits
                     </Button>
                 </Link>
             </div>

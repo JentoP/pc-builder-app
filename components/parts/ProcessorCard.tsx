@@ -29,7 +29,8 @@ export default function ProcessorCard({cpu, onAddToBuild}: ProcessorCardProps) {
 
     return (
         <div className="w-full min-w-64">
-            <div className="border bg-sidebar rounded-lg p-4 shadow hover:shadow-lg transition duration-200 items-center">
+            <div
+                className="border bg-sidebar rounded-lg p-4 shadow hover:shadow-lg transition duration-200 items-center">
                 <div className="flex gap-3">
                     <Link href={`/parts/processors/${cpu.id}`}>
                         <span className="flex items-start">

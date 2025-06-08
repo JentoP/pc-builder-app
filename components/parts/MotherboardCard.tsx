@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import {useState} from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import {Button} from '@/components/ui/button'
 
 type Motherboard = {
     id: string;
@@ -25,7 +25,7 @@ type MotherboardCardProps = {
     onAddToBuild?: (mobo: Motherboard) => void
 }
 
-export default function MotherboardCard({ motherboard, onAddToBuild }: MotherboardCardProps) {
+export default function MotherboardCard({motherboard, onAddToBuild}: MotherboardCardProps) {
     const [imageError, setImageError] = useState(false)
 
     const imageToShow =
@@ -35,7 +35,8 @@ export default function MotherboardCard({ motherboard, onAddToBuild }: Motherboa
 
     return (
         <div className="w-full min-w-64">
-            <div className="border bg-sidebar rounded-lg p-4 shadow hover:shadow-lg transition duration-200 items-center">
+            <div
+                className="border bg-sidebar rounded-lg p-4 shadow hover:shadow-lg transition duration-200 items-center">
                 <div className="flex gap-3">
                     <Link href={`/parts/motherboards/${motherboard.id}`}>
             <span className="flex items-start">

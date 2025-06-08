@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
-import { Skeleton } from '@/components/ui/skeleton'
+import {useEffect, useState} from 'react'
+import {createClient} from '@/utils/supabase/client'
+import {Skeleton} from '@/components/ui/skeleton'
 import ProcessorCard from '@/components/parts/ProcessorCard'
-import { useBuild } from '@/hooks/useBuild'
-import { ArrowBigDownDash } from 'lucide-react'
+import {useBuild} from '@/hooks/useBuild'
+import {ArrowBigDownDash} from 'lucide-react'
 
 type Processor = {
     id: string
@@ -27,11 +27,11 @@ export default function ProcessorsPage() {
     const [socketFilter, setSocketFilter] = useState('All')
     const [itemsToShow, setItemsToShow] = useState(9)
     const supabase = createClient()
-    const { updateBuild } = useBuild();
+    const {updateBuild} = useBuild();
 
     useEffect(() => {
         const fetchProcessors = async () => {
-            const { data, error } = await supabase.from('processors').select('*')
+            const {data, error} = await supabase.from('processors').select('*')
             if (error) {
                 console.error('Error fetching processors:', error.message)
             } else {
@@ -63,7 +63,7 @@ export default function ProcessorsPage() {
             <h1 className="text-3xl font-bold text-center mb-4">Processors</h1>
 
             {/* Filter */}
-            <div className="my-6 mr-8">
+            <div className="mb-6">
                 <label htmlFor="socketFilter" className="block text-sm font-medium mb-2">
                     Filter by Socket
                 </label>
@@ -84,14 +84,14 @@ export default function ProcessorsPage() {
             {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {[...Array(6)].map((_, i) => (
-                        <Skeleton key={i} className="h-60 w-full rounded-lg" />
+                        <Skeleton key={i} className="h-60 w-full rounded-lg"/>
                     ))}
                 </div>
             ) : (
                 <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
                         {filtered.slice(0, itemsToShow).map(cpu => (
-                            <ProcessorCard key={cpu.id} cpu={cpu} onAddToBuild={handleAddToBuild} />
+                            <ProcessorCard key={cpu.id} cpu={cpu} onAddToBuild={handleAddToBuild}/>
                         ))}
                     </div>
                     {itemsToShow < filtered.length && (
@@ -99,7 +99,7 @@ export default function ProcessorsPage() {
                             <button
                                 onClick={() => setItemsToShow(prev => prev + 9)}
                                 className="bg-sidebar text-primary border border-blue-800 hover:bg-blue-800 hover:text-white px-6 py-2 rounded-md transition-colors">
-                                <ArrowBigDownDash />
+                                Load More
                             </button>
                         </div>
                     )}

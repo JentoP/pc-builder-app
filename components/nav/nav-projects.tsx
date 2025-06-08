@@ -53,7 +53,10 @@ export function NavProjects({
                                         <MoreHorizontal className="h-4 w-4" />
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent side="right" align="start">
+                                <DropdownMenuContent side="right" align="center">
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/dashboard">Dashboard</Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <Link href="/saved">Builds</Link>
                                     </DropdownMenuItem>

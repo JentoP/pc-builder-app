@@ -1,6 +1,6 @@
 # PC Builder Application
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FJentoP%2Fpc-builder-app&project-name=pc-builder&repository-name=pc-builder-app)
+[![Deploy with Vercel](https://vercel.com/button)]((https://pc-builder-app-tau.vercel.app/))
 
 The PC Builder is a modern, user-friendly web application that enables users to build their own PCs. It uses a visual builder where components such as CPU, GPU, RAM, and storage can be selected. The application is targeted towards tech enthusiasts, gamers, and students who want to customize their ideal PC setup.
 

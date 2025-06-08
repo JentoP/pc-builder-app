@@ -1,46 +1,61 @@
+/**
+ * BuildDetailPage Component
+ * 
+ * Displays the details of a specific saved build with options to manage it.
+ * Handles viewing, sharing, and deleting individual builds.
+ * 
+ * Features:
+ * - Displays detailed build information including all components
+ * - Toggle build sharing (public/private)
+ * - Copy shareable links
+ * - Delete builds
+ * - Responsive layout with part details
+ */
 'use client';
 
-import {useEffect, useState} from 'react';
-import {useParams, useRouter} from 'next/navigation';
-import {createClient} from '@/utils/supabase/client';
-import {Button} from '@/components/ui/button';
+// Import necessary hooks and components
+import {useEffect, useState} from 'react';  // React hooks
+import {useParams, useRouter} from 'next/navigation';  // Routing utilities
+import {createClient} from '@/utils/supabase/client';  // Supabase client
+import {Button} from '@/components/ui/button';  // Reusable button component
 import {
     Share2,
     Copy,
     Trash2,
     Loader2,
     ArrowLeft,
-    Settings2,
     UploadCloud,
-    EyeIcon,
     Computer,
     Clock,
     HardDrive
-} from 'lucide-react';
-import {toast} from 'sonner';
-import {useProfile} from '@/hooks/fetchUser';
-import {Switch} from '@/components/ui/switch';
-import {Label} from '@/components/ui/label';
-import Link from "next/link";
+} from 'lucide-react';  // Icons
+import {toast} from 'sonner';  // Toast notifications
+import {useProfile} from '@/hooks/fetchUser';  // User profile hook
+import {Switch} from '@/components/ui/switch';  // Toggle switch component
+import {Label} from '@/components/ui/label';  // Form label component
+import Link from "next/link";  // Client-side navigation
 
+// Type definitions for build data structure
 type BuildData = {
-    name: string;
-    totalPrice?: number;
-    processor?: any;
-    memory?: any[];
-    storage?: any[];
-    [key: string]: any;
+    name: string;  // Build name
+    totalPrice?: number;  // Total price of all components
+    processor?: any;  // Processor details
+    memory?: any[];  // Memory components
+    storage?: any[];  // Storage components
+    [key: string]: any;  // Allow additional properties
 };
 
+// Type definition for a saved build
 type Build = {
-    id: string;
-    user_id: string;
-    created_at: string;
-    name: string;
-    is_shared: boolean;
-    build_data: BuildData;
+    id: string;  // Unique build identifier
+    user_id: string;  // ID of the user who owns the build
+    created_at: string;  // ISO timestamp of creation
+    name: string;  // Build name
+    is_shared: boolean;  // Whether the build is publicly shared
+    build_data: BuildData;  // The actual build configuration
 };
 
+// Defines the order in which parts should be displayed
 const partDisplayOrder = [
     'processor',
     'motherboard',
@@ -53,18 +68,21 @@ const partDisplayOrder = [
 ];
 
 export default function BuildDetailPage() {
-    const {id} = useParams();
-    const router = useRouter();
-    const [build, setBuild] = useState<Build | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const {profile} = useProfile();
-    const supabase = createClient();
+    // Component state and hooks
+    const {id} = useParams();  // Get build ID from URL
+    const router = useRouter();  // Router for navigation
+    const [build, setBuild] = useState<Build | null>(null);  // Current build data
+    const [loading, setLoading] = useState(true);  // Loading state
+    const [error, setError] = useState<string | null>(null);  // Error message
+    const [isDeleting, setIsDeleting] = useState(false);  // Deletion in progress
+    const {profile} = useProfile();  // Current user's profile
+    const supabase = createClient();  // Supabase client instance
 
+    // Fetch build data when component mounts or when ID/profile changes
     useEffect(() => {
         const fetchBuild = async () => {
             try {
+                // Query the specific build from Supabase
                 const {data, error: fetchError} = await supabase
                     .from('builds')
                     .select('*')
@@ -77,10 +95,13 @@ export default function BuildDetailPage() {
                     return;
                 }
 
+
                 if (profile === undefined) {
                     return;
                 }
 
+
+                // Check if user has permission to view this build
                 if (!data.is_shared && data.user_id !== profile?.id) {
                     setError('This build is private');
                 } else {
@@ -109,13 +130,19 @@ export default function BuildDetailPage() {
         }
     }, [id, profile, supabase]);
 
+    /**
+     * Toggles the sharing status of the current build
+     * Updates both local state and database
+     */
     const toggleShare = async () => {
         if (!profile?.id || !build) return;
         const originalSharedStatus = build.is_shared;
 
+        // Optimistically update UI
         setBuild(prev => prev ? {...prev, is_shared: !prev.is_shared} : null);
 
         try {
+            // Call API to update sharing status
             const response = await fetch(`/api/share-build`, {
                 method: 'PATCH',
                 headers: {
@@ -132,14 +159,17 @@ export default function BuildDetailPage() {
 
             const newIsShared = responseData.is_shared;
 
+            // Update local state with confirmed value from server
             setBuild(prev => prev ? {...prev, is_shared: newIsShared} : null);
 
+            // Show success message
             toast.success(
                 newIsShared
                     ? 'Build is now shared publicly'
                     : 'Build is now private'
             );
 
+            // If shared, copy the shareable link to clipboard
             if (newIsShared) {
                 const url = `${window.location.origin}/saved/${build.id}`;
                 if (document.hasFocus()) {
@@ -152,10 +182,15 @@ export default function BuildDetailPage() {
         } catch (err: any) {
             console.error('Error toggling share:', err);
             toast.error(err.message || 'Failed to update sharing');
+            // Revert optimistic update on error
             setBuild(prev => prev ? {...prev, is_shared: originalSharedStatus} : null);
         }
     };
 
+    /**
+     * Copies the shareable link of the current build to clipboard
+     * Shows appropriate feedback if build is not shared
+     */
     const copyShareLink = () => {
         if (!build || !build.is_shared) {
             toast.error('Build is private. Share it first to get a link.');
@@ -166,6 +201,10 @@ export default function BuildDetailPage() {
         toast.success('Link copied to clipboard!');
     };
 
+    /**
+     * Deletes the current build after confirmation
+     * Redirects to saved builds page on success
+     */
     const deleteBuild = async () => {
         if (!build) return;
 
@@ -175,6 +214,7 @@ export default function BuildDetailPage() {
 
         setIsDeleting(true);
         try {
+            // Delete build from database
             const {error} = await supabase
                 .from('builds')
                 .delete()
@@ -193,10 +233,20 @@ export default function BuildDetailPage() {
         }
     };
 
+    /**
+     * Renders a part component with its details
+     * @param part - The part data to render
+     * @param partType - Type of the part (e.g., 'processor', 'memory')
+     * @param index - Index for array parts (memory, storage)
+     * @returns JSX element for the part
+     */
     const renderPart = (part: any, partType: string, index: number = 0) => {
         if (!part) return null;
 
+        // Determine the correct image path based on part type
         const imageKey = partType === 'gpu' ? 'graphic-cards' : partType;
+        
+        // Map part types to their URL paths
         const partTypeToUrlPath = {
             processor: 'processors',
             memory: 'memory',
@@ -208,6 +258,7 @@ export default function BuildDetailPage() {
             cooling: 'cooling'
         };
 
+        // Display name for the part type
         const displayName = {
             processor: 'Processor',
             memory: 'Memory',
@@ -219,9 +270,11 @@ export default function BuildDetailPage() {
             cooling: 'Cooling'
         }[partType];
 
+        // URL for the part details page
         const partDetailUrl = part.id ? `/parts/${partTypeToUrlPath[partType as keyof typeof partTypeToUrlPath]}/${part.id}` : '#';
         const isLink = !!part.id;
 
+        // JSX for the part component
         const cardContent = (
             <div className="flex items-center p-4">
                 <div className="w-16 h-16 p-2">
@@ -253,6 +306,7 @@ export default function BuildDetailPage() {
             </div>
         );
 
+        // Return a link if the part has an ID, otherwise return a plain div
         if (isLink) {
             return (
                 <Link key={`${partType}-${index}`} href={partDetailUrl} className="block bg-sidebar shadow rounded-lg border mb-4 hover:shadow-md hover:border-blue-500 transition-all duration-150">
@@ -325,7 +379,7 @@ export default function BuildDetailPage() {
     if (error) {
         return (
             <div className="container mx-auto p-4 max-w-4xl">
-                <Button variant="outline" size="icon" asChild>
+                <Button variant="secondary" size="icon" className="size-8 mr-2">
                     <Link href="/saved">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
@@ -347,7 +401,7 @@ export default function BuildDetailPage() {
         return (
             <div className="container mx-auto p-4 text-center">
                 <p>Build not found or could not be loaded.</p>
-                <Button variant="outline" size="icon" asChild>
+                <Button variant="secondary" size="icon" className="size-8 mr-2">
                     <Link href="/dashboard">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
@@ -361,7 +415,7 @@ export default function BuildDetailPage() {
     return (
         <div className="container mx-auto p-4 max-w-6xl">
             <div className="flex items-center justify-between mb-6">
-                <Button variant="outline" size="icon" asChild>
+                <Button variant="secondary" size="icon" className="size-8 mr-2">
                     <Link href="/saved">
                         <ArrowLeft className="h-4 w-4"/>
                     </Link>
@@ -371,11 +425,6 @@ export default function BuildDetailPage() {
                 </h1>
             </div>
 
-
-            <h2 className="text-xl font-semibold mt-8 mb-2 text-primary flex items-center justify-center">
-                <Computer className="h-5 w-5 mr-2"/>
-                Summary
-            </h2>
 
             {/* Public Build Notice */}
             {!isOwner && build.is_shared && (
@@ -387,7 +436,7 @@ export default function BuildDetailPage() {
             )}
 
             {/* Owner actions section */}
-            <div className="shadow rounded-lg p-4 border mb-6 bg-sidebar">
+            <div className="p-4 mb-6">
                 <div className="flex flex-wrap justify-center gap-2">
                     {/* Publicly Shared Toggle */}
                     <div
@@ -443,36 +492,54 @@ export default function BuildDetailPage() {
                     </Button>
                 </div>
             </div>
+            {/* Build metadata */}
+            <h2 className="text-xl font-semibold mt-4 text-primary flex items-center justify-center">
+                <Computer className="h-5 w-5 mr-2"/>
+                Summary
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="bg-sidebar shadow border p-4 rounded-lg">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Computer className="h-4 w-4" />
+                        <span className="text-sm">Components</span>
+                    </div>
+                    <p className="text-xl font-semibold mt-1">
+                        {Object.values(build.build_data).filter(Boolean).length - 1} parts
+                    </p>
+                </div>
 
+                <div className="bg-sidebar shadow border p-4 rounded-lg">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="h-4 w-4" />
+                        <span className="text-sm">Created</span>
+                    </div>
+                    <p className="text-sm mt-1">
+                        {new Date(build.created_at).toLocaleDateString()}
+                    </p>
+                </div>
+
+                <div className="bg-sidebar shadow border p-4 rounded-lg">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <HardDrive className="h-4 w-4" />
+                        <span className="text-sm">Status</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                        <div className={`h-2 w-2 rounded-full ${build.is_shared ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                        <span className="text-sm">
+                            {build.is_shared ? 'Public' : 'Private'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {/*Total Price*/}
             {totalPrice > 0 && (
-                <>
-
                     <div className="shadow rounded-lg p-4 border mb-6 bg-sidebar">
-                        <div className="flex flex-col gap-2 text-sm text-muted-foreground mb-4">
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-2">
-                                    <Clock className="h-4 w-4"/>
-                                    <span>Created on {new Date(build.created_at).toLocaleDateString()}</span>
-                                </div>
-                                {build.is_shared ? (
-                                    <span
-                                        className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">Shared</span>
-                                ) : (
-                                    <span
-                                        className="px-2 py-0.5 text-xs rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">Private</span>
-                                )}
-                            </div>
-
-                            <div>Total parts: <strong>{Object.keys(build.build_data).length}</strong></div>
-                            <div>Assembled by: <strong>{profile?.firstName || 'Unknown'}</strong></div>
-                        </div>
-
-                        <div className="flex justify-between items-center border-t pt-4 mt-4">
+                        <div className="flex justify-between items-center p-4">
                             <span className="text-xl">Total Price:</span>
                             <span className="text-xl font-semibold">€{totalPrice.toFixed(2)}</span>
                         </div>
                     </div>
-                </>
             )}
 
             {/* Components section */}

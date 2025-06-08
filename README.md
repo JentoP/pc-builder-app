@@ -37,19 +37,32 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 | PSU         | GPU, Case               | Wattage capacity, PSU form factor                  |
 | Case        | Motherboard, GPU, PSU   | Motherboard form factor, GPU length, PSU size      |
 
-### 6. Admin Environment (nice to have)
-- Admin can manage or edit components in the Supabase database
-- Logs for builds and user activity
+## Nice to have features
+
+### 1. Admin Environment
+- Admin can manage components
+- Logs for builds and activity
   
-### 7. Wishlist and Comparison (nice to have)
+### 2. Wishlist and Comparison
 - Option to compare components
 - Wishlist for future purchases
 
-### 7. API Integration (nice to have)
+### 3. API Integration
 - External API used to fetch real-time component data (price, specs, availability)
 
+### 4. Image fetching
+- Component Details could display an image of the corresponding part that's fetched through an API.
 
-## Tech Stack
+### 5. More customization options
+- Profile customization
+- Uploading profile images
+- Dynamic management of components (builds & profile)
+  
+### 6. Advanced Compatibility Check
+- For example more checks like watt usages, RAM slot size, GPU length, etc...
+- Better handling compatibility
+
+# Tech Stack
 
 - **Framework**: [Next.js](https://nextjs.org/) 13+ (App Router)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) with [Shadcn/ui](https://ui.shadcn.com/)

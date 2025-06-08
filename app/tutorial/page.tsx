@@ -8,7 +8,8 @@ export default function Tutorial() {
             <h1 className="text-3xl font-bold text-center mb-10 animate-fade-right animate-ease-in">Tutorial</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Getting Started */}
-                <Card className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[500ms]">
+                <Card
+                    className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[500ms]">
                     <CardHeader>
                         <CardTitle>Getting Started</CardTitle>
                     </CardHeader>
@@ -37,7 +38,8 @@ export default function Tutorial() {
                 </Card>
 
                 {/* Building Your PC */}
-                <Card className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[1000ms]">
+                <Card
+                    className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[1000ms]">
                     <CardHeader>
                         <CardTitle>Building Your PC</CardTitle>
                     </CardHeader>
@@ -66,7 +68,8 @@ export default function Tutorial() {
                 </Card>
 
                 {/* Saving and Sharing */}
-                <Card className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[1500ms]">
+                <Card
+                    className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[1500ms]">
                     <CardHeader>
                         <CardTitle>Saving and Sharing</CardTitle>
                     </CardHeader>
@@ -95,7 +98,8 @@ export default function Tutorial() {
                 </Card>
 
                 {/* Tips & Tricks */}
-                <Card className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[2000ms]">
+                <Card
+                    className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[2000ms]">
                     <CardHeader>
                         <CardTitle>Tips & Tricks</CardTitle>
                     </CardHeader>
@@ -119,12 +123,22 @@ export default function Tutorial() {
                                         button in the drawer to select the next component to add to your build.</p>
                                 </div>
                             </li>
+                            <li className="flex items-start gap-2 animate-fade-in animate-duration-[800ms] animate-once animate-delay-[2400ms]">
+                                <span
+                                    className="w-4 h-4 rounded-full bg-purple-700 flex items-center justify-center p-4 text-white">✓</span>
+                                <div>
+                                    <h3 className="font-semibold">Use the share build option</h3>
+                                    <p className="text-sm text-muted-foreground">Share your build with friends or the
+                                        community to get feedback and suggestions.</p>
+                                </div>
+                            </li>
                         </ol>
                     </CardContent>
                 </Card>
 
                 {/* Knowledge Base */}
-                <Card className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[2500ms]">
+                <Card
+                    className="md:col-span-2 lg:col-span-1 bg-sidebar animate-fade-right animate-ease-in animate-delay-[2500ms]">
                     <CardHeader>
                         <CardTitle>Good to know</CardTitle>
                     </CardHeader>

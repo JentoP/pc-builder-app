@@ -18,11 +18,11 @@ The PC Builder is a modern, user-friendly web application that enables users to 
 - Intuitive selection for each component
 - Live price calculation
 - Dynamic preview of your build
-- 
+
 ### 4. Save and Share Builds
 - Users can save builds in their profile
 - Share via a unique link
-- 
+
 ### 5. Compatibility Check
 - Automatic compatibility checking between components
 - Warnings for conflicts (e.g., wrong socket or insufficient wattage)
